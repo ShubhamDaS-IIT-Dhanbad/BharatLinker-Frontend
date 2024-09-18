@@ -9,14 +9,10 @@
         }
       }
     ],
-    "routes": [
+    "rewrites": [
       {
-        "src": "/",
-        "dest": "/"
-      },
-      {
-        "src": "/test",
-        "dest": "/"
+        "source": "/(.*)",
+        "destination": "/"
       }
     ]
   }
