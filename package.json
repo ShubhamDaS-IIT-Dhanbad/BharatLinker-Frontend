@@ -4,11 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cross-env HOST=0.0.0.0 vite",
-    "lint": "eslint .",
-    "preview": "vite preview",
+    "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "preview": "vite preview"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
