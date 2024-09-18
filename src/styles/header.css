@@ -1,0 +1,70 @@
+#header-div {
+    display: flex;
+    align-items: center;
+    height: 57px;
+    background-color: rgb(249, 248, 248);
+    padding: 0 10px;
+    justify-content: space-between;
+}
+
+#header-div-ham {
+    width: 30px;
+    height: 30px;
+}
+
+#header-div-input {
+    border-style: none;
+    height: 30px;color: white;
+    font-size: 12px;
+    padding-left: 10px;
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+#header-div-input:focus {
+    border: none;
+}
+
+#header-div-search-div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 20px;
+    background-color: rgb(59, 63, 63);
+    position: relative;
+}
+
+#header-div-search-div-search {
+    font-size: 29px;
+    margin-right: 10px;
+    color: white;
+}
+
+#header-div-search-div-cross {
+    font-size: 29px;
+    cursor: pointer; /* Show a pointer cursor to indicate it's clickable */
+    position: absolute; /* Position it within the search div */
+    right: 10px; /* Position it to the right */
+    color: white;
+}
+
+#header-div-right-div {
+    display: flex;
+    gap: 3px;
+}
+
+#header-div-search {
+    font-size: 29px;
+}
+
+#header-div-truck {
+    font-size: 29px;
+}
+
+#header-div-cart {
+    font-size: 29px;
+}
