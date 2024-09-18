@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env HOST=0.0.0.0 vite",
-    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
