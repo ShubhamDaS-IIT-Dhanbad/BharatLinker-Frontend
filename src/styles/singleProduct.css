@@ -1,0 +1,76 @@
+
+#product-details-container{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-top: 57px;
+}
+#product-details-img{
+    height: 220px;
+    display: flex;
+    justify-content: center;
+}
+#product-details-img-selected{
+    height: 220px;display: flex;background-color: rgb(0, 0, 0);
+}
+#ProductDetails{
+    display: flex;
+    flex-direction: column;justify-content: space-between;
+    padding: 10px;gap: 10px;
+    min-height: 85px;
+}
+#ProductDetails-trending{
+    background-color: rgba(252, 203, 140, 0.571);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 900;font-size: 13px;
+    padding: 2px;width: 105px;color: rgb(215, 63, 88);
+    border-radius: 1px;
+}
+#detailsBlock-1-pid{
+    font-size: 11px;color: rgba(0, 0, 0, 0.532);
+    font-weight: 100;
+}
+#detailsBlock-1-title{
+    font-weight: 900;
+}
+#productDetails-see-all-brand-product{
+    padding: 0 10px 0px 10px;
+    font-size: 13px;font-weight: 900;color: rgb(212, 76, 212);
+}
+#productDetails-shop{
+    padding: 0px 10px 0px 10px;
+    font-weight: 300;
+    display: flex;align-items: center;
+}
+#productDetails-price-button{
+    padding: 10px;
+    display: flex;justify-content: space-between;
+    font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+#productDetails-price-button p{
+    height: 40px;display: flex;justify-content: center;
+    align-items: center;
+}
+#productDetails-price-button-instock{
+    width: 100px;background-color: rgb(208, 67, 114);
+    height: 40px;display: flex;justify-content: center;
+    align-items: center;
+    border-radius: 5px;color: white;padding: 2px;
+}
+#productDetails-hr{
+    margin: 5px 10px 0px 10px;
+    background-color: rgba(0, 0, 0, 0.358);
+    height: 0.1px;
+}
+#productDetails-about{
+    padding: 10px;display: flex;
+    align-items: center;justify-content: space-between;
+}
+#productDetails-description{
+    padding: 10px;
+    font-size: 10px;
+}
+#productDetails-similar{
+    padding: 20px 10px 10px 10px;
+    font-weight: 900;font-size: 17px;
+}
