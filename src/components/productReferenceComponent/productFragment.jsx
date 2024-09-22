@@ -7,20 +7,20 @@ const ReferenceCard = ({ product }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="reference-card" onClick={() => navigate(`/product/${product._id}`)}>
-            <div className="reference-card-top">
-                <img className="reference-card-top-image" src={product.images[0]} alt={product.title} />
+        <div className="product-fragment-reference-card" onClick={() => navigate(`/product/${product._id}`)}>
+            <div className="product-fragment-reference-card-top">
+                <img className="product-fragment-reference-card-top-image" src={product.images[0]} alt={product.title} />
             </div>
-            <div className='reference-card-bottom'>
-                <div className="reference-card-shop-price">
-                    <span className='reference-card-shop-name'>
+            <div className="product-fragment-reference-card-bottom">
+                <div className="product-fragment-reference-card-shop-price">
+                    <span className="product-fragment-reference-card-shop-name">
                         {product.title.length > 45 ? `${product.title.substr(0, 30)}...` : product.title}
                     </span>
-                    <span className='reference-card-shop'>
+                    <span className="product-fragment-reference-card-shop">
                         ₹{product.price}
                     </span>
                 </div>
-                <div className='reference-card-bottom-stock'>
+                <div className="product-fragment-reference-card-bottom-stock">
                     {product.quantityAvailable > 0 ? (
                         <span>IN STOCK</span>
                     ) : (
@@ -37,7 +37,7 @@ const ReferenceProductCard = ({ brand, shopId }) => {
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
     const productsPerPage = 3;
-    const containerRef = useRef(null); // Reference for the container
+    const containerRef = useRef(null);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -56,12 +56,12 @@ const ReferenceProductCard = ({ brand, shopId }) => {
                 if (data.products && data.products.length > 0) {
                     setProducts((prevProducts) => {
                         if (page === 1) {
-                            return data.products; // Replace with new data
+                            return data.products;
                         }
-                        return [...prevProducts, ...data.products]; // Append new products
+                        return [...prevProducts, ...data.products];
                     });
                 } else {
-                    setHasMoreProducts(false); // No more products to load
+                    setHasMoreProducts(false);
                 }
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -79,7 +79,6 @@ const ReferenceProductCard = ({ brand, shopId }) => {
                     const lastCardRect = lastCard.getBoundingClientRect();
                     const containerRect = containerRef.current.getBoundingClientRect();
 
-                    // Check if the last card is visible in the viewport
                     if (lastCardRect.right <= containerRect.right && hasMoreProducts) {
                         setPage((prevPage) => prevPage + 1);
                     }
@@ -95,7 +94,7 @@ const ReferenceProductCard = ({ brand, shopId }) => {
     }, [hasMoreProducts]);
 
     return (
-        <div className='reference-product-container' ref={containerRef}>
+        <div className="product-fragment-reference-product-container" ref={containerRef}>
             {products.length > 0 ? (
                 products.map((product) => (
                     <ReferenceCard key={`${product._id}-${product.title}`} product={product} />

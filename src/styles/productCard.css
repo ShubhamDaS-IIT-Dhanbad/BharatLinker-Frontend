@@ -1,12 +1,11 @@
 .product-card {
     background-color: rgb(255, 255, 255);
     color: black;
-    width:45vw;
+    width:47vw;max-width: 200px;
     display: flex;
     flex-direction: column;
-    align-items:center;
-    min-height: 370px;
-    max-height: 370px;
+    min-height: 320px;margin-top: 10px;
+    max-height: 400px;
     z-index: 3;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
@@ -15,8 +14,8 @@
 
 
 .product-card-top-image {
-    width: 100%;max-height: 200px;
-    min-height: 200px;background-color: red;
+    width: 100%;max-height: 190px;
+    min-height: 190px;border-radius: 5px;
 }
 #product-card-shop-price{
     display: flex;flex-direction: column;
@@ -25,7 +24,7 @@
     justify-content: space-between;
 }
 .product-card-bottom {
-    width: 100%;height: 170px;
+    width: 100%;height: 130px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -91,4 +90,33 @@ background-color: rgb(183, 221, 222);display: flex;
 justify-content: center;align-items: center;
 font-weight: 900;font-size: 19px;
 width: 60%;
+}
+
+.product-card-bottom-stock.instock {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(76, 199, 45);
+    font-weight: 900;
+    border-radius: 5px;
+    font-size: 15px;
+    border: 0.1px solid rgb(106, 232, 74);
+    width: 97%;
+    min-height: 40px;
+    max-height: 40px;
+}
+.product-card-bottom-stock.outofstock {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(232, 74, 74);
+    font-weight: 900;
+    border-radius: 5px;
+    font-size: 15px;
+    border: 0.1px solid palevioletred;
+    width: 97%;
+    min-height: 40px;
+    max-height: 40px;
 }

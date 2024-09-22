@@ -8,7 +8,7 @@ function ProductCard({ id, image, title, price, quantity }) {
 
     const imageUrl = image || 'http://res.cloudinary.com/dicsxehfn/image/upload/v1715907822/p6yehdqg0uwnl3jmpxmt.jpg'; // Provide a default image URL
     const productName = title ? (title.length > 45 ? title.substr(0, 45) + '..' : title) : 'Product Name'; // Provide a default product name
-    const productPrice = price || '0'; // Provide a default price
+    const productPrice = price || '0';
 
     return (
         <div className="product-card">
@@ -22,18 +22,14 @@ function ProductCard({ id, image, title, price, quantity }) {
                         ₹{productPrice}
                     </span>
                 </div>
-                <div id='product-card-bottom'>
-                    <div id='product-card-bottom-cart-icon'>
-                        < CiLocationArrow1 size={30} />
-                    </div>
-                    <div id='product-card-bottom-instock'>
-                        {quantity > 0 ? (
+                
+                    <div className={`product-card-bottom-stock ${quantity > 0 ? 'instock' : 'outofstock'}`}>
+                        {quantity > 0? (
                             <span>IN STOCK</span>
                         ) : (
-                            <span></span>
+                            <span>OUT OF STOCK</span>
                         )}
                     </div>
-                </div>
             </div>
         </div>
     );

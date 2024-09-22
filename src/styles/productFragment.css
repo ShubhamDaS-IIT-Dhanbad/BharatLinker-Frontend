@@ -1,28 +1,33 @@
-.reference-product-container{
-    max-width: 100vw;overflow-x: scroll;
-    height: 270px;margin-top: 10px;
+.product-fragment-reference-product-container {
+    max-width: 100vw;
+    overflow-x: scroll;
+    height: 270px;
+    margin-top: 10px;
     margin-bottom: 50px;
-    display: flex;gap: 3px;
+    display: flex;
+    gap: 3px;
     scrollbar-width: 0;
-    
 }
-.reference-product-container::-webkit-scrollbar{
+
+.product-fragment-reference-product-container::-webkit-scrollbar {
     display: none;
 }
 
-
-.reference-card {
-    min-width: 150px;max-width: 150px;
-    max-height: 100%;min-height: 100%;
-    display: flex;flex-direction: column;
+.product-fragment-reference-card {
+    min-width: 150px;
+    max-width: 150px;
+    max-height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-.reference-card-top-image {
+.product-fragment-reference-card-top-image {
     width: 100%;
 }
 
-.reference-card-shop-price {
+.product-fragment-reference-card-shop-price {
     display: flex;
     flex-direction: column;
     font-size: 5px;
@@ -32,7 +37,7 @@
     justify-content: space-between;
 }
 
-.reference-card-bottom {
+.product-fragment-reference-card-bottom {
     width: 100%;
     height: 170px;
     display: flex;
@@ -42,19 +47,19 @@
     background-color: rgb(255, 255, 255);
 }
 
-.reference-card-shop {
+.product-fragment-reference-card-shop {
     font-size: 15px;
     font-weight: 900;
 }
 
-.reference-card-shop-name {
+.product-fragment-reference-card-shop-name {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 12.5px;
     font-weight: 900;
     letter-spacing: 1;
 }
 
-.reference-card-bottom-cart-icon {
+.product-fragment-reference-card-bottom-cart-icon {
     background-color: black;
     width: 40%;
     color: white;
@@ -63,12 +68,17 @@
     align-items: center;
 }
 
-.reference-card-bottom-stock {
+.product-fragment-reference-card-bottom-stock {
     background-color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
-    align-items: center;color: palevioletred;
-    font-weight: 900;border-radius: 5px;
-    font-size: 19px;border: 1.5px solid palevioletred;
-    width: 97%;min-height: 40px;max-height: 40px;
+    align-items: center;
+    color: rgb(232, 74, 74);
+    font-weight: 900;
+    border-radius: 5px;
+    font-size: 15px;
+    border: 0.1px solid palevioletred;
+    width: 97%;
+    min-height: 40px;
+    max-height: 40px;
 }

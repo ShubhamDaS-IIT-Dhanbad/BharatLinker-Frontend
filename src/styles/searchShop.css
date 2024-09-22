@@ -3,6 +3,7 @@
   position:fixed ;margin-top: 8.5px;justify-content: center;align-items: center;
   border: 0.0005px solid rgba(0, 0, 0, 0.365);
   top: 0px;border-radius: 5px;
+  
 }
 #shop-search-container-top{
    width: 100%;height: 57px;position:fixed ;top: 0;
@@ -24,11 +25,13 @@
    color: black;
 }
 #shop-grid {
-   display: grid;
-   grid-template-columns: repeat(2, 1fr); /* Two columns layout */
-   column-gap: 0; /* No gap between columns */
-   row-gap: 5px; /* Adjust the gap between rows */
-   justify-items: center; /* Center items horizontally within each grid cell */
+   display: flex;flex-wrap: wrap;
+   align-items: center;width: 100vw;
+   height: 100vh;
    margin-top: 60px;
    margin-bottom: 100px;
+
+   ::-webkit-scrollbar{
+      display: none;
+   }
 }

@@ -29,11 +29,9 @@ const ProductDetails = () => {
                     setSelectedImage(data.product.images[0]);
                 }
                 console.log(data.product)
-                // Fetch shop details using shopId from product
                 if (data.product.shop) {
                     const shopResponse = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shopdetail/${data.product.shop}`);
                     const shopData = await shopResponse.json();
-                  
                     setShopDetail(shopData.shop);
                     console.log(shopData.shop)
                 }
@@ -62,7 +60,7 @@ const ProductDetails = () => {
 
     const handleShopClick = () => {
         if (shopDetail) {
-            navigate(`/shop/${shopDetail._id}`); // Use shopDetail._id for navigation
+            navigate(`/shop/${shopDetail._id}`);
         }
     };
 
@@ -73,11 +71,11 @@ const ProductDetails = () => {
             ) : (
                 productDetail && (
                     <Fragment>
-                        <div id="shop-search-container-top">
-                            <div id='shop-search-container-top-div'>
+                        <div id="product-details-search-container-top">
+                            <div id='product-details-search-container-top-div'>
                                 <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
                                 <input
-                                    id="shop-search-bar"
+                                    id="product-details-search-bar"
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                     placeholder="Search"
@@ -93,43 +91,43 @@ const ProductDetails = () => {
                                     id="product-details-img-selected" />
                             </div>
 
-                            <div id="ProductDetails">
-                                <div id="ProductDetails-trending">Trending deal</div>
-                                <p id="detailsBlock-1-pid">Product # {productDetail._id}</p>
-                                <div id="detailsBlock-1-title">{productDetail.title}</div>
+                            <div id="product-details-info">
+                                <span id="product-details-trending-deals">Trending deal</span>
+                                <p id="product-details-pid">Product # {productDetail._id}</p>
+                                <div id="product-details-title">{productDetail.title}</div>
                             </div>
 
-                            <div id="productDetails-see-all-brand-product">
+                            <div id="product-details-see-all-brand-product">
                                 See All {productDetail.brand} Products <MdOutlineKeyboardArrowRight size={11} />
                             </div>
 
-                            <div id="productDetails-shop" onClick={handleShopClick} style={{ cursor: 'pointer' }}>
+                            <div id="product-details-shop" onClick={handleShopClick} style={{ cursor: 'pointer' }}>
                                 Shop: {shopDetail ? shopDetail.shopName : 'Loading...'}
                                 <HiOutlineArrowRightStartOnRectangle />
                             </div>
 
-                            <div id="productDetails-price-button">
+                            <div id="product-details-price-button">
                                 <p>₹{productDetail.price}</p>
-                                <div id="productDetails-price-button-instock">
+                                <div id="product-details-price-instock">
                                     {productDetail.quantityAvailable > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
                                 </div>
                             </div>
 
-                            <div id="productDetails-hr"></div>
+                            <div id="product-details-hr"></div>
 
-                            <div id="productDetails-about" onClick={toggleDescription} style={{ cursor: 'pointer' }}>
+                            <div id="product-details-about" onClick={toggleDescription} style={{ cursor: 'pointer' }}>
                                 <p>About Product</p>
                                 {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
 
                             {showDescription && (
-                                <div id="productDetails-description">
+                                <div id="product-details-description">
                                     Description: {productDetail.description}
                                 </div>
                             )}
-                            <div id="productDetails-hr"></div>
+                            <div id="product-details-hr"></div>
 
-                            <div id="productDetails-similar">
+                            <div id="product-details-similar">
                                <p>Similar products</p>
                                 <ProductFragment brand={productDetail.brand}/>
                             </div>

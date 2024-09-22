@@ -6,7 +6,7 @@ import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-i
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
 
-import ReferenceProduct from './shopReferenceComponent/referenceProduct.jsx';
+import ReferenceProduct from './shopReferenceComponent/shopFragment.jsx';
 import REACT_APP_API_URL from '../../public/constant.js';
 
 const ShopDetails = () => {
@@ -16,6 +16,8 @@ const ShopDetails = () => {
     const [shopDetails, setShopDetails] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [showDescription, setShowDescription] = useState(false);
+    const [showContact, setShowContact] = useState(false);
+    const [showAddress, setShowAddress] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,8 +45,11 @@ const ShopDetails = () => {
         }
     };
 
-    const toggleDescription = () => {
-        setShowDescription(!showDescription);
+    const toggleContact = () => {
+        setShowContact(!showContact);
+    };
+    const toggleAddress = () => {
+        setShowAddress(!showAddress);
     };
 
     return (
@@ -54,11 +59,11 @@ const ShopDetails = () => {
             ) : (
                 shopDetails && (
                     <Fragment>
-                        <div id="shop-search-container-top">
-                            <div id='shop-search-container-top-div'>
+                        <div id="shop-details-search-container-top">
+                            <div id='shop-details-search-container-top-div'>
                                 <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
                                 <input
-                                    id="shop-search-bar"
+                                    id="shop-details-search-bar"
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                     placeholder="Search"
@@ -69,62 +74,62 @@ const ShopDetails = () => {
 
                         <div id="shop-details-container">
                             <div id="shop-details-img">
-                                    {shopDetails.images.map((image, index) => (
-                                        <div id="shop-details-img-div" key={index}>
-                                            <img src={image}  id="shop-details-img-selected"  key={index} />
-                                       </div>
-                                    ))}
+                                {shopDetails.images.map((image, index) => (
+                                    <div id="shop-details-img-div" key={index}>
+                                        <img src={image} id="shop-details-img-selected" />
+                                    </div>
+                                ))}
                             </div>
 
-                            <div id="ShopDetails">
-                                <div id="ShopDetails-trending">Verified Shop</div>
-                                <p id="detailsBlock-1-pid">Shop # {shopDetails._id}</p>
-                                <div id="detailsBlock-1-title">{shopDetails.shopName}</div>
+                            <div id="shop-details-info">
+                                <div id="shop-details-trending">Verified Shop</div>
+                                <p id="shop-details-id">Shop # {shopDetails._id}</p>
+                                <div id="shop-details-title">{shopDetails.shopName}</div>
                             </div>
 
-                            <div id="shopDetails-see-all-brand-product">
+                            <div id="shop-details-see-all-products">
                                 See All {shopDetails.brand} Products <MdOutlineKeyboardArrowRight size={11} />
                             </div>
 
-                            <div id="shopDetails-shop" style={{ cursor: 'pointer' }}>
-                                Location: 
+                            <div id="shop-details-location" style={{ cursor: 'pointer' }}>
+                                Location:
                                 <IoLocationOutline size={20} />
                             </div>
 
-                            <div id="shopDetails-price-button">
+                            <div id="shop-details-status">
                                 <p></p>
-                                <div className={`shopDetails-button-status ${1 < 0 ? 'opened' : 'closed'}`}>
+                                <div className={`shop-details-status-button ${1 < 0 ? 'opened' : 'closed'}`}>
                                     {1 < 0 ? 'OPENED' : 'CLOSED'}
                                 </div>
                             </div>
 
-                            <div id="shopDetails-hr"></div>
+                            <div id="shop-details-hr"></div>
 
-                            <div id="shopDetails-about" onClick={toggleDescription} style={{ cursor: 'pointer' }}>
+                            <div id="shop-details-about" onClick={toggleAddress} style={{ cursor: 'pointer' }}>
                                 <p>Address</p>
-                                {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+                                {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
 
-                            {showDescription && (
-                                <div id="shopDetails-description">
-                                    {/* Description: {shopDetails.description} */}
+                            {showAddress && (
+                                <div id="shop-details-description">
+                                    helow
                                 </div>
                             )}
-                            <div id="shopDetails-hr"></div>
+                            <div id="shop-details-hr"></div>
 
-                            <div id="shopDetails-about" onClick={toggleDescription} style={{ cursor: 'pointer' }}>
+                            <div id="shop-details-contact" onClick={toggleContact} style={{ cursor: 'pointer' }}>
                                 <p>Contact</p>
-                                {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+                                {showContact ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
 
-                            {showDescription && (
-                                <div id="shopDetails-description">
-                                    {/* Description: {shopDetails.description} */}
+                            {showContact && (
+                                <div id="shop-details-description">
+                                   helow
                                 </div>
                             )}
-                            <div id="shopDetails-hr"></div>
+                            <div id="shop-details-hr"></div>
 
-                            <div id="shopDetails-similar">
+                            <div id="shop-details-similar-products">
                                 <p>Product Available</p>
                                 <ReferenceProduct shopId={shopDetails._id} />
                             </div>

@@ -3,13 +3,12 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import Header from './components/header.jsx';
 import Home from './components/home.jsx';
 import SearchPage from './components/searchPage.jsx'; 
-import ShopPage from './components/shop.jsx'; 
+import ShopPage from './components/searchShop.jsx'; 
 import SingleProduct from './components/singleProduct.jsx';
 import SingleShop from './components/singleShop.jsx'
 
 function App() {
   const [pincode, setPinCode] = useState(['742136','123456']);
-
   useEffect(() => {
     const storedPincode = localStorage.getItem('pincode');
     if (storedPincode) {
@@ -41,6 +40,10 @@ function App() {
 }
 
 function RoutesWithConditionalHeader({ pincode, setPinCode }) {
+  
+  const [hideHeader, setHideHeader] = useState(false); // For controlling header visibility
+
+  
   const location = useLocation();
   const isHomepage = location.pathname === '/';
 
@@ -48,7 +51,7 @@ function RoutesWithConditionalHeader({ pincode, setPinCode }) {
     <>
       {isHomepage && <Header />}
       <Routes>
-        <Route path="/" element={<Home pincode={pincode} setPinCode={setPinCode} />} />
+        <Route path="/" element={<Home hideHeader={hideHeader} setHideHeader={setHideHeader} pincode={pincode} setPinCode={setPinCode} />} />
         <Route path="/search" element={<SearchPage pincode={pincode} />} />
         <Route path="/shop" element={<ShopPage/>} />
         <Route path="/product/:productId" element={<SingleProduct />} />

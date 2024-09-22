@@ -4,8 +4,10 @@ import '../styles/home.css';
 import REACT_APP_API_URL from '../../public/constant.js';
 import b1 from '../assets/b1.jpg';
 import ProductCard from './productCard.jsx';
-import { LiaSortSolid } from "react-icons/lia";
+
 import { MdFilterList } from "react-icons/md";
+import { LiaSortSolid } from "react-icons/lia";
+
 
 function Home() {
     const [loading, setLoading] = useState(false);

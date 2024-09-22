@@ -1,26 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../../styles/referenceProduct.css';
+import '../../styles/shopFragment.css';
 import REACT_APP_API_URL from '../../../public/constant.js';
 import { useNavigate } from 'react-router-dom';
 
-const ReferenceCard = ({ product }) => {
+const ShopFragmentCard = ({ product }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="reference-card" onClick={() => navigate(`/product/${product._id}`)}>
-            <div className="reference-card-top">
-                <img className="reference-card-top-image" src={product.images[0]} alt={product.title} />
+        <div className="shop-fragment-card" onClick={() => navigate(`/product/${product._id}`)}>
+            <div className="shop-fragment-card-top">
+                <img className="shop-fragment-card-top-image" src={product.images[0]} alt={product.title} />
             </div>
-            <div className='reference-card-bottom'>
-                <div className="reference-card-shop-price">
-                    <span className='reference-card-shop-name'>
+            <div className='shop-fragment-card-bottom'>
+                <div className="shop-fragment-card-shop-price">
+                    <span className='shop-fragment-card-shop-name'>
                         {product.title.length > 45 ? `${product.title.substr(0, 30)}...` : product.title}
                     </span>
-                    <span className='reference-card-shop'>
+                    <span className='shop-fragment-card-shop'>
                         ₹{product.price}
                     </span>
                 </div>
-                <div className='reference-card-bottom-stock'>
+                <div className='shop-fragment-card-bottom-stock'>
                     {product.quantityAvailable > 0 ? (
                         <span>IN STOCK</span>
                     ) : (
@@ -32,7 +32,7 @@ const ReferenceCard = ({ product }) => {
     );
 };
 
-const ReferenceProductCard = ({ brand, shopId }) => {
+const ShopFragment = ({ brand, shopId }) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
@@ -95,10 +95,10 @@ const ReferenceProductCard = ({ brand, shopId }) => {
     }, [hasMoreProducts]);
 
     return (
-        <div className='reference-product-container' ref={containerRef}>
+        <div className='shop-fragment-container' ref={containerRef}>
             {products.length > 0 ? (
                 products.map((product) => (
-                    <ReferenceCard key={`${product._id}-${product.title}`} product={product} />
+                    <ShopFragmentCard key={`${product._id}-${product.title}`} product={product} />
                 ))
             ) : (
                 <p>No similar products found.</p>
@@ -107,4 +107,4 @@ const ReferenceProductCard = ({ brand, shopId }) => {
     );
 };
 
-export default ReferenceProductCard;
+export default ShopFragment;
