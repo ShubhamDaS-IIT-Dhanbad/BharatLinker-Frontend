@@ -9,7 +9,6 @@ import ProductCard from './productCard.jsx';
 import ExploreCategory from './homePageComponent/exploreCategory.jsx'
 
 import { MdOutlineStore } from "react-icons/md";
-import ExploreNearbyShops from './homePageComponent/exploreNearByShop.jsx';
 
 function Home() {
     const [loading, setLoading] = useState(false);
