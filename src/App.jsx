@@ -14,7 +14,7 @@ function App() {
     const userpincodesCookie = document.cookie.split('; ').find(row => row.startsWith('userpincodes='));
 
     if (!userpincodesCookie || !existingAddressCookie) {
-      if ("geolocation" in navigator) {
+      // if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
             const { latitude, longitude } = position.coords;
@@ -48,9 +48,7 @@ function App() {
             console.error("Geolocation error:", error.message);
           }
         );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-      }
+      
     }
   }, []);
 
