@@ -1,0 +1,36 @@
+.explore-category{
+  max-width: 100vw;
+  padding: 0 10px 0px 10px;
+}
+  
+  .explore-category-title {
+    display: flex;justify-content: flex-start;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-bottom: 12px;
+    font-size: 15px;font-weight: 700;
+    color: #2c2c2c;
+  }
+  
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    justify-items: center;
+  }
+  
+  .category-item {
+    display: flex;flex-grow: inherit;
+    border-radius: 15px;
+    transition: transform 0.3s;
+    overflow: hidden;
+  }
+  
+  .category-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .category-image {
+    width: 100%;
+    object-fit: cover;
+  }
+  

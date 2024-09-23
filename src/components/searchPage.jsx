@@ -8,11 +8,6 @@ import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-import { AiOutlineClose } from "react-icons/ai";
-
-import r1 from '../assets/realm.jpg'
-import o1 from '../assets/oneplus.jpg'
-
 const SearchPage = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();

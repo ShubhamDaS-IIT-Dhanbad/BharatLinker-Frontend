@@ -32,7 +32,7 @@ const ReferenceCard = ({ product }) => {
     );
 };
 
-const ReferenceProductCard = ({ brand, shopId }) => {
+const ReferenceProductCard = ({ brand,category,pincode,shopId }) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
@@ -40,7 +40,7 @@ const ReferenceProductCard = ({ brand, shopId }) => {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchProductsShop = async () => {
             try {
                 const response = await fetch(
                     `${REACT_APP_API_URL}/api/v1/product/products?keyword=ear&page=${page}&limit=${productsPerPage}`
@@ -68,7 +68,7 @@ const ReferenceProductCard = ({ brand, shopId }) => {
             }
         };
 
-        fetchProducts();
+        if(true) fetchProductsShop();
     }, [shopId, page]);
 
     useEffect(() => {

@@ -1,0 +1,11 @@
+.CarouselSlide img{
+    width: 100%;
+}
+  
+.CarouselSlide{
+    background-color: aqua;
+    width: 100%;
+}
+.carousal-slide{
+    width: 90vw;
+}

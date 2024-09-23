@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
+import { useNavigate } from 'react-router-dom';
 import '../styles/header.css';
-
 import { HiOutlineUserCircle } from "react-icons/hi2";
-import { IoIosSearch } from 'react-icons/io';
 import { BiSearchAlt } from "react-icons/bi";
-
-
-import { CiDeliveryTruck } from 'react-icons/ci';
-import { CiShoppingCart } from 'react-icons/ci';
-import { IoClose } from 'react-icons/io5';
-
-import { BsShop } from "react-icons/bs";
-import { RiAdminLine } from "react-icons/ri";
+import { TbChevronDown } from "react-icons/tb";
 
 function Navbar() {
-    const [searchVisible, setSearchVisible] = useState(false);
-    const [searchInput, setSearchInput] = useState(''); // For handling search input
-    const [hideHeader, setHideHeader] = useState(false); // For controlling header visibility
-    const navigate = useNavigate(); 
+    const [searchInput, setSearchInput] = useState('');
+    const [hideHeader, setHideHeader] = useState(false);
+    const [address, setAddress] = useState({ city: 'Unknown City', postcode: 'Unknown Pincode' });
+    const navigate = useNavigate();
 
+    // Retrieve address from cookie
+    useEffect(() => {
+        const getCookieValue = (name) => {
+            const value = document.cookie.split('; ').find((row) => row.startsWith(`${name}=`));
+            return value ? decodeURIComponent(value.split('=')[1]) : null;
+        };
+
+        const addressCookie = getCookieValue('address');
+        if (addressCookie) {
+            const addressData = JSON.parse(addressCookie);
+            setAddress(addressData);
+        }
+    }, []);
+
+    // Hide header on scroll
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) { // Adjust the value as needed
+            if (window.scrollY > 80) {
                 setHideHeader(true);
             } else {
                 setHideHeader(false);
@@ -30,58 +36,46 @@ function Navbar() {
         };
 
         window.addEventListener('scroll', handleScroll);
-
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
-    const handleSearchClick = () => {
-        setSearchVisible(true);
-    };
 
-    const handleCloseClick = () => {
-        setSearchVisible(false);
-    };
 
     const handleSearchSubmit = () => {
         if (searchInput.trim()) {
-            navigate(`/search?query=${searchInput}`); // Navigate to the search page with the search query
+            navigate(`/search?query=${searchInput}`);
         }
     };
 
-    const handleShopRedirect = () => {
-        navigate('/shop'); // Redirect to the Shop page
-    };
-    
     return (
         <>
-            <div id='header-div'>
-                {!searchVisible && <HiOutlineUserCircle  id='header-div-ham' />}
-                {!searchVisible && (
-                    <div id='header-div-right-div'>
-                        <IoIosSearch id='header-div-search' onClick={handleSearchClick} />
-                        <CiDeliveryTruck id='header-div-truck' />
-                        <CiShoppingCart id='header-div-cart' />
+            <div className={hideHeader ? 'header-div-hide' : 'header-div-show'}>
+                <div className='header-div-user'>
+                    <HiOutlineUserCircle id='header-div-ham' size={30} />
+                    <div id='header-div-user-location-div'>
+                        <p id='header-div-user-location'>Location</p>
+                        <div id='header-div-user-location-name' onClick={() => navigate('/pincode')}>
+                            {address.city} {address.postcode}
+                            <TbChevronDown size={15} />
+                        </div>
                     </div>
-                )}
-                {searchVisible && (
-                    <div id='header-div-search-div'>
+                </div>
+
+                <div id='header-div-search-div'>
+                    <div id='header-div-search-div-1'>
                         <BiSearchAlt id='header-div-search-div-search' onClick={handleSearchSubmit} />
                         <input
                             id='header-div-input'
                             placeholder="Search"
                             value={searchInput}
-                            onChange={(e) => setSearchInput(e.target.value)} // Update search input value
-                            onKeyPress={(e) => e.key === 'Enter' && handleSearchSubmit()} // Trigger search on Enter key
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSearchSubmit()}
                         />
-                        <IoClose id='header-div-search-div-cross' onClick={handleCloseClick} />
                     </div>
-                )}
+                </div>
             </div>
-            
-            {/* Home Div Header (below search bar) */}
-            
         </>
     );
 }

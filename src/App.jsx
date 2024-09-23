@@ -1,49 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from './components/header.jsx';
 import Home from './components/home.jsx';
-import SearchPage from './components/searchPage.jsx'; 
-import ShopPage from './components/searchShop.jsx'; 
+import SearchPage from './components/searchPage.jsx';
+import ShopPage from './components/searchShop.jsx';
 import SingleProduct from './components/singleProduct.jsx';
-import SingleShop from './components/singleShop.jsx'
+import SingleShop from './components/singleShop.jsx';
+import Pincode from "./components/pincode.jsx";
 
 function App() {
-  const [pincode, setPinCode] = useState(['742136','123456']);
   useEffect(() => {
-    const storedPincode = localStorage.getItem('pincode');
-    if (storedPincode) {
-      setPinCode(JSON.parse(storedPincode));
-    } else {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (position) => {
-          const { latitude, longitude } = position.coords;
-          try {
-            const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-            const data = await response.json();
-            const locationPincode = '742136';
-            const updatedPincode = [locationPincode,'742136','742137','742138'];
-            setPinCode(updatedPincode);
-            localStorage.setItem('pincode', JSON.stringify(updatedPincode));
-          } catch (error) {
-            console.error("Error fetching pincode:", error);
+    const existingAddressCookie = document.cookie.split('; ').find(row => row.startsWith('address='));
+    const userpincodesCookie = document.cookie.split('; ').find(row => row.startsWith('userpincodes='));
+
+    if (!userpincodesCookie || !existingAddressCookie) {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+              const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+              );
+              const data = await response.json();
+              const locationPincode = data.address.postcode || 'Add Pincode';
+
+              const expirationTime = new Date();
+              expirationTime.setTime(expirationTime.getTime() + (15 * 60 * 1000));
+              const expires = `expires=${expirationTime.toUTCString()}`;
+
+              // Store address as a cookie with expiration
+              document.cookie = `address=${encodeURIComponent(JSON.stringify(data.address))}; ${expires}; path=/`;
+
+              const userPincodes = [
+                {
+                  pincode: data.address.postcode,
+                  selected: true,
+                },
+              ];
+
+              document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
+            } catch (error) {
+              console.error("Error fetching pincode:", error);
+            }
+          },
+          (error) => {
+            console.error("Geolocation error:", error.message);
           }
-        });
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
       }
     }
   }, []);
 
   return (
     <Router>
-      <RoutesWithConditionalHeader pincode={pincode} setPinCode={setPinCode} />
+      <RoutesWithConditionalHeader />
     </Router>
   );
 }
 
-function RoutesWithConditionalHeader({ pincode, setPinCode }) {
-  
-  const [hideHeader, setHideHeader] = useState(false); // For controlling header visibility
-
-  
+function RoutesWithConditionalHeader() {
   const location = useLocation();
   const isHomepage = location.pathname === '/';
 
@@ -51,15 +69,15 @@ function RoutesWithConditionalHeader({ pincode, setPinCode }) {
     <>
       {isHomepage && <Header />}
       <Routes>
-        <Route path="/" element={<Home hideHeader={hideHeader} setHideHeader={setHideHeader} pincode={pincode} setPinCode={setPinCode} />} />
-        <Route path="/search" element={<SearchPage pincode={pincode} />} />
-        <Route path="/shop" element={<ShopPage/>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/shop" element={<ShopPage />} />
         <Route path="/product/:productId" element={<SingleProduct />} />
-        <Route path="/shop/:shopId" element={<SingleShop/>}/>
+        <Route path="/shop/:shopId" element={<SingleShop />} />
+        <Route path="/pincode" element={<Pincode />} />
       </Routes>
     </>
   );
 }
 
 export default App;
-

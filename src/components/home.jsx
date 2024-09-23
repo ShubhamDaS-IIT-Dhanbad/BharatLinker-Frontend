@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import '../styles/home.css';
+
 import REACT_APP_API_URL from '../../public/constant.js';
 import b1 from '../assets/b1.jpg';
 import ProductCard from './productCard.jsx';
+import ExploreCategory from './homePageComponent/exploreCategory.jsx'
 
-import { MdFilterList } from "react-icons/md";
-import { LiaSortSolid } from "react-icons/lia";
-
+import { MdOutlineStore } from "react-icons/md";
+import ExploreNearbyShops from './homePageComponent/exploreNearByShop.jsx';
 
 function Home() {
     const [loading, setLoading] = useState(false);
@@ -21,6 +23,7 @@ function Home() {
 
     const navigate = useNavigate();
 
+    // Fetch products
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
@@ -31,7 +34,7 @@ function Home() {
                 if (data.products && data.products.length > 0) {
                     setCurrentProducts((prevProducts) => {
                         if (page === 1) {
-                            return data.products; // Replace with new data
+                            return data.products;
                         }
                         return [...prevProducts, ...data.products]; // Append new products
                     });
@@ -49,34 +52,11 @@ function Home() {
         fetchProducts();
     }, [pincode, page]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (containerRef.current) {
-                const lastCard = containerRef.current.lastChild;
-                if (lastCard) {
-                    const lastCardRect = lastCard.getBoundingClientRect();
-                    const containerRect = containerRef.current.getBoundingClientRect();
-
-                    
-                    if (lastCardRect.bottom <= containerRect.bottom && hasMoreProducts) {
-                        setPage((prevPage) => prevPage + 1);
-                    }
-                }
-            }
-        };
-
-        const currentContainer = containerRef.current;
-        currentContainer.addEventListener('scroll', handleScroll);
-        return () => {
-            currentContainer.removeEventListener('scroll', handleScroll);
-        };
-    }, [hasMoreProducts]);
-
     return (
-        <div id='home-div' ref={containerRef} style={{ overflowY: 'auto', maxHeight: '80vh' }}>
+        <div id='home-div' ref={containerRef}>
             <div id='home-body'>
                 <img src={b1} alt="Banner" id='home-body-img' />
-
+                <ExploreCategory />
                 <div className="all-product-page-grid">
                     {currentProducts.map(product => (
                         <div key={product._id}>
@@ -99,13 +79,8 @@ function Home() {
             </div>
 
             <div id='home-footer'>
-                <div id='home-footer-sortby'>
-                    <LiaSortSolid size={25} />
-                    SORT BY
-                </div>
-                <div id='home-footer-filterby'>
-                    <MdFilterList size={25} />
-                    FILTER BY
+                <div id='home-footer-shop' onClick={()=>navigate('/shop')}>
+                <MdOutlineStore size={40}/>
                 </div>
             </div>
         </div>

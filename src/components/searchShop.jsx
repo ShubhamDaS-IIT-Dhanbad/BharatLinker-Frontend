@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/searchShop.css'; // Ensure you have this CSS file for styling
 
-import ProductCard from './productCard.jsx';
-import { BsSearch } from "react-icons/bs";
 import { MdFilterList } from "react-icons/md";
 import { LiaSortSolid } from "react-icons/lia";
 
@@ -11,10 +9,6 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import { useNavigate } from 'react-router-dom';
 import ShopCard from './shopCard.jsx';
-
-
-import o1 from '../assets/oneplus.jpg'
-import s1 from '../assets/shopsPage.webp';
 
 const Shop = () => {
   const [shops, setShops] = useState([]);
