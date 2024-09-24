@@ -20,7 +20,7 @@ const ShopFragmentCard = ({ product }) => {
                         ₹{product.price}
                     </span>
                 </div>
-                <div className='shop-fragment-card-bottom-stock'>
+                <div className={`product-card-bottom-stock ${product.quantityAvailable > 0 ? 'instock' : 'outofstock'}`}>
                     {product.quantityAvailable > 0 ? (
                         <span>IN STOCK</span>
                     ) : (

@@ -1,37 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiLocationArrow1 } from "react-icons/ci";
-import "../styles/shopCard.css"; // Make sure to use the appropriate CSS file
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import "../styles/shopCard.css";
 
 function ShopCard({ shop }) {
     const navigate = useNavigate();
+    const [showAddress, setShowAddress] = useState(false);
 
-    // Fallback values for the shop's image and name if missing
-    const shopImageUrl = shop.images && shop.images[0] ? shop.images[0] : 'https://via.placeholder.com/300x180'; 
-    const shopDisplayName = shop.shopName || 'Shop Name'; // Default shop name
-    const shopPincode = shop.pincode || 'Pincode'; // Default pincode
-    const shopCategory = shop.category || 'Grocery'; // Default category
+    const shopImageUrl = shop.images && shop.images[0] ? shop.images[0] : 'https://via.placeholder.com/300x180';
+    const shopDisplayName = shop.shopName || 'Shop Name';
+
+    const toggleAddress = () => {
+        setShowAddress(!showAddress);
+    };
 
     return (
-        <div className="shop-card" onClick={() => navigate(`/shop/${shop._id}`)}>
-            <div className="shop-card-top">
-                <img className="shop-card-top-image" src={shopImageUrl} alt={shopDisplayName} />
+        <div className="shop-card-container">
+            <div className="shop-card-header" onClick={() => navigate(`/shop/${shop._id}`)}>
+                <img className="shop-card-image" src={shopImageUrl} alt={shopDisplayName} />
             </div>
-            
-            <div className='shop-card-bottom-container'>
-                <div id="shop-card-shop-info">
-                    <span className='shop-card-shop-name'>{shopDisplayName}</span>
-                    <span className='shop-card-shop-category'>{shopCategory}</span>
-                    <span className='shop-card-shop-pincode'>{shopPincode}</span>
-                </div>
-                <div id='shop-card-bottom-icons'>
-                    <div id='shop-card-bottom-location-icon'>
-                        <CiLocationArrow1 size={25} />
-                        <span>{shopPincode}</span>
+
+            <div className='shop-card-details'>
+                <span className='shop-card-name'>{shopDisplayName}</span>
+
+                <div className="shop-card-info">
+
+                    <div className="shop-card-divider"></div>
+                    <div className="shop-card-address-toggle" onClick={toggleAddress} style={{ cursor: 'pointer' }}>
+                        <p>Category</p>
+                        {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                     </div>
-                    <div id='shop-card-bottom-status'>
-                        {shop.isOpen ? 'OPENED' : 'CLOSED'}
-                    </div>
+
+                    {showAddress && (
+                        <div className="shop-card-address">
+                            <p>Shop Address here</p> {/* Replace with actual address from shop data */}
+                        </div>
+                    )}
+
+                    <div className="shop-card-divider"></div>
                 </div>
             </div>
         </div>

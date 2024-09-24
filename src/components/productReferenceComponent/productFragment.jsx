@@ -20,12 +20,12 @@ const ReferenceCard = ({ product }) => {
                         ₹{product.price}
                     </span>
                 </div>
-                <div className="product-fragment-reference-card-bottom-stock">
-                    {product.quantityAvailable > 0 ? (
-                        <span>IN STOCK</span>
-                    ) : (
-                        <span>OUT OF STOCK</span>
-                    )}
+                <div className={`product-card-bottom-stock ${product.quantityAvailable > 0 ? 'instock' : 'outofstock'}`}>
+                        {product.quantityAvailable> 0? (
+                            <span>IN STOCK</span>
+                        ) : (
+                            <span>OUT OF STOCK</span>
+                        )}
                 </div>
             </div>
         </div>

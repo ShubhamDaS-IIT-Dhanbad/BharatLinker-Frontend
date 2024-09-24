@@ -70,7 +70,7 @@ const Pincode = () => {
             setUserPincodes(prevPincodes => {
                 const updatedPincodes = [...prevPincodes, newPincode];
                 const expires = new Date();
-                expires.setTime(expires.getTime() + 15 * 60 * 1000);
+                expires.setTime(expires.getTime() + 60 * 60 * 1000);
                 document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(updatedPincodes))}; expires=${expires.toUTCString()}; path=/`;
                 return updatedPincodes;
             });

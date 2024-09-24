@@ -26,7 +26,7 @@ function App() {
               const locationPincode = data.address.postcode || 'Add Pincode';
 
               const expirationTime = new Date();
-              expirationTime.setTime(expirationTime.getTime() + (15 * 60 * 1000));
+              expirationTime.setTime(expirationTime.getTime() + (60 * 60 * 1000));
               const expires = `expires=${expirationTime.toUTCString()}`;
 
               // Store address as a cookie with expiration

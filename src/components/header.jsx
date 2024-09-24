@@ -8,7 +8,7 @@ import { TbChevronDown } from "react-icons/tb";
 function Navbar() {
     const [searchInput, setSearchInput] = useState('');
     const [hideHeader, setHideHeader] = useState(false);
-    const [address, setAddress] = useState({ city: 'Unknown City', postcode: 'Unknown Pincode' });
+    const [address, setAddress] = useState({city:"Enter",postcode:"Pincode"});
     const navigate = useNavigate();
 
     // Retrieve address from cookie

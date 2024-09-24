@@ -1,49 +1,66 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/searchShop.css'; // Ensure you have this CSS file for styling
+import { useNavigate } from 'react-router-dom';
+import ShopCard from './shopCard.jsx';
+import '../styles/searchShop.css';
 
 import { MdFilterList } from "react-icons/md";
 import { LiaSortSolid } from "react-icons/lia";
-
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-import { useNavigate } from 'react-router-dom';
-import ShopCard from './shopCard.jsx';
+const ITEMS_PER_PAGE = 10; // Number of items to display per page
 
 const Shop = () => {
   const [shops, setShops] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [pincodes, setPincodes] = useState([]);
-  const navigate = useNavigate();
-  const [pincode, setPincode] = useState('742136');
-
+  const [selectedPincodes, setSelectedPincodes] = useState([]);
+  const [pincodeLoading, setPincodeLoading] = useState(true);
   const [showPincode, setShowPincode] = useState(true);
-  const [showShop, setShowShop] = useState(false);
-  const [showCatgory, setShowCategory] = useState(false);
-
   const [showFilter, setShowFilter] = useState(false);
-  const [showSortby, setShowSortby] = useState(false);
+  const [showSortBy, setShowSortBy] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalShops, setTotalShops] = useState(0);
+
+  const navigate = useNavigate();
+
+  const getCookieValue = (cookieName) => {
+    const name = cookieName + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let cookie of cookieArray) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name)) {
+        return cookie.substring(name.length);
+      }
+    }
+    return null;
+  };
 
   useEffect(() => {
-    const storedPincodes = localStorage.getItem('pincode');
-    if (storedPincodes) {
-      setPincodes(JSON.parse(storedPincodes));
+    const pincodesCookie = getCookieValue('userpincodes');
+    if (pincodesCookie) {
+      try {
+        const pincodesData = JSON.parse(pincodesCookie);
+        const selected = pincodesData.filter(p => p.selected).map(p => p.pincode);
+        setSelectedPincodes(selected);
+      } catch (error) {
+        console.error("Error parsing userpincodes cookie", error);
+      }
     }
+    setPincodeLoading(false);
   }, []);
 
   useEffect(() => {
     const fetchShops = async () => {
-
+      if (pincodeLoading || selectedPincodes.length === 0) return;
       try {
-        // const pincodeQuery = pincodes.join(',');
-        const response = await fetch(`http://localhost:12000/api/v1/shop/shops?pincode=742136`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch shops');
-        }
-        const data = await response.json(); console.log(data);
+        const response = await fetch(`http://localhost:12000/api/v1/shop/shops?pincode=${selectedPincodes}&page=${currentPage}&limit=${ITEMS_PER_PAGE}`);
+        if (!response.ok) throw new Error('Failed to fetch shops');
+        const data = await response.json();
         setShops(data.shops || []);
+        setTotalShops(data.total); // Assuming your API returns the total number of shops
       } catch (error) {
         setError(error.message);
       } finally {
@@ -52,7 +69,7 @@ const Shop = () => {
     };
 
     fetchShops();
-  }, [pincodes]);
+  }, [selectedPincodes, pincodeLoading, currentPage]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -63,26 +80,33 @@ const Shop = () => {
     const shopCategoriesMatch = shop?.categories?.some(category =>
       category.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
     return shopNameMatches || shopCategoriesMatch;
   });
 
+  const totalPages = Math.ceil(totalShops / ITEMS_PER_PAGE);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-      {!showFilter && !showSortby && (
+      {!showFilter &&!showSortBy && (
         <>
           <div id="shop-search-container-top">
             <div id='shop-search-container-top-div'>
-              <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
+              <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
               <input
                 id="shop-search-bar"
                 value={searchQuery}
@@ -94,63 +118,67 @@ const Shop = () => {
 
           <div id="shop-grid">
             {filteredShops.length > 0 ? (
-              filteredShops.map(shop => (
-                <ShopCard key={shop._id} shop={shop} />
-              ))
+              filteredShops.map(shop => <ShopCard key={shop._id} shop={shop} />)
             ) : (
               <p>No shops found</p>
             )}
           </div>
+        </>)}
 
-        </>
-      )}
 
       {showFilter && (
         <div className='searchpage-filter-section'>
           <div className='modal-content'>
             <div id="product-details-about" onClick={() => setShowPincode(!showPincode)} style={{ cursor: 'pointer' }}>
-              <p>pincode</p>
+              <p>Pincode</p>
               {showPincode ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
-
             {showPincode && (
               <div id="shop-details-description">
-                pincode
+                {selectedPincodes.join(', ')}
               </div>
             )}
-
-
             <div id="product-details-hr"></div>
-            <div id="product-details-about" onClick={() => setShowShop(!showShop)} style={{ cursor: 'pointer' }}>
+            <div id="product-details-about" onClick={() => setShowFilter(false)} style={{ cursor: 'pointer' }}>
               <p>Shop</p>
-              {showShop ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+              <IoIosArrowDown size={20} />
             </div>
             <div id="product-details-hr"></div>
-            <div id="product-details-about" onClick={() => setShowCategory(!showCatgory)} style={{ cursor: 'pointer' }}>
+            <div id="product-details-about" onClick={() => setShowSortBy(!showSortBy)} style={{ cursor: 'pointer' }}>
               <p>Category</p>
-              {showCatgory ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+              {showSortBy ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
           </div>
         </div>
       )}
 
-      {showSortby && (
+      {showSortBy && (
         <div className='searchpage-filter-section'>
           <div className='modal-content'>
-            <div id="product-details-about" onClick={() => setShowPincode(!showPincode)} style={{ cursor: 'pointer' }}>
-              <p>low to high</p>
-              {showPincode ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+            <div id="product-details-about" style={{ cursor: 'pointer' }}>
+              <p>Low to High</p>
             </div>
           </div>
         </div>
       )}
 
+      {/* Pagination Controls */}
+      <div id="pagination-controls">
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+          Prev
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+          Next
+        </button>
+      </div>
+
       <div id='searchpage-footer'>
-        <div id='searchpage-footer-sortby' onClick={() => { setShowSortby(!showSortby); setShowFilter(false) }}>
+        <div id='searchpage-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
           <LiaSortSolid size={25} />
           SORT BY
         </div>
-        <div id='searchpage-footer-filterby' onClick={() => { setShowSortby(false); setShowFilter(!showFilter) }}>
+        <div id='searchpage-footer-filterby' onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }}>
           <MdFilterList size={25} />
           FILTER BY
         </div>
