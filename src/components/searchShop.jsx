@@ -56,7 +56,7 @@ const Shop = () => {
       if (pincodeLoading || selectedPincodes.length === 0) return;      
       const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
       try {
-        const response = await fetch(`http://localhost:12000/api/v1/shop/shops?pincode=${searchByPincode}`);
+        const response = await fetch(`http://localhost:12000/api/v1/shop/shops?pincode=742136`);
         if (!response.ok) throw new Error('Failed to fetch shops');
         const data = await response.json();
         setShops(data.shops || []);
