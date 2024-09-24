@@ -43,8 +43,7 @@ const Shop = () => {
     if (pincodesCookie) {
       try {
         const pincodesData = JSON.parse(pincodesCookie);
-        const selected = pincodesData.filter(p => p.selected).map(p => p.pincode);
-        setSelectedPincodes(selected);
+        setSelectedPincodes(pincodesData);
       } catch (error) {
         console.error("Error parsing userpincodes cookie", error);
       }
@@ -54,9 +53,10 @@ const Shop = () => {
 
   useEffect(() => {
     const fetchShops = async () => {
-      if (pincodeLoading || selectedPincodes.length === 0) return;
+      if (pincodeLoading || selectedPincodes.length === 0) return;      
+      const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
       try {
-        const response = await fetch(`http://localhost:12000/api/v1/shop/shops?pincode=${selectedPincodes}&page=${currentPage}&limit=${ITEMS_PER_PAGE}`);
+        const response = await fetch(`http://localhost:12000/api/v1/shop/shops?pincode=${searchByPincode}`);
         if (!response.ok) throw new Error('Failed to fetch shops');
         const data = await response.json();
         setShops(data.shops || []);
