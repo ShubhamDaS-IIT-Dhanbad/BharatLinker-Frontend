@@ -104,14 +104,14 @@ const Pincode = () => {
         <div>
             <div id='pincode-you-location'>
                 <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
-                YOUR LOCATION
+                ADD PINCODES
             </div>
 
             <div id="pincode-search-container-top">
                 <div id='pincode-search-container-top-div'>
                     <input
                         id="pincode-search-bar"
-                        placeholder="Enter Pincode"
+                        placeholder="Add Pincode"
                         value={inputValue}
                         onChange={handleInputChange}
                     />

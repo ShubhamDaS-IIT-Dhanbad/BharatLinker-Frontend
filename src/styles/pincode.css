@@ -13,21 +13,43 @@
     z-index: 999;margin-top: 5px;
  }
 #pincode-search-container-top-div{
-    width: 96vw;display: flex;background-color: rgba(248, 240, 240, 0.541);
-   justify-content: center;align-items: center;
-    border: 0.0005px solid rgba(0, 0, 0, 0.365);
+    width: 96vw;display: flex; background-color: rgb(229, 203, 203) ;
+   justify-content: center;align-items: center;color: rgb(0, 0, 0);
+    border: 0.0005px solid rgba(255, 255, 255, 0.365);
    border-radius: 5px;height: 40px;
     
   }
-  #pincode-search-bar {
-    display: flex;background-color: rgba(248, 238, 238, 0.674);
-    width: 88%;font-size: 15px;
+  /* General styling for the pincode search bar */
+#pincode-search-bar {
+    display: flex;
+    background-color: rgb(229, 203, 203);
+    width: 88%;
+    font-size: 15px;
+    color: rgb(0, 0, 0);
     border: none; /* Removes the border */
-    outline: none; /* Removes default focus outline (optional) */
+    outline: none; /* Removes default focus outline */
     padding: 6px;
+    font-weight: 800;
     box-sizing: border-box; /* Ensures padding is included in the element's total width */
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
- }
+}
+
+/* Target #pincode-search-bar for autofill in Chrome, Edge, and Safari */
+#pincode-search-bar:-webkit-autofill,
+#pincode-search-bar:-webkit-autofill:hover,
+#pincode-search-bar:-webkit-autofill:focus {
+    background-color: rgb(229, 203, 203) !important; /* Keep the custom background */
+    color: black !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgb(229, 203, 203) inset !important; /* Ensure background doesn't change */
+    box-shadow: 0 0 0px 1000px rgb(229, 203, 203) inset !important;
+}
+
+
+
+
+
+
+
  .pincode-item {
     display: flex;
     align-items: center; /* Center items vertically */

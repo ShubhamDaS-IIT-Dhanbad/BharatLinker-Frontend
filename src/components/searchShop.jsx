@@ -8,7 +8,8 @@ import { LiaSortSolid } from "react-icons/lia";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-const ITEMS_PER_PAGE = 10; // Number of items to display per page
+
+import REACT_APP_API_URL from '../../public/constant.js';
 
 const Shop = () => {
   const [shops, setShops] = useState([]);
@@ -25,6 +26,7 @@ const Shop = () => {
 
   const navigate = useNavigate();
 
+  // Function to get cookie values
   const getCookieValue = (cookieName) => {
     const name = cookieName + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
@@ -38,6 +40,7 @@ const Shop = () => {
     return null;
   };
 
+  // Effect to load pincodes from cookies
   useEffect(() => {
     const pincodesCookie = getCookieValue('userpincodes');
     if (pincodesCookie) {
@@ -51,58 +54,41 @@ const Shop = () => {
     setPincodeLoading(false);
   }, []);
 
-  useEffect(() => {
-    const fetchShops = async () => {
-      if (pincodeLoading || selectedPincodes.length === 0) return;      
+  // Effect to fetch shops based on selected pincodes
+  
+  const fetchShops = async () => {
+    try {
+
       const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-      try {
-        const response = await fetch(`http://localhost:12000/api/v1/shop/shops?pincode=742136`);
-        if (!response.ok) throw new Error('Failed to fetch shops');
-        const data = await response.json();
-        setShops(data.shops || []);
-        setTotalShops(data.total); // Assuming your API returns the total number of shops
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const response = await fetch(
+        `${REACT_APP_API_URL}/api/v1/shop/shops?keyword=${searchQuery}&pincode=742136`
+    );
+      if (!response.ok) throw new Error('Failed to fetch shops');
+      const data = await response.json();
+      setShops(data.shops || []);
+      
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchShops();
-  }, [selectedPincodes, pincodeLoading, currentPage]);
-
+  }, [pincodeLoading, selectedPincodes,searchQuery]);
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    fetchShops();
   };
 
-  const filteredShops = shops.filter(shop => {
-    const shopNameMatches = shop?.shopName?.toLowerCase().includes(searchQuery.toLowerCase());
-    const shopCategoriesMatch = shop?.categories?.some(category =>
-      category.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    return shopNameMatches || shopCategoriesMatch;
-  });
-
-  const totalPages = Math.ceil(totalShops / ITEMS_PER_PAGE);
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
+ 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-      {!showFilter &&!showSortBy && (
+      {!showFilter && !showSortBy && (
         <>
           <div id="shop-search-container-top">
             <div id='shop-search-container-top-div'>
@@ -117,14 +103,18 @@ const Shop = () => {
           </div>
 
           <div id="shop-grid">
-            {filteredShops.length > 0 ? (
-              filteredShops.map(shop => <ShopCard key={shop._id} shop={shop} />)
+            {shops.length > 0 ? (
+              shops.map(shop => (
+                <div key={shop._id}>
+                  <ShopCard shop={shop} />
+                </div>
+              ))
             ) : (
               <p>No shops found</p>
             )}
           </div>
-        </>)}
-
+        </>
+      )}
 
       {showFilter && (
         <div className='searchpage-filter-section'>
@@ -135,7 +125,7 @@ const Shop = () => {
             </div>
             {showPincode && (
               <div id="shop-details-description">
-                {selectedPincodes.join(', ')}
+                {selectedPincodes.map(pin => pin.pincode).join(', ')}
               </div>
             )}
             <div id="product-details-hr"></div>
@@ -162,17 +152,8 @@ const Shop = () => {
         </div>
       )}
 
-      {/* Pagination Controls */}
-      <div id="pagination-controls">
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>
-          Prev
-        </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Next
-        </button>
-      </div>
 
+      {/* Footer with Sort and Filter */}
       <div id='searchpage-footer'>
         <div id='searchpage-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
           <LiaSortSolid size={25} />

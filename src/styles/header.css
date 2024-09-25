@@ -71,7 +71,19 @@
     margin-left: 10px;
     color: rgb(0, 0, 0);
 }
+/* For Chrome, Edge, and Safari */
+/* Target #header-div-input for autofill in Chrome, Edge, and Safari */
+#header-div-input:-webkit-autofill,
+#header-div-input:-webkit-autofill:hover,
+#header-div-input:-webkit-autofill:focus {
+    background-color: white !important;
+    color: black !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    box-shadow: 0 0 0px 1000px white inset !important;
+}
 
+
+/* General input styling */
 #header-div-input {
     border: none;
     color: rgb(0, 0, 0);
@@ -79,4 +91,5 @@
     padding-left: 10px;
     flex-grow: 1; /* Allow input to grow */
     outline: none;
+    background-color: white;
 }

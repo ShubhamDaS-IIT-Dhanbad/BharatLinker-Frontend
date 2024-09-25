@@ -278,7 +278,6 @@ const SearchPage = () => {
                                 placeholder="Search"
                                 value={inputValue}
                                 onChange={handleInputChange}
-                                disabled={loading} // Disable input while loading
                             />
                         </div>
                     </div>
