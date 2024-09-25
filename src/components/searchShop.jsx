@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Import useRef
 import { useNavigate } from 'react-router-dom';
 import ShopCard from './shopCard.jsx';
 import '../styles/searchShop.css';
@@ -8,23 +8,42 @@ import { LiaSortSolid } from "react-icons/lia";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-
 import REACT_APP_API_URL from '../../public/constant.js';
+
+const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
+  return (
+    <div className="pincode-item-search-page-card" onClick={() => toggleCategorySelection(categoryObj.category)}>
+      <div className={categoryObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
+      <p className="pincode-item-pincode">{categoryObj.category}</p>
+    </div>
+  );
+};
 
 const Shop = () => {
   const [shops, setShops] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [selectedPincodes, setSelectedPincodes] = useState([]);
-  const [pincodeLoading, setPincodeLoading] = useState(true);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   const [showPincode, setShowPincode] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [showSortBy, setShowSortBy] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalShops, setTotalShops] = useState(0);
+  const [showFilterCategory, setShowFilterCategory] = useState(false);
+
+  const [categories, setCategories] = useState([
+    { category: "mobile", selected: false },
+    { category: "laptop", selected: false },
+    { category: "earphone", selected: false },
+    { category: "television", selected: false }
+  ]);
 
   const navigate = useNavigate();
+
+  // Create a ref for the input
+  const searchInputRef = useRef(null);
 
   // Function to get cookie values
   const getCookieValue = (cookieName) => {
@@ -51,39 +70,61 @@ const Shop = () => {
         console.error("Error parsing userpincodes cookie", error);
       }
     }
-    setPincodeLoading(false);
   }, []);
 
-  // Effect to fetch shops based on selected pincodes
-  
-  const fetchShops = async () => {
-    try {
+  // Effect to fetch shops based on selected pincodes and search query
+  useEffect(() => {
+    const fetchShops = async () => {
+      setLoading(true);
+      setError(null); // Reset error state
+      try {
+        const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
+        const response = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shops?keyword=${searchQuery}&pincode=${searchByPincode.join(',')}`);
 
-      const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-      const response = await fetch(
-        `${REACT_APP_API_URL}/api/v1/shop/shops?keyword=${searchQuery}&pincode=742136`
-    );
-      if (!response.ok) throw new Error('Failed to fetch shops');
-      const data = await response.json();
-      setShops(data.shops || []);
-      
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+        if (!response.ok) throw new Error('Failed to fetch shops');
+        const data = await response.json();
+        setShops(data.shops || []);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchShops();
+  }, [selectedPincodes, searchQuery]);
+
+  const handleSearchChange = (event) => {
+    const newValue = event.target.value; // Get the new value from the input
+    setSearchQuery(newValue); // Update the search query state
+    setShops([]); // Reset shops on input change
+    searchInputRef.current.focus(); // Maintain focus on the search input
   };
 
-  useEffect(() => {
-    fetchShops();
-  }, [pincodeLoading, selectedPincodes,searchQuery]);
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    fetchShops();
+  const toggleCategorySelection = (categoryName) => {
+    setCategories((prevCategories) => {
+      return prevCategories.map((category) => {
+        if (category.category === categoryName) {
+          return {
+            ...category,
+            selected: !category.selected // Toggle the selected state
+          };
+        }
+        return category;
+      });
+    });
+
+    // Update selectedCategories based on the toggled state
+    setSelectedCategories((prevSelected) => {
+      if (prevSelected.includes(categoryName)) {
+        return prevSelected.filter(item => item !== categoryName);
+      } else {
+        return [...prevSelected, categoryName];
+      }
+    });
   };
 
  
-  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -95,14 +136,14 @@ const Shop = () => {
               <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
               <input
                 id="shop-search-bar"
+                ref={searchInputRef} // Set the ref here
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search"
               />
             </div>
           </div>
-
-          <div id="shop-grid">
+        {loading?(<>loading...</>):(<div id="shop-grid">
             {shops.length > 0 ? (
               shops.map(shop => (
                 <div key={shop._id}>
@@ -112,7 +153,8 @@ const Shop = () => {
             ) : (
               <p>No shops found</p>
             )}
-          </div>
+          </div>)}
+          
         </>
       )}
 
@@ -128,30 +170,23 @@ const Shop = () => {
                 {selectedPincodes.map(pin => pin.pincode).join(', ')}
               </div>
             )}
+
             <div id="product-details-hr"></div>
-            <div id="product-details-about" onClick={() => setShowFilter(false)} style={{ cursor: 'pointer' }}>
-              <p>Shop</p>
-              <IoIosArrowDown size={20} />
-            </div>
-            <div id="product-details-hr"></div>
-            <div id="product-details-about" onClick={() => setShowSortBy(!showSortBy)} style={{ cursor: 'pointer' }}>
+            <div id="product-details-about" onClick={() => setShowFilterCategory(!showFilterCategory)} style={{ cursor: 'pointer' }}>
               <p>Category</p>
-              {showSortBy ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+              {showFilterCategory ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
           </div>
         </div>
       )}
 
-      {showSortBy && (
-        <div className='searchpage-filter-section'>
-          <div className='modal-content'>
-            <div id="product-details-about" style={{ cursor: 'pointer' }}>
-              <p>Low to High</p>
-            </div>
-          </div>
+      {showFilterCategory && (
+        <div id="filter-category-options">
+          {categories.map((cat, idx) => (
+            <CategoryCard key={idx} categoryObj={cat} toggleCategorySelection={toggleCategorySelection} />
+          ))}
         </div>
       )}
-
 
       {/* Footer with Sort and Filter */}
       <div id='searchpage-footer'>
