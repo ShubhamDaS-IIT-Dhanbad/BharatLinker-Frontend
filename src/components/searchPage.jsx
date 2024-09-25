@@ -270,11 +270,11 @@ const SearchPage = () => {
         <>
             {!showFilter && !showSortBy && (
                 <>
-                    <div id="shop-search-container-top">
-                        <div id='shop-search-container-top-div'>
+                    <div id="product-search-container-top">
+                        <div id='product-search-container-top-div'>
                             <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
                             <input
-                                id="shop-search-bar"
+                                id="product-search-bar"
                                 placeholder="Search"
                                 value={inputValue}
                                 onChange={handleInputChange}

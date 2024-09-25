@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'; // Import useRef
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ShopCard from './shopCard.jsx';
 import '../styles/searchShop.css';
@@ -9,12 +9,25 @@ import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import REACT_APP_API_URL from '../../public/constant.js';
+import { useDebounce } from 'use-debounce';
 
+// Category card for filtering by categories
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
   return (
     <div className="pincode-item-search-page-card" onClick={() => toggleCategorySelection(categoryObj.category)}>
       <div className={categoryObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
       <p className="pincode-item-pincode">{categoryObj.category}</p>
+    </div>
+  );
+};
+
+// Pin code card for filtering by pin codes
+const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
+  return (
+    <div className="pincode-item-search-page-card"
+      onClick={() => togglePincodeSelection(pincodeObj.pincode)}>
+      <div className={pincodeObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
+      <p className="pincode-item-pincode">{pincodeObj.pincode}</p>
     </div>
   );
 };
@@ -41,11 +54,9 @@ const Shop = () => {
   ]);
 
   const navigate = useNavigate();
-
-  // Create a ref for the input
   const searchInputRef = useRef(null);
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500); // Debounce for 500ms
 
-  // Function to get cookie values
   const getCookieValue = (cookieName) => {
     const name = cookieName + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
@@ -59,7 +70,6 @@ const Shop = () => {
     return null;
   };
 
-  // Effect to load pincodes from cookies
   useEffect(() => {
     const pincodesCookie = getCookieValue('userpincodes');
     if (pincodesCookie) {
@@ -72,33 +82,34 @@ const Shop = () => {
     }
   }, []);
 
-  // Effect to fetch shops based on selected pincodes and search query
+  const fetchShops = async () => {
+    setLoading(true);
+    try {
+      const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
+      if (searchByPincode.length === 0) { setShops([]); return; }
+      const response = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shops?pincode=${searchByPincode}&keyword=${debouncedSearchQuery}`);
+      if (!response.ok) throw new Error('Failed to fetch shops');
+      const data = await response.json();
+      setShops(data.shops || []);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchShops = async () => {
-      setLoading(true);
-      setError(null); // Reset error state
-      try {
-        const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-        const response = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shops?keyword=${searchQuery}&pincode=${searchByPincode.join(',')}`);
-
-        if (!response.ok) throw new Error('Failed to fetch shops');
-        const data = await response.json();
-        setShops(data.shops || []);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchShops();
-  }, [selectedPincodes, searchQuery]);
+    if (selectedPincodes.length > 0) {
+      fetchShops();
+    }
+  }, [debouncedSearchQuery, selectedPincodes]);
 
   const handleSearchChange = (event) => {
-    const newValue = event.target.value; // Get the new value from the input
-    setSearchQuery(newValue); // Update the search query state
-    setShops([]); // Reset shops on input change
-    searchInputRef.current.focus(); // Maintain focus on the search input
+    setLoading(true);
+    const newValue = event.target.value;
+    setSearchQuery(newValue);
+    setShops([]);
+    searchInputRef.current.focus(); // Keep focus on search input
   };
 
   const toggleCategorySelection = (categoryName) => {
@@ -107,14 +118,13 @@ const Shop = () => {
         if (category.category === categoryName) {
           return {
             ...category,
-            selected: !category.selected // Toggle the selected state
+            selected: !category.selected
           };
         }
         return category;
       });
     });
 
-    // Update selectedCategories based on the toggled state
     setSelectedCategories((prevSelected) => {
       if (prevSelected.includes(categoryName)) {
         return prevSelected.filter(item => item !== categoryName);
@@ -124,71 +134,92 @@ const Shop = () => {
     });
   };
 
- 
+  const togglePincodeSelection = (pincode) => {
+    setSelectedPincodes((prevSelectedPincodes) => {
+      const updatedPincodes = prevSelectedPincodes.map(pin =>
+        pin.pincode === pincode
+          ? { ...pin, selected: !pin.selected }
+          : pin
+      );
+      return updatedPincodes;
+    });
+  };
+
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
       {!showFilter && !showSortBy && (
         <>
+
           <div id="shop-search-container-top">
             <div id='shop-search-container-top-div'>
               <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
               <input
                 id="shop-search-bar"
-                ref={searchInputRef} // Set the ref here
+                ref={searchInputRef}
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search"
               />
             </div>
           </div>
-        {loading?(<>loading...</>):(<div id="shop-grid">
-            {shops.length > 0 ? (
-              shops.map(shop => (
-                <div key={shop._id}>
-                  <ShopCard shop={shop} />
-                </div>
-              ))
-            ) : (
-              <p>No shops found</p>
-            )}
-          </div>)}
-          
+
+          {loading ? (
+            <div>Loading shops...</div>
+          ) : (
+            <div id="search-shop-grid">
+              {shops.length > 0 ? (
+                shops.map(shop => (
+                  <div key={shop._id}>
+                    <ShopCard shop={shop} />
+                  </div>
+                ))
+              ) : (
+                <p>No shops found</p>
+              )}
+            </div>
+          )}
         </>
       )}
 
       {showFilter && (
         <div className='searchpage-filter-section'>
-          <div className='modal-content'>
-            <div id="product-details-about" onClick={() => setShowPincode(!showPincode)} style={{ cursor: 'pointer' }}>
+          <div id='filter-section-search-page'>
+            <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} />
+            FILTER SECTION
+          </div>
+          <div className='filter-options-search-page'>
+            <div className="search-shop-page-filter-option-title" onClick={() => setShowPincode(!showPincode)} style={{ cursor: 'pointer' }}>
               <p>Pincode</p>
               {showPincode ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
             {showPincode && (
-              <div id="shop-details-description">
-                {selectedPincodes.map(pin => pin.pincode).join(', ')}
+              <div id="filter-search-shop-pincode-options">
+                {selectedPincodes.map(pincodeObj => <PinCodeCard
+                  key={pincodeObj.pincode}
+                  pincodeObj={pincodeObj}
+                  togglePincodeSelection={togglePincodeSelection} />)}
               </div>
             )}
 
-            <div id="product-details-hr"></div>
-            <div id="product-details-about" onClick={() => setShowFilterCategory(!showFilterCategory)} style={{ cursor: 'pointer' }}>
+            <div className='search-shop-page-filter-option-title' onClick={() => setShowFilterCategory(!showFilterCategory)} style={{ cursor: 'pointer' }}>
               <p>Category</p>
               {showFilterCategory ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
+            {showFilterCategory && (
+              <div id="filter-search-shop-pincode-options">
+                {categories.map((cat, idx) => (
+                  <CategoryCard key={idx} categoryObj={cat} toggleCategorySelection={toggleCategorySelection} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {showFilterCategory && (
-        <div id="filter-category-options">
-          {categories.map((cat, idx) => (
-            <CategoryCard key={idx} categoryObj={cat} toggleCategorySelection={toggleCategorySelection} />
-          ))}
-        </div>
-      )}
 
-      {/* Footer with Sort and Filter */}
+
       <div id='searchpage-footer'>
         <div id='searchpage-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
           <LiaSortSolid size={25} />

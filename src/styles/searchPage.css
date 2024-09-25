@@ -80,6 +80,39 @@
 
 
 
+#product-search-container-top {
+    width: 100%;
+    height: 57px;
+    position: fixed;
+    top: 0;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+ }
+ #product-search-container-top-div {
+    width: 96vw;
+    display: flex;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    margin-top: 8.5px;
+    justify-content: center;
+    align-items: center;
+    border: 0.0005px solid rgba(0, 0, 0, 0.365);
+    top: 0px;
+    border-radius: 5px;
+ }
+  
+ #product-search-bar {
+    width: 100%; /* Makes the search bar full width */
+    border: none; /* Removes the border */
+    outline: none; /* Removes default focus outline (optional) */
+    padding: 10px; /* Add padding if needed for better aesthetics */
+    padding-left: 0px;
+    box-sizing: border-box; /* Ensures padding is included in the element's total width */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ }
 
 .searchpage-filter-section{
   width: 100%;margin-bottom: 67px;

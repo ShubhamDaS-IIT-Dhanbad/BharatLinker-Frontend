@@ -53,7 +53,7 @@ function Navbar() {
         <>
             <div className={hideHeader ? 'header-div-hide' : 'header-div-show'}>
                 <div className='header-div-user'>
-                    <HiOutlineUserCircle id='header-div-ham' size={30} />
+                    <HiOutlineUserCircle id='header-div-ham' size={35} />
                     <div id='header-div-user-location-div'>
                         <p id='header-div-user-location'>Location</p>
                         <div id='header-div-user-location-name' onClick={() => navigate('/pincode')}>

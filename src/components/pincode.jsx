@@ -110,7 +110,7 @@ const Pincode = () => {
             <div id="pincode-search-container-top">
                 <div id='pincode-search-container-top-div'>
                     <input
-                        id="pincode-search-bar"
+                        id="pincode-search-bar-home"
                         placeholder="Add Pincode"
                         value={inputValue}
                         onChange={handleInputChange}

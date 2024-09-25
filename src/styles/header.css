@@ -6,27 +6,29 @@
     position: fixed;
     top: 0;
     min-width: 100vw;
-    background-color: rgb(36, 34, 34);
+    background-color: rgba(18, 17, 17, 0.925);
     color: white;
     z-index: 10000000000;
     transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
 }
-
+#header-div-ham{
+    margin-left: 4px;
+}
 .header-div-show {
     padding: 15px 0 0;
-    height: 100px;
+    height: 110px;
     transform: translateY(0);
     opacity: 1; /* Fully visible */
 }
 
 .header-div-hide {
     padding: 10px 0 0;
-    transform: translateY(-48px);
+    transform: translateY(-55px);
 }
 
 .header-div-user {
     display: flex;
-    height: 45px;
+    height: 52px;
     padding: 0 10px;
     opacity: 1;
     pointer-events: auto; /* Enable interaction */

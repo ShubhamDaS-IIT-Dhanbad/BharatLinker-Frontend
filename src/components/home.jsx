@@ -7,8 +7,11 @@ import REACT_APP_API_URL from '../../public/constant.js';
 import b1 from '../assets/b1.jpg';
 import ProductCard from './productCard.jsx';
 import ExploreCategory from './homePageComponent/exploreCategory.jsx'
+import HomeProductFragment from './productReferenceComponent/homeProductFragment.jsx'
 
 import { MdOutlineStore } from "react-icons/md";
+import { RxCaretRight } from "react-icons/rx";
+import ExploreByCategories from './homePageComponent/exploreByCategory.jsx';
 
 function Home() {
     const [loading, setLoading] = useState(false);
@@ -55,8 +58,9 @@ function Home() {
         <div id='home-div' ref={containerRef}>
             <div id='home-body'>
                 <img src={b1} alt="Banner" id='home-body-img' />
-                <ExploreCategory />
-                <div className="all-product-page-grid">
+                {/* <ExploreCategory /> */}
+                <ExploreByCategories/>
+                {/* <div className="all-product-page-grid">
                     {currentProducts.map(product => (
                         <div key={product._id}>
                             {product.images && product.title && product.price && (
@@ -71,6 +75,28 @@ function Home() {
                             )}
                         </div>
                     ))}
+                </div> */}
+
+                <div id="home-product-details-similar">
+                    <div id='home-product-details-similar-names'>
+                        <p>Exclusive Gadgets</p>
+                        <div id='home-product-details-similar-names-see-all'>See All <RxCaretRight size={20} /></div>
+                    </div>
+                    <HomeProductFragment keyword={"phone"}/>
+                </div>
+                <div id="home-product-details-similar">
+                    <div id='home-product-details-similar-names'>
+                        <p>Earbuds</p>
+                        <div id='home-product-details-similar-names-see-all'>See All <RxCaretRight size={20} /></div>
+                    </div>
+                    <HomeProductFragment keyword={"earbuds"}/>
+                </div>
+                <div id="home-product-details-similar">
+                    <div id='home-product-details-similar-names'>
+                        <p>New Arrival</p>
+                        <div id='home-product-details-similar-names-see-all'>See All <RxCaretRight size={20} /></div>
+                    </div>
+                    <HomeProductFragment keyword={"phone"}/>
                 </div>
 
                 {loading && <p>Loading more products...</p>}
@@ -78,8 +104,8 @@ function Home() {
             </div>
 
             <div id='home-footer'>
-                <div id='home-footer-shop' onClick={()=>navigate('/shop')}>
-                <MdOutlineStore size={40}/>
+                <div id='home-footer-shop' onClick={() => navigate('/shop')}>
+                    <MdOutlineStore size={40} />
                 </div>
             </div>
         </div>

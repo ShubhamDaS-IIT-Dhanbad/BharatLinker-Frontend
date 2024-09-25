@@ -1,6 +1,6 @@
 #home-div{
     display: flex;flex-direction: column;
-   margin-top: 110px;max-width: 100vw;
+   margin-top: 119px;max-width: 100vw;
 }
 #home-body{
     display: flex;flex-direction: column;
@@ -22,9 +22,22 @@
     bottom: 0;
     z-index: 900000;
 }
-
+#home-product-details-similar{
+    margin-top: 30px;
+   color: black;gap: 10px;display: flex;flex-direction: column;
+    font-weight: 900;height: 350px;max-width: 90vw;
+    font-size: 15px;
+}
+#home-product-details-similar-names{
+    display: flex;justify-content: space-between;
+}
+#home-product-details-similar-names-see-all{
+    display: flex;justify-content: center;align-items: center;
+   
+    color: rgb(232, 74, 74);
+}
 #home-footer-shop {
-    width: 60px;
+    width: 60px;box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     border-radius: 50%;
     background-color: rgb(255, 255, 255);
     height: 60px;color: rgb(0, 0, 0);
