@@ -25,7 +25,7 @@
 #home-product-details-similar{
     margin-top: 30px;
    color: black;gap: 10px;display: flex;flex-direction: column;
-    font-weight: 900;height: 390px;max-width: 90vw;
+    font-weight: 900;height: 400px;max-width: 90vw;
     font-size: 15px;
 }
 #home-product-details-similar-names{
