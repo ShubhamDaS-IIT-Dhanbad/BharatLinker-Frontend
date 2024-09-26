@@ -12,6 +12,7 @@ import { TbCategoryPlus } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ExploreByCategories from './homePageComponent/exploreByCategory.jsx';
 
+import LoadingHomePage from './loadingHomePage.jsx'
 function Home() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -41,7 +42,7 @@ function Home() {
     // Fetch products
     const fetchProducts = async () => {
         setLoading(true);
-        console.log("pincodes",pincode);
+        console.log("pincodes", pincode);
         if (pincode.length > 0) {
             try {
                 const response = await fetch(
@@ -101,7 +102,7 @@ function Home() {
     }, [loading, hasMoreProducts]);
 
     // Reusable Product Section
-    const ProductSection = ({ title, keyword ,pincode}) => (
+    const ProductSection = ({ title, keyword, pincode }) => (
         <div id="home-product-details-similar">
             <div id='home-product-details-similar-names'>
                 <p>{title}</p>
@@ -115,18 +116,20 @@ function Home() {
 
     return (
         <div id='home-div' ref={containerRef}>
-            <div id='home-body'>
-                <img src={b1} alt="Banner" id='home-body-img' />
-                <ExploreByCategories />
+            {loading ? (<LoadingHomePage />) : (
+                <div id='home-body'>
+                    <img src={b1} alt="Banner" id='home-body-img' />
+                    <ExploreByCategories />
 
-                <ProductSection pincode={pincode} title="Exclusive Gadgets" keyword="phone" />
-                <ProductSection pincode={pincode}  title="Earbuds" keyword="earbuds" />
-                <ProductSection pincode={pincode}  title="New Arrival" keyword="phone" />
+                    <ProductSection pincode={pincode} title="Exclusive Gadgets" keyword="phone" />
+                    <ProductSection pincode={pincode} title="Earbuds" keyword="earbuds" />
+                    <ProductSection pincode={pincode} title="New Arrival" keyword="phone" />
 
-                {loading && <p>Loading more products...</p>}
-                {error && <p>{error}</p>}
-                {!hasMoreProducts && <p>No more products to load.</p>}
-            </div>
+                    {loading && <p>Loading more products...</p>}
+                    {error && <p>{error}</p>}
+                    {!hasMoreProducts && <p>No more products to load.</p>}
+                </div>
+            )}
 
             <div id='home-footer'>
                 <div id='home-footer-shop' onClick={() => navigate('/')}>
