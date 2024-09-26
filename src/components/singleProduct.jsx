@@ -8,6 +8,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import ProductFragment from './productReferenceComponent/productFragment.jsx';
 import REACT_APP_API_URL from '../../public/constant.js';
+import LoadingSingleProductPage from "./loadingSingleProduct.jsx";
 
 const ProductDetails = () => {
     const { productId } = useParams();
@@ -63,33 +64,31 @@ const ProductDetails = () => {
             navigate(`/shop/${shopDetail._id}`);
         }
     };
-
+    // return <LoadingSingleProductPage/>;
     return (
         <Fragment>
-            {loading ? (
-                <>Loading...</>
-            ) : (
-                productDetail && (
-                    <Fragment>
-                        <div id="product-details-search-container-top">
-                            <div id='product-details-search-container-top-div'>
-                                <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
-                                <input
-                                   style={{borderRadius:"5px"}}
-                                    id="product-details-search-bar"
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
-                                    placeholder="Search"
-                                    onKeyDown={handleEnter}
-                                />
-                            </div>
-                        </div>
+            <div id="product-details-search-container-top">
+                <div id='product-details-search-container-top-div'>
+                    <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
+                    <input
+                        style={{ borderRadius: "5px" }}
+                        id="product-details-search-bar"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        placeholder="Search"
+                        onKeyDown={handleEnter}
+                    />
+                </div>
+            </div>
 
+            {loading ? (
+                <LoadingSingleProductPage />
+            ) : (
+                <Fragment>
+                    {productDetail && (
                         <div id="product-details-container">
                             <div id="product-details-img">
-                                <img src={selectedImage}
-                                    alt="Selected Product"
-                                    id="product-details-img-selected" />
+                                <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
                             </div>
 
                             <div id="product-details-info">
@@ -102,7 +101,11 @@ const ProductDetails = () => {
                                 See All {productDetail.brand} Products <MdOutlineKeyboardArrowRight size={11} />
                             </div>
 
-                            <div id="product-details-shop" onClick={handleShopClick} style={{ cursor: 'pointer' }}>
+                            <div 
+                                id="product-details-shop" 
+                                onClick={handleShopClick} 
+                                style={{ cursor: 'pointer' }}
+                            >
                                 Shop: {shopDetail ? shopDetail.shopName : 'Loading...'}
                                 <HiOutlineArrowRightStartOnRectangle />
                             </div>
@@ -116,7 +119,11 @@ const ProductDetails = () => {
 
                             <div id="product-details-hr"></div>
 
-                            <div id="product-details-about" onClick={toggleDescription} style={{ cursor: 'pointer' }}>
+                            <div 
+                                id="product-details-about" 
+                                onClick={toggleDescription} 
+                                style={{ cursor: 'pointer' }}
+                            >
                                 <p>About Product</p>
                                 {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
@@ -126,15 +133,16 @@ const ProductDetails = () => {
                                     Description: {productDetail.description}
                                 </div>
                             )}
+
                             <div id="product-details-hr"></div>
 
                             <div id="product-details-similar">
-                               <p>Similar products</p>
-                                <ProductFragment brand={productDetail.brand}/>
+                                <p>Similar products</p>
+                                <ProductFragment brand={productDetail.brand} />
                             </div>
                         </div>
-                    </Fragment>
-                )
+                    )}
+                </Fragment>
             )}
         </Fragment>
     );

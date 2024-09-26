@@ -4,9 +4,9 @@ import '../styles/loadingHomePage.css';
 const LoadingHomePage = () => {
     return (
         <div id="loading-home-page-container">
-             <div  id='loading-home-body-img' />
+             <div  id="loading-home-body-img" />
             <div id="loading-home-page-grid">
-                {Array.from({ length: 8 }).map((_, index) => (
+                {Array.from({ length: 6 }).map((_, index) => (
                     <div className="loading-page-product-card" key={index}>
                         <div className="loading-page-product-card-top">
                             {/* Loading placeholder */}
