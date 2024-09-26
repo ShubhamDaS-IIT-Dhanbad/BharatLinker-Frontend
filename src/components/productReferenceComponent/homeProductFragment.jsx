@@ -36,7 +36,7 @@ const HomePageProductFragment = ({ keyword,brand, category, pincode, shopId }) =
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
-    const productsPerPage = 3;
+    const productsPerPage = 5;
     const containerRef = useRef(null);
 
     useEffect(() => {

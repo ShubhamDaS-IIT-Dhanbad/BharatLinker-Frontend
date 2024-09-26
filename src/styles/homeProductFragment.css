@@ -14,8 +14,8 @@
 }
 
 .home-page-product-fragment-card {
-    min-width: 120px;
-    max-width: 120px;
+    min-width: 123px;
+    max-width: 123px;
     max-height: 800px;
     min-height: 100%;
     display: flex;
