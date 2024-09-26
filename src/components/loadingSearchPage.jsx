@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/LoadingSearchPage.css';
+import '../styles/loadingSearchPage.css';
 
 const LoadingSearchPage = () => {
     return (
