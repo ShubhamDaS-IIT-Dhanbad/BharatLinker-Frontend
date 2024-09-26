@@ -5,7 +5,7 @@
     margin-top: 10px;
     margin-bottom: 50px;
     display: flex;
-    gap: 5px;
+    gap: 7px;
     scrollbar-width: 0;
 }
 
@@ -14,8 +14,8 @@
 }
 
 .home-page-product-fragment-card {
-    min-width: 117px;
-    max-width: 117px;
+    min-width: 120px;
+    max-width: 120px;
     max-height: 800px;
     min-height: 100%;
     display: flex;
