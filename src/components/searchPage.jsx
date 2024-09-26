@@ -7,6 +7,8 @@ import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
+import LoadingSearchPage from './loadingSearchPage.jsx';
+
 const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
     return (
         <div className="pincode-item-search-page-card"
@@ -265,7 +267,7 @@ const SearchPage = () => {
     };
 
 
-
+    
     return (
         <>
             {!showFilter && !showSortBy && (
@@ -274,6 +276,7 @@ const SearchPage = () => {
                         <div id='product-search-container-top-div'>
                             <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
                             <input
+                                style={{borderRadius:"5px"}}
                                 id="product-search-bar"
                                 placeholder="Search"
                                 value={inputValue}
@@ -298,7 +301,7 @@ const SearchPage = () => {
                                 </div>
                             ))}
                         </div>
-                        {loading && <p>Loading more products...</p>}
+                        {loading && <LoadingSearchPage/>}
                         {!hasMoreProducts && <p>No more products to load.</p>}
                     </div>
                 </>

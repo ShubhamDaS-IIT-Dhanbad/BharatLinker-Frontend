@@ -75,6 +75,7 @@ const ProductDetails = () => {
                             <div id='product-details-search-container-top-div'>
                                 <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
                                 <input
+                                   style={{borderRadius:"5px"}}
                                     id="product-details-search-bar"
                                     value={searchQuery}
                                     onChange={handleSearchChange}

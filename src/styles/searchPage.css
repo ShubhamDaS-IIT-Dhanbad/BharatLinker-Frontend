@@ -21,7 +21,7 @@
     margin-top: 20px;
 }
 #search-container-top-div{
-   width: 96vw;display: flex;background-color: rgb(221, 223, 223);
+   width: 96vw;display: flex;
    position:fixed ;margin-top: 8.5px;
    border: 1px solid black;
    top: 0px;border-radius: 5px;
@@ -85,7 +85,8 @@
     height: 57px;
     position: fixed;
     top: 0;
-    background-color: rgb(255, 255, 255);
+   
+    background-color: rgb(86, 218, 241);
     display: flex;
     align-items: center;
     justify-content: center;

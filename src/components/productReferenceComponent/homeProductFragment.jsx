@@ -43,7 +43,7 @@ const HomePageProductFragment = ({ keyword,brand, category, pincode, shopId }) =
         const fetchProductsShop = async () => {
             try {
                 const response = await fetch(
-                    `${REACT_APP_API_URL}/api/v1/product/products?keyword=${keyword}&page=${page}&limit=${productsPerPage}`
+                    `${REACT_APP_API_URL}/api/v1/product/products?pincode=742136&keyword=${keyword}&page=${page}&limit=${productsPerPage}`
                 );
 
                 if (!response.ok) {

@@ -10,6 +10,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import REACT_APP_API_URL from '../../public/constant.js';
 import { useDebounce } from 'use-debounce';
+import LoadingShopPage from './loadingShopPage.jsx';
 
 // Category card for filtering by categories
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
@@ -145,6 +146,8 @@ const Shop = () => {
     });
   };
 
+
+
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -156,6 +159,7 @@ const Shop = () => {
             <div id='shop-search-container-top-div'>
               <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
               <input
+               style={{borderRadius:"5px"}}
                 id="shop-search-bar"
                 ref={searchInputRef}
                 value={searchQuery}
@@ -166,7 +170,7 @@ const Shop = () => {
           </div>
 
           {loading ? (
-            <div>Loading shops...</div>
+            <LoadingShopPage/>
           ) : (
             <div id="search-shop-grid">
               {shops.length > 0 ? (

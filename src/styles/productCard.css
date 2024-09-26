@@ -3,7 +3,7 @@
     width:47vw;max-width: 200px;
     display: flex;
     flex-direction: column;
-height: 340px;margin-top: 10px;
+    height: 340px;margin-top: 10px;
     z-index: 3;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
