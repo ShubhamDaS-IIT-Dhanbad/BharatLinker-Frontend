@@ -14,8 +14,8 @@
 }
 
 .home-page-product-fragment-card {
-    min-width: 115px;
-    max-width: 115px;
+    min-width: 120px;
+    max-width: 120px;
     max-height: 800px;
     min-height: 100%;
     display: flex;
@@ -76,7 +76,7 @@
     color: rgb(232, 74, 74);
     font-weight: 900;
     border-radius: 5px;
-    font-size: 15px;
+    font-size: 13px;
     border: 0.1px solid rgb(216, 112, 112);
     width: 97%;
     min-height: 40px;
@@ -87,11 +87,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgb(255, 0, 0);
-    font-weight: 900;
+    color: rgb(255, 0, 0);font-size: 13px;font-weight: 900;
     border-radius: 5px;
-    font-size: 15px;
-    border: 1px solid rgb(215, 0, 0);
+    border: 0.1px solid rgb(216, 112, 112);
     width: 97%;
     min-height: 40px;
     max-height: 40px;
