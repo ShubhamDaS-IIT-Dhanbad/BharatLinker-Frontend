@@ -5,12 +5,14 @@ import '../styles/home.css';
 
 import REACT_APP_API_URL from '../../public/constant.js';
 import b1 from '../assets/b1.jpg';
-import ProductCard from './productCard.jsx';
-import ExploreCategory from './homePageComponent/exploreCategory.jsx'
 import HomeProductFragment from './productReferenceComponent/homeProductFragment.jsx'
 
 import { MdOutlineStore } from "react-icons/md";
 import { RxCaretRight } from "react-icons/rx";
+import { RiSunCloudyLine } from "react-icons/ri";
+import { TbCategoryPlus } from "react-icons/tb";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
+
 import ExploreByCategories from './homePageComponent/exploreByCategory.jsx';
 
 function Home() {
@@ -104,8 +106,21 @@ function Home() {
             </div>
 
             <div id='home-footer'>
+                <div id='home-footer-shop' onClick={() => navigate('/')}>
+                    <RiSunCloudyLine size={30} />
+                    home
+                </div>
+                <div id='home-footer-shop' onClick={() => navigate('/search')}>
+                    <TbCategoryPlus  size={30} />
+                    Products
+                </div>
                 <div id='home-footer-shop' onClick={() => navigate('/shop')}>
-                    <MdOutlineStore size={40} />
+                    <MdOutlineStore size={30} />
+                    Shop
+                </div>
+                <div id='home-footer-shop' onClick={() => navigate('/retailer')}>
+                    <MdOutlineAdminPanelSettings  size={30} />
+                    Retailer
                 </div>
             </div>
         </div>
