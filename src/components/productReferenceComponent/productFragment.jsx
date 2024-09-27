@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../../styles/productFragment.css';
 import REACT_APP_API_URL from '../../../public/constant.js';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const ReferenceCard = ({ product }) => {
     const navigate = useNavigate();
@@ -21,26 +23,28 @@ const ReferenceCard = ({ product }) => {
                     </span>
                 </div>
                 <div className={`product-card-bottom-stock ${product.quantityAvailable > 0 ? 'instock' : 'outofstock'}`}>
-                        {product.quantityAvailable> 0? (
-                            <span>IN STOCK</span>
-                        ) : (
-                            <span>OUT OF STOCK</span>
-                        )}
+                    {product.quantityAvailable > 0 ? (
+                        <span>IN STOCK</span>
+                    ) : (
+                        <span>OUT OF STOCK</span>
+                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-const ReferenceProductCard = ({ brand,category,pincode,shopId }) => {
+const ReferenceProductCard = ({ brand, category, pincode, shopId }) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
+    const [loading, setLoading] = useState(true); // State for loading
     const productsPerPage = 3;
     const containerRef = useRef(null);
 
     useEffect(() => {
         const fetchProductsShop = async () => {
+            setLoading(true); // Set loading to true before fetching
             try {
                 const response = await fetch(
                     `${REACT_APP_API_URL}/api/v1/product/products?keyword=ear&page=${page}&limit=${productsPerPage}`
@@ -65,10 +69,12 @@ const ReferenceProductCard = ({ brand,category,pincode,shopId }) => {
                 }
             } catch (error) {
                 console.error('Error fetching products:', error);
+            } finally {
+                setLoading(false); // Set loading to false after fetching
             }
         };
 
-        if(true) fetchProductsShop();
+        fetchProductsShop();
     }, [shopId, page]);
 
     useEffect(() => {
@@ -95,12 +101,21 @@ const ReferenceProductCard = ({ brand,category,pincode,shopId }) => {
 
     return (
         <div className="product-fragment-reference-product-container" ref={containerRef}>
-            {products.length > 0 ? (
-                products.map((product) => (
-                    <ReferenceCard key={`${product._id}-${product.title}`} product={product} />
-                ))
+            {loading ? (
+                // Show skeletons while loading
+                <>
+                    <Skeleton height={250} style={{width:"40vw" }} />
+                    <Skeleton height={250} style={{width:"40vw" }} />
+                    <Skeleton height={250} style={{width:"40vw" }} />
+                </>
             ) : (
-                <p>No similar products found.</p>
+                products.length > 0 ? (
+                    products.map((product) => (
+                        <ReferenceCard key={`${product._id}-${product.title}`} product={product} />
+                    ))
+                ) : (
+                    <p>No similar products found.</p>
+                )
             )}
         </div>
     );

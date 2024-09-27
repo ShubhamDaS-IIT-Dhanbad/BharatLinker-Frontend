@@ -6,8 +6,8 @@
     position: fixed;
     top: 0;
     min-width: 100vw;
-    background-color: rgba(86, 241, 210, 1);
-    color: rgb(0, 0, 0);
+    background-color: rgb(25, 55, 109);
+    color: rgb(255, 255, 255);
     z-index: 10000000000;
     transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
 }
@@ -49,7 +49,7 @@
     justify-content: center;
     align-items: center;
     gap: 5px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
 }
 

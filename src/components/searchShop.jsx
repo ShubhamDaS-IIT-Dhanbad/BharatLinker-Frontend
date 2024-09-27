@@ -10,7 +10,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import REACT_APP_API_URL from '../../public/constant.js';
 import { useDebounce } from 'use-debounce';
-import LoadingShopPage from './loadingShopPage.jsx';
+
+import LoadingShopPage from './loadingComponents/loadingShopPage.jsx';
 
 // Category card for filtering by categories
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
@@ -157,9 +158,9 @@ const Shop = () => {
 
           <div id="shop-search-container-top">
             <div id='shop-search-container-top-div'>
-              <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
+              <MdOutlineKeyboardArrowLeft size={'29px'} onClick={() => navigate('/')} />
               <input
-               style={{borderRadius:"5px"}}
+                style={{ borderRadius: "5px" }}
                 id="shop-search-bar"
                 ref={searchInputRef}
                 value={searchQuery}

@@ -1,0 +1,5 @@
+#loading-shop-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

@@ -1,0 +1,139 @@
+/* login.css */
+
+.retailer-login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    background-color: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.retailer-login-title {
+    font-size: 35px;
+    font-weight: 900;
+    margin: 50px 0 21px; /* Combined margin properties */
+    color: #333;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    width: 100%;
+}
+
+.retailer-login-subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.retailer-login-form {
+    width: 100%;
+    max-width: 430px;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.retailer-login-input {
+    width: 95%;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.4); /* Simplified rgba color */
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.retailer-login-input::placeholder {
+    color: #aaa;
+}
+
+.retailer-login-forgot-password {
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.retailer-login-forgot-password a {
+    color: #4c6ef5;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.retailer-login-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #4e3ee6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.retailer-login-button:hover {
+    background-color: #294ddf;
+}
+
+.retailer-login-divider {
+    position: relative;
+    margin: 20px 0;
+}
+
+.retailer-login-divider span {
+    background-color: #f6f7fb;
+    padding: 0 10px;
+    color: #aaa;
+    font-size: 0.9rem;
+    z-index: 1;
+}
+
+.retailer-login-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #ccc;
+    z-index: 0;
+}
+
+.retailer-login-social {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
+}
+
+.retailer-social-button {
+    background-color: #fff;
+    border: 1px solid #0a0a0a;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.retailer-social-button:hover {
+    transform: scale(1.1);
+}
+
+.retailer-login-register {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    color: #666;
+}
+
+.retailer-login-register a {
+    color: #4c6ef5;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+}

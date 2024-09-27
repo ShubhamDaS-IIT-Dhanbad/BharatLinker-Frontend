@@ -1,0 +1,220 @@
+/* retailerSignup.css */
+
+.retailer-signup-container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+}
+
+.retailer-data-signup-section-title {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: Fredoka;
+    background-color: #4e3ee6;color: white;
+    font-size: 23px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.299);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.shop-data-signup-section-title {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: Fredoka;
+    position: fixed;top: 0;
+    font-size: 23px;
+    font-weight: 600; background-color: #4e3ee6;color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.299);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+}
+
+.retailer-data-signup-form {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.retailer-data-signup-form-img {
+    width: 90%;
+    margin-top: -30px;
+}
+
+.retailer-signup-retailer-title {
+    font-size: 20px;
+    margin-top: -20px;
+    font-weight: 900;
+}
+
+.retailer-data-signup-form-inputs {
+    width: 90vw;
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.shop-data-signup-form-inputs{
+    width: 100vw;margin-top: 90px;
+    gap: 5px;flex-grow:1;height: 40vh;
+    display: flex;align-items: center;justify-content: flex-start;
+    flex-direction: column;
+}
+.shop-data-signup-form-img{
+    max-width: 80vw;
+}
+.shop-signup-form{
+    display: flex;flex-direction: column;
+    justify-content: center;align-items: center;
+}
+.shop-signup-input{
+    color: #000000;
+    /* width: 90%;padding: 15px; */
+    padding: 15px 0px 15px 12px;
+    border: 1px solid #00000066;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 80%;
+    outline: none;
+}
+.shop-signup-input::placeholder {
+    color: #aaa;
+}
+
+.name-row{
+    width: 100%;
+    display: flex;
+    gap: 5px;
+    /* Adds space between the two inputs */
+    flex-grow: 1;
+}
+
+.retailer-signup-input-name {
+    color: #000000;
+    /* width: 90%;padding: 15px; */
+    padding: 15px 0px 15px 12px;
+    border: 1px solid #00000066;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 45%;
+    outline: none;
+}
+.retailer-signup-input-name::placeholder {
+    color: #aaa;
+}
+
+.name-row .retailer-signup-input {
+    flex: 1;
+    /* Ensure both inputs take up equal space */
+}
+
+
+
+
+
+.retailer-signup-title {
+    font-size: 35px;
+    width: 100%;
+    display: flex;
+    margin-bottom: 21px;
+    margin-top: 50px;
+    font-weight: 900;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #333;
+}
+
+.retailer-signup-title-welcome {
+    font-size: 25px;
+    width: 100%;
+    font-weight: 700;
+    display: flex;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.retailer-signup-form {
+    width: 100%;
+    margin-top: 25px;
+    max-width: 430px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+
+.retailer-signup-input {
+    width: 90%;
+    padding: 15px;
+    border: 1px solid #00000066;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.retailer-signup-input::placeholder {
+    color: #aaa;
+}
+
+
+
+
+
+.retailer-signup-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #4e3ee6;
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    position: fixed;
+    bottom: 0;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.retailer-signup-button-next {
+    width: 100%;
+    padding:20px 10px 20px 10px ;
+    background-color: #4e3ee6;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.retailer-signup-button:hover {
+    background-color: #294ddf;
+}
+
+.retailer-signup-register {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    color: #666;
+    bottom: 0;
+}
+
+.retailer-signup-register a {
+    color: #4c6ef5;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+}
+.button-group{
+    background-color: #333;width: 100vw;
+    display: flex;position: fixed;bottom: 0;
+}

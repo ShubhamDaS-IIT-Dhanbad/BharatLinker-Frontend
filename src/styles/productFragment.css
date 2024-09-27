@@ -1,7 +1,7 @@
 .product-fragment-reference-product-container {
     max-width: 100vw;
     overflow-x: scroll;
-    height: 270px;
+    height: 300px;
     margin-top: 10px;
     margin-bottom: 50px;
     display: flex;
@@ -14,8 +14,8 @@
 }
 
 .product-fragment-reference-card {
-    min-width: 150px;
-    max-width: 150px;
+    min-width: 160px;
+    max-width: 160px;
     max-height: 100%;
     min-height: 100%;
     display: flex;

@@ -8,7 +8,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import ProductFragment from './productReferenceComponent/productFragment.jsx';
 import REACT_APP_API_URL from '../../public/constant.js';
-import LoadingSingleProductPage from "./loadingSingleProduct.jsx";
+
+import LoadingSingleProduct from "./loadingComponents/loadingSingleProduct.jsx";
 
 const ProductDetails = () => {
     const { productId } = useParams();
@@ -29,12 +30,10 @@ const ProductDetails = () => {
                 if (data.product.images && data.product.images.length > 0) {
                     setSelectedImage(data.product.images[0]);
                 }
-                console.log(data.product)
                 if (data.product.shop) {
                     const shopResponse = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shopdetail/${data.product.shop}`);
                     const shopData = await shopResponse.json();
                     setShopDetail(shopData.shop);
-                    console.log(shopData.shop)
                 }
             } catch (err) {
                 console.error("Error while fetching product or shop details", err);
@@ -64,12 +63,12 @@ const ProductDetails = () => {
             navigate(`/shop/${shopDetail._id}`);
         }
     };
-    // return <LoadingSingleProductPage/>;
+
     return (
         <Fragment>
             <div id="product-details-search-container-top">
                 <div id='product-details-search-container-top-div'>
-                    <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
+                    <MdOutlineKeyboardArrowLeft size={'33px'} onClick={() => { navigate('/') }} />
                     <input
                         style={{ borderRadius: "5px" }}
                         id="product-details-search-bar"
@@ -80,9 +79,8 @@ const ProductDetails = () => {
                     />
                 </div>
             </div>
-
             {loading ? (
-                <LoadingSingleProductPage />
+                <LoadingSingleProduct />
             ) : (
                 <Fragment>
                     {productDetail && (
@@ -101,9 +99,9 @@ const ProductDetails = () => {
                                 See All {productDetail.brand} Products <MdOutlineKeyboardArrowRight size={11} />
                             </div>
 
-                            <div 
-                                id="product-details-shop" 
-                                onClick={handleShopClick} 
+                            <div
+                                id="product-details-shop"
+                                onClick={handleShopClick}
                                 style={{ cursor: 'pointer' }}
                             >
                                 Shop: {shopDetail ? shopDetail.shopName : 'Loading...'}
@@ -112,16 +110,17 @@ const ProductDetails = () => {
 
                             <div id="product-details-price-button">
                                 <p>₹{productDetail.price}</p>
-                                <div id="product-details-price-instock">
+                                <div id={`product-details-price-${productDetail.quantityAvailable > 0 ? 'instock' : 'outofstock'}`}>
                                     {productDetail.quantityAvailable > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
                                 </div>
+
                             </div>
 
                             <div id="product-details-hr"></div>
 
-                            <div 
-                                id="product-details-about" 
-                                onClick={toggleDescription} 
+                            <div
+                                id="product-details-about"
+                                onClick={toggleDescription}
                                 style={{ cursor: 'pointer' }}
                             >
                                 <p>About Product</p>

@@ -9,6 +9,8 @@ import { IoLocationOutline } from "react-icons/io5";
 import ReferenceProduct from './shopReferenceComponent/shopFragment.jsx';
 import REACT_APP_API_URL from '../../public/constant.js';
 
+import LoadingSingleShop from './loadingComponents/loadingSingleShop.jsx';
+
 const ShopDetails = () => {
     const { shopId } = useParams();
     const navigate = useNavigate();
@@ -54,25 +56,24 @@ const ShopDetails = () => {
 
     return (
         <Fragment>
+            <div id="shop-details-search-container-top">
+                <div id='shop-details-search-container-top-div'>
+                    <MdOutlineKeyboardArrowLeft size={'37px'} onClick={() => { navigate('/') }} />
+                    <input
+                       style={{borderRadius:"5px"}}
+                        id="shop-details-search-bar"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        placeholder="Search Products"
+                        onKeyDown={handleEnter}
+                    />
+                </div>
+            </div>
             {loading ? (
-                <>Loading...</>
+                <LoadingSingleShop/>
             ) : (
                 shopDetails && (
                     <Fragment>
-                        <div id="shop-details-search-container-top">
-                            <div id='shop-details-search-container-top-div'>
-                                <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
-                                <input
-                                   style={{borderRadius:"5px"}}
-                                    id="shop-details-search-bar"
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
-                                    placeholder="Search"
-                                    onKeyDown={handleEnter}
-                                />
-                            </div>
-                        </div>
-
                         <div id="shop-details-container">
                             <div id="shop-details-img">
                                 {shopDetails.images.map((image, index) => (
@@ -113,9 +114,10 @@ const ShopDetails = () => {
 
                             {showAddress && (
                                 <div id="shop-details-description">
-                                    helow
+                                    {shopDetails.address}
                                 </div>
                             )}
+
                             <div id="shop-details-hr"></div>
 
                             <div id="shop-details-contact" onClick={toggleContact} style={{ cursor: 'pointer' }}>
@@ -125,9 +127,10 @@ const ShopDetails = () => {
 
                             {showContact && (
                                 <div id="shop-details-description">
-                                   helow
+                                   {shopDetails.contactNumber}
                                 </div>
                             )}
+
                             <div id="shop-details-hr"></div>
 
                             <div id="shop-details-similar-products">

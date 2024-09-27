@@ -7,7 +7,8 @@ import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
-import LoadingSearchPage from './loadingSearchPage.jsx';
+
+import LoadingSearchPage from './loadingComponents/loadingSearchPage.jsx';
 
 const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
     return (
@@ -267,16 +268,16 @@ const SearchPage = () => {
     };
 
 
-    
+
     return (
         <>
             {!showFilter && !showSortBy && (
                 <>
                     <div id="product-search-container-top">
                         <div id='product-search-container-top-div'>
-                            <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => navigate('/')} />
+                            <MdOutlineKeyboardArrowLeft size={'30px'} onClick={() => navigate('/')} />
                             <input
-                                style={{borderRadius:"5px"}}
+                                style={{ borderRadius: "5px" }}
                                 id="product-search-bar"
                                 placeholder="Search"
                                 value={inputValue}
@@ -284,7 +285,8 @@ const SearchPage = () => {
                             />
                         </div>
                     </div>
-                    <div style={{ width: "100vw", height: "57px", backgroundColor: "black" }}></div>
+                    
+                    <div style={{ width: "100vw", height: "57px", backgroundColor: "white" }}></div>
                     <div id="search-product-page-container">
                         <div id="search-product-page-grid">
                             {products.map((product) => (
@@ -301,7 +303,10 @@ const SearchPage = () => {
                                 </div>
                             ))}
                         </div>
-                        {loading && <LoadingSearchPage/>}
+                        {loading &&
+                            <>
+                                <LoadingSearchPage/>
+                            </>}
                         {!hasMoreProducts && <p>No more products to load.</p>}
                     </div>
                 </>
@@ -366,15 +371,15 @@ const SearchPage = () => {
                     <div id="sortby-options">
 
                         <div className="pincode-item-search-page-card"
-                            onClick={() => { sortProducts('lowToHigh');}}>
+                            onClick={() => { sortProducts('lowToHigh'); }}>
                             <div
-                                className={sortType==='lowToHigh' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
+                                className={sortType === 'lowToHigh' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>
                             <p className="pincode-item-pincode">low to high</p>
                         </div>
                         <div className="pincode-item-search-page-card"
-                            onClick={() => { sortProducts('highToLow');}}>
-                            <div className={sortType==='highToLow' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
+                            onClick={() => { sortProducts('highToLow'); }}>
+                            <div className={sortType === 'highToLow' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>
                             <p className="pincode-item-pincode">   high to low</p>
                         </div>

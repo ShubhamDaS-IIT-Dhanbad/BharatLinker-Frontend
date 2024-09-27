@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import '../styles/home.css';
 import REACT_APP_API_URL from '../../public/constant.js';
@@ -12,7 +14,6 @@ import { TbCategoryPlus } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ExploreByCategories from './homePageComponent/exploreByCategory.jsx';
 
-import LoadingHomePage from './loadingHomePage.jsx'
 function Home() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -42,7 +43,6 @@ function Home() {
     // Fetch products
     const fetchProducts = async () => {
         setLoading(true);
-        console.log("pincodes", pincode);
         if (pincode.length > 0) {
             try {
                 const response = await fetch(
@@ -110,13 +110,23 @@ function Home() {
                     See All <RxCaretRight size={20} />
                 </div>
             </div>
-            <HomeProductFragment pincode={pincode} keyword={keyword} />
+            {loading ? (
+                <Skeleton height={200} width={300} count={4} style={{ margin: '10px' }} />
+            ) : (
+                <HomeProductFragment pincode={pincode} keyword={keyword} />
+            )}
         </div>
     );
 
     return (
         <div id='home-div' ref={containerRef}>
-            {loading ? (<LoadingHomePage />) : (
+            {loading ? (
+                <div>
+                    <Skeleton height={400} width={'100%'} />
+                    <Skeleton height={30} width={200} style={{ margin: '20px 0' }} />
+                    <Skeleton count={3} height={200} width={300} style={{ margin: '10px' }} />
+                </div>
+            ) : (
                 <div id='home-body'>
                     <img src={b1} alt="Banner" id='home-body-img' />
                     <ExploreByCategories />

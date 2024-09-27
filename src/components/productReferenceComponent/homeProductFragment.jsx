@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../../styles/homeProductFragment.css';
 import REACT_APP_API_URL from '../../../public/constant.js';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const HomePageProductCard = ({ product }) => {
     const navigate = useNavigate();
@@ -32,15 +34,17 @@ const HomePageProductCard = ({ product }) => {
     );
 };
 
-const HomePageProductFragment = ({ keyword,brand, category, pincode, shopId }) => {
+const HomePageProductFragment = ({ keyword, brand, category, pincode, shopId }) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
     const productsPerPage = 5;
     const containerRef = useRef(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchProductsShop = async () => {
+            setLoading(true); // Set loading to true when fetching starts
             try {
                 const response = await fetch(
                     `${REACT_APP_API_URL}/api/v1/product/products?pincode=742136&keyword=${keyword}&page=${page}&limit=${productsPerPage}`
@@ -56,20 +60,22 @@ const HomePageProductFragment = ({ keyword,brand, category, pincode, shopId }) =
                 if (data.products && data.products.length > 0) {
                     setProducts((prevProducts) => {
                         if (page === 1) {
-                            return data.products;
+                            return data.products; // Replace with new data
                         }
-                        return [...prevProducts, ...data.products];
+                        return [...prevProducts, ...data.products]; // Append new products
                     });
                 } else {
-                    setHasMoreProducts(false);
+                    setHasMoreProducts(false); // No more products to load
                 }
             } catch (error) {
                 console.error('Error fetching products:', error);
+            } finally {
+                setLoading(false); // Set loading to false when fetching completes
             }
         };
 
-        if (true) fetchProductsShop();
-    }, [shopId, page]);
+        fetchProductsShop();
+    }, [keyword, shopId, page]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -79,7 +85,8 @@ const HomePageProductFragment = ({ keyword,brand, category, pincode, shopId }) =
                     const lastCardRect = lastCard.getBoundingClientRect();
                     const containerRect = containerRef.current.getBoundingClientRect();
 
-                    if (lastCardRect.right <= containerRect.right && hasMoreProducts) {
+                    // Check if the last card is visible in the viewport
+                    if (lastCardRect.bottom <= containerRect.bottom && hasMoreProducts) {
                         setPage((prevPage) => prevPage + 1);
                     }
                 }
@@ -95,12 +102,25 @@ const HomePageProductFragment = ({ keyword,brand, category, pincode, shopId }) =
 
     return (
         <div className="home-page-product-fragment-container" ref={containerRef}>
-            {products.length > 0 ? (
-                products.map((product) => (
-                    <HomePageProductCard key={`${product._id}-${product.title}`} product={product} />
-                ))
+            {loading ? (
+                // Show skeleton loaders while loading
+                <div className="skeleton-container">
+                    {Array.from({ length: 5 }).map((_, index) => (
+                        <div key={index} className="home-page-product-fragment-card">
+                            <Skeleton height={200} style={{ marginBottom: '10px' }} />
+                            <Skeleton height={20} width={'80%'} style={{ marginBottom: '5px' }} />
+                            <Skeleton height={20} width={'60%'} style={{ marginBottom: '5px' }} />
+                        </div>
+                    ))}
+                </div>
             ) : (
-                <p>No similar products found.</p>
+                products.length > 0 ? (
+                    products.map((product) => (
+                        <HomePageProductCard key={`${product._id}-${product.title}`} product={product} />
+                    ))
+                ) : (
+                    <p>No similar products found.</p>
+                )
             )}
         </div>
     );
