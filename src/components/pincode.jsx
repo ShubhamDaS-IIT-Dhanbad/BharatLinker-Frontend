@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 import { RiDeleteBackLine } from "react-icons/ri";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../styles/pincode.css';
 
@@ -13,9 +15,7 @@ const PinCodeCard = ({ pincodeObj, togglePincodeSelection, handleDeletePincode }
                 onClick={() => togglePincodeSelection(pincodeObj.pincode)}
                 className={pincodeObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}>
             </div>
-            <p className="pincode-item-pincode">{pincodeObj.pincode}
-                 {/* - {pincodeObj.city ? pincodeObj.city : "Fetching..."} */}
-                 </p>
+            <p className="pincode-item-pincode">{pincodeObj.pincode}</p>
             <RiDeleteBackLine
                 size={25}
                 className="pincode-item-pincode-delete"
@@ -30,7 +30,6 @@ const Pincode = () => {
     const [inputValue, setInputValue] = useState('');
     const [userPincodes, setUserPincodes] = useState([]);
 
-    // Fetch cookies on initial load
     useEffect(() => {
         const getCookieValue = (name) => {
             const value = document.cookie.split('; ').find((row) => row.startsWith(`${name}=`));
@@ -52,22 +51,31 @@ const Pincode = () => {
         setInputValue(event.target.value);
     };
 
-    const handleAddPincode = async () => {
-        if (inputValue.trim() !== '' && !userPincodes.some(pincode => pincode.pincode === inputValue)) {
-            const newPincode = { pincode: inputValue, selected: true };
-
-            setUserPincodes(prevPincodes => {
-                const updatedPincodes = [...prevPincodes, newPincode];
-                const expires = new Date();
-                expires.setTime(expires.getTime() + 60 * 60 * 1000);
-                document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(updatedPincodes))}; expires=${expires.toUTCString()}; path=/`;
-                return updatedPincodes;
-            });
-            setInputValue(''); // Clear input after adding
+    const handleAddPincode = () => {
+        if (inputValue.trim() === '') {
+            toast.error("Pincode cannot be empty!"); // Show error if input is empty
+            return;
         }
+
+        if (userPincodes.some(pincode => pincode.pincode === inputValue)) {
+            toast.error(`Pincode ${inputValue} already exists!`); // Show error if pincode exists
+            return;
+        }
+
+        const newPincode = { pincode: inputValue, selected: true };
+
+        setUserPincodes(prevPincodes => {
+            const updatedPincodes = [...prevPincodes, newPincode];
+            const expires = new Date();
+            expires.setTime(expires.getTime() + 60 * 60 * 1000);
+            document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(updatedPincodes))}; expires=${expires.toUTCString()}; path=/`;
+            return updatedPincodes;
+        });
+
+        setInputValue(''); // Clear input after adding
+        toast.success(`Pincode ${inputValue} added successfully!`); // Show success toast
     };
 
-    
     const togglePincodeSelection = (pincode) => {
         setUserPincodes(prevPincodes => {
             const updatedPincodes = prevPincodes.map(pin =>
@@ -86,6 +94,7 @@ const Pincode = () => {
             const expires = new Date();
             expires.setTime(expires.getTime() + 15 * 60 * 1000);
             document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(updatedPincodes))}; expires=${expires.toUTCString()}; path=/`;
+            toast.success(`Pincode ${pincode} deleted successfully!`); // Show success toast on deletion
             return updatedPincodes;
         });
     };
@@ -105,8 +114,7 @@ const Pincode = () => {
                         value={inputValue}
                         onChange={handleInputChange}
                     />
-                    <IoMdAdd size={35}
-                        onClick={handleAddPincode} />
+                    <IoMdAdd size={35} onClick={handleAddPincode} />
                 </div>
             </div>
 
@@ -124,6 +132,14 @@ const Pincode = () => {
                     <div>No pincodes available</div>
                 )}
             </div>
+            <ToastContainer
+                position="bottom-center" // Set position to bottom-center
+                autoClose={5000} // Auto close after 5 seconds
+                hideProgressBar={false} // Show progress bar
+                closeOnClick // Close on click
+                draggable // Enable dragging
+                pauseOnHover // Pause on hover
+            /> 
         </div>
     );
 };

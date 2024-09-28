@@ -4,6 +4,8 @@ import '../styles/header.css';
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { BiSearchAlt } from "react-icons/bi";
 import { TbChevronDown } from "react-icons/tb";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Navbar() {
     const [searchInput, setSearchInput] = useState('');
@@ -47,6 +49,10 @@ function Navbar() {
                             ];
 
                             document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
+
+                            // Show success toast notification
+                            toast.success(`Location updated to ${data.address.city || data.address.town} (${locationPincode})!`);
+
                         } catch (error) {
                             console.error("Error fetching pincode:", error);
                         }
@@ -131,6 +137,15 @@ function Navbar() {
                     />
                 </div>
             </div>
+
+            <ToastContainer
+                position="bottom-center" // Set position to bottom-center
+                autoClose={5000} // Auto close after 5 seconds
+                hideProgressBar={false} // Show progress bar
+                closeOnClick // Close on click
+                draggable // Enable dragging
+                pauseOnHover // Pause on hover
+            />
         </div>
     );
 }
