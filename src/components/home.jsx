@@ -118,6 +118,15 @@ function Home() {
         </div>
     );
 
+    const handleRetailerClick = () => {
+        const retailerCookie = getCookieValue('BharatLinkerRetailer');
+        if (retailerCookie) {
+            navigate('/retailer/shop');
+        } else {
+            navigate('/retailer');
+        }
+    };
+
     return (
         <div id='home-div' ref={containerRef}>
             {loading ? (
@@ -154,10 +163,11 @@ function Home() {
                     <MdOutlineStore size={30} />
                     Shop
                 </div>
-                <div id='home-footer-shop' onClick={() => navigate('/retailer')}>
+                <div id='home-footer-shop' onClick={handleRetailerClick}>
                     <MdOutlineAdminPanelSettings size={30} />
                     Retailer
                 </div>
+
             </div>
         </div>
     );

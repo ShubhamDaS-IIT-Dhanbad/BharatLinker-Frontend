@@ -13,7 +13,9 @@ import { useLocation } from "react-router-dom";
 import Retailer from './retailerComponent/retailer.jsx';
 import RetailerLogin from './retailerComponent/retailerLogin.jsx';
 import RetailerSignup from './retailerComponent/retailerSignup.jsx';
+import ProtectedRoute from './components/protectedRouteRetailer.jsx';
 
+import RetailerShopPage from './retailerComponent/retailerShopPage.jsx';
 // ScrollToTop component
 import ScrollToTop from './components/scrollToTop.jsx'; // Adjust the path as necessary
 
@@ -28,7 +30,7 @@ function App() {
   );
 }
 
-function RoutesWithConditionalHeader({ pincode, setPincode }) {
+function RoutesWithConditionalHeader() {
   const location = useLocation();
   const isHomepage = location.pathname === '/';
 
@@ -47,8 +49,13 @@ function RoutesWithConditionalHeader({ pincode, setPincode }) {
         <Route path='/retailer' element={<Retailer />} />
         <Route path='/retailer/login' element={<RetailerLogin />} />
         <Route path='/retailer/signup' element={<RetailerSignup />} />
+
+        <Route
+          path='/retailer/shop'
+          element={<ProtectedRoute><RetailerShopPage/> </ProtectedRoute> }/>
+
         {/* PROTECTED ROUTES */}
-        <Route path='/retailer/home' element={<>hi</>} />
+        <Route path='/retailer/product' element={<ProtectedRoute><div>Retailer Dashboard</div> </ProtectedRoute> } />
       </Routes>
     </>
   );

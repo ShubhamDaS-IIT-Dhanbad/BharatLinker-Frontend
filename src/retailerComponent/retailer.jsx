@@ -19,7 +19,7 @@ const Retailer = () => {
     useEffect(() => {
         const retailerData = Cookies.get('BharatLinkerRetailerData'); // Fetch cookie
         if (retailerData) {
-            navigate('/retailer/home'); // Redirect to home if cookie is found
+            navigate('/retailer/shop'); // Redirect to home if cookie is found
         } else {
             setLoading(false); // Set loading to false after checking for cookie
         }

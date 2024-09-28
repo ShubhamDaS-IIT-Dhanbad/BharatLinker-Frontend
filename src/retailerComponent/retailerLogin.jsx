@@ -26,11 +26,11 @@ const RetailerLogin = () => {
                 toast.warn('Your Shop is not verified. Please wait until we verify.'); // Show pending status toast
             } else {
                 // Store retailer data in cookies
-                Cookies.set('UniqueRetailerData', JSON.stringify(response.data.shop), { expires: 7 }); // Changed cookie name
+                Cookies.set('BharatLinkerRetailer', JSON.stringify(response.data.shop), { expires: 7 }); // Add BharatLinkerRetailer cookie
 
                 toast.success('Login successful!'); // Show success toast
                 console.log(response.data.shop); // Handle the response if needed
-                navigate('/retailer/dashboard'); // Changed redirect path to /dashboard
+                navigate('/retailer/shop'); // Changed redirect path to /dashboard
             }
         } catch (error) {
             if (error.response) {
