@@ -144,7 +144,18 @@ function Navbar() {
                 </div>
             </div>
 
-            
+            <ToastContainer
+                position="bottom-center" // Set position to bottom-center
+                autoClose={2000} // Auto close after 5 seconds
+                hideProgressBar={false} // Show progress bar
+                closeOnClick // Close on click
+                draggable // Enable dragging
+                pauseOnHover // Pause on hover
+                style={{
+                    position:"fixed",
+                    top:"87vh"
+                }}
+            />
         </div>
     );
 }
