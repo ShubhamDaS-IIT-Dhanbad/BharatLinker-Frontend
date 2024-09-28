@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../retailerStyles/retailer.css'
+
 import Cookies from 'js-cookie'; // Import js-cookie
 import retailerimg from '../retailerAssets/retailer.png';
 
@@ -73,16 +75,19 @@ const Retailer = () => {
                         Simplify the way you manage your shop. Join us and streamline your retail business with ease and efficiency.
                     </p>
 
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' ,
+                    marginTop:"90px"
+                        
+                    }}>
                         <button
-                            style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer' }}
                             onClick={() => navigate('/retailer/login')}
+                            className="retailer-page-login-button"
                         >
-                            Sign in
+                            Log in
                         </button>
                         <button
-                            style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer' }}
                             onClick={() => navigate('/retailer/signup')}
+                            className="retailer-page-signup-button"
                         >
                             Register
                         </button>

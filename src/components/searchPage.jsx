@@ -307,7 +307,7 @@ const SearchPage = () => {
                             <>
                                 <LoadingSearchPage/>
                             </>}
-                        {!hasMoreProducts && <p>No more products to load.</p>}
+                        {!hasMoreProducts && <p></p>}
                     </div>
                 </>
             )}
