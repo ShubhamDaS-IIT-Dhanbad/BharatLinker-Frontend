@@ -153,7 +153,7 @@ function Navbar() {
                 pauseOnHover // Pause on hover
                 style={{
                     position:"fixed",
-                    top:"92vh"
+                    top:"97vh"
                 }}
             />
         </div>
