@@ -13,13 +13,11 @@ function Navbar() {
     const [address, setAddress] = useState({ city: "Enter", postcode: "Pincode" });
     const navigate = useNavigate();
 
-    // Retrieve address from cookie
     useEffect(() => {
         const existingAddressCookie = document.cookie.split('; ').find(row => row.startsWith('address='));
         const userPincodesCookie = document.cookie.split('; ').find(row => row.startsWith('userpincodes='));
 
         if (!userPincodesCookie || !existingAddressCookie) {
-            // Ensure geolocation is available in the browser
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     async (position) => {
@@ -28,17 +26,18 @@ function Navbar() {
                             const response = await fetch(
                                 `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
                             );
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
                             const data = await response.json();
                             const locationPincode = data.address.postcode || 'Add Pincode';
 
-                            // Set the address to the state
                             setAddress({ city: data.address.city || data.address.town || 'Unknown City', postcode: locationPincode });
 
                             const expirationTime = new Date();
                             expirationTime.setTime(expirationTime.getTime() + (60 * 60 * 1000)); // 1 hour expiry
                             const expires = `expires=${expirationTime.toUTCString()}`;
 
-                            // Store address and pincode as cookies with expiration
                             document.cookie = `address=${encodeURIComponent(JSON.stringify(data.address))}; ${expires}; path=/`;
 
                             const userPincodes = [
@@ -50,37 +49,42 @@ function Navbar() {
 
                             document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
 
-                            // Show success toast notification
                             toast.success(`Location updated to ${data.address.city || data.address.town} (${locationPincode})!`);
 
                         } catch (error) {
                             console.error("Error fetching pincode:", error);
+                            toast.error(`Failed to fetch location: ${error.message}`, { 
+                                position: "bottom-center", 
+                                autoClose: 5000 
+                            });
                         }
                     },
                     (error) => {
                         console.error("Geolocation error:", error.message);
+                        toast.error(`Geolocation error: ${error.message}`, { 
+                            position: "bottom-center", 
+                            autoClose: 5000 
+                        });
                     }
                 );
             } else {
                 console.error("Geolocation is not available in this browser.");
+                toast.error("Geolocation is not available in this browser.", { 
+                    position: "bottom-center", 
+                    autoClose: 5000 
+                });
             }
         } else {
             try {
-                // Extract and decode the cookie value
                 const addressCookie = decodeURIComponent(existingAddressCookie.split('=')[1]);
                 if (addressCookie) {
-                    try {
-                        const data = JSON.parse(addressCookie);
-                        setAddress({ city: data.city || data.town || 'Unknown City', postcode: data.postcode || 'Pincode' });
-                    } catch (error) {
-                        console.error("Error parsing address cookie", error);
-                    }
+                    const data = JSON.parse(addressCookie);
+                    setAddress({ city: data.city || data.town || 'Unknown City', postcode: data.postcode || 'Pincode' });
                 }
             } catch (error) {
-                console.error("Error parsing userpincodes cookie", error);
+                console.error("Error parsing address cookie", error);
             }
 
-            // Handle userPincodes cookie safely
             if (userPincodesCookie) {
                 try {
                     const pincodesCookie = decodeURIComponent(userPincodesCookie.split('=')[1]);
@@ -94,7 +98,6 @@ function Navbar() {
         }
     }, []);
 
-    // Hide header on scroll
     useEffect(() => {
         const handleScroll = () => {
             setHideHeader(window.scrollY > 80);
@@ -145,6 +148,10 @@ function Navbar() {
                 closeOnClick // Close on click
                 draggable // Enable dragging
                 pauseOnHover // Pause on hover
+                style={{
+                    position:"fixed",
+                    top:"93vh"
+                }}
             />
         </div>
     );
