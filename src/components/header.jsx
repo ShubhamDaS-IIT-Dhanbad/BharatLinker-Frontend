@@ -82,7 +82,7 @@ function Navbar() {
                     setAddress({ city: data.city || data.town || 'Unknown City', postcode: data.postcode || 'Pincode' });
                 }
                 
-                toast.success(`Location updated`);
+                // toast.success(`Location updated`);
 
             } catch (error) {
                 console.error("Error parsing address cookie", error);
