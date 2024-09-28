@@ -81,6 +81,9 @@ function Navbar() {
                     const data = JSON.parse(addressCookie);
                     setAddress({ city: data.city || data.town || 'Unknown City', postcode: data.postcode || 'Pincode' });
                 }
+                
+                toast.success(`Location updated`);
+
             } catch (error) {
                 console.error("Error parsing address cookie", error);
             }
@@ -150,7 +153,7 @@ function Navbar() {
                 pauseOnHover // Pause on hover
                 style={{
                     position:"fixed",
-                    top:"93vh"
+                    top:"92vh"
                 }}
             />
         </div>
