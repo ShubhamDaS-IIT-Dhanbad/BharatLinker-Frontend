@@ -58,7 +58,7 @@ const ShopDetails = () => {
         <Fragment>
             <div id="shop-details-search-container-top">
                 <div id='shop-details-search-container-top-div'>
-                    <MdOutlineKeyboardArrowLeft size={'37px'} onClick={() => { navigate('/') }} />
+                    <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
                     <input
                        style={{borderRadius:"5px"}}
                         id="shop-details-search-bar"

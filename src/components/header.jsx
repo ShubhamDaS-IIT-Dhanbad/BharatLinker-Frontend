@@ -14,91 +14,58 @@ function Navbar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const existingAddressCookie = document.cookie.split('; ').find(row => row.startsWith('address='));
-        const userPincodesCookie = document.cookie.split('; ').find(row => row.startsWith('userpincodes='));
-
-        if (!userPincodesCookie || !existingAddressCookie) {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    async (position) => {
-                        const { latitude, longitude } = position.coords;
-                        try {
-                            const response = await fetch(
-                                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
-                            );
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            const data = await response.json();
-                            const locationPincode = data.address.postcode || 'Add Pincode';
-
-                            setAddress({ city: data.address.city || data.address.town || 'Unknown City', postcode: locationPincode });
-
-                            const expirationTime = new Date();
-                            expirationTime.setTime(expirationTime.getTime() + (60 * 60 * 1000)); // 1 hour expiry
-                            const expires = `expires=${expirationTime.toUTCString()}`;
-
-                            document.cookie = `address=${encodeURIComponent(JSON.stringify(data.address))}; ${expires}; path=/`;
-
-                            const userPincodes = [
-                                {
-                                    pincode: locationPincode,
-                                    selected: true,
-                                },
-                            ];
-
-                            document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
-
-                            toast.success(`Location updated to ${data.address.city || data.address.town} (${locationPincode})!`);
-
-                        } catch (error) {
-                            console.error("Error fetching pincode:", error);
-                            toast.error(`Failed to fetch location: ${error.message}`, { 
-                                position: "bottom-center", 
-                                autoClose: 5000 
-                            });
-                        }
-                    },
-                    (error) => {
-                        console.error("Geolocation error:", error.message);
-                        toast.error(`Geolocation error: ${error.message}`, { 
-                            position: "bottom-center", 
-                            autoClose: 5000 
-                        });
-                    }
-                );
-            } else {
-                console.error("Geolocation is not available in this browser.");
-                toast.error("Geolocation is not available in this browser.", { 
-                    position: "bottom-center", 
-                    autoClose: 5000 
-                });
-            }
-        } else {
+        const fetchLocation = async () => {
+            if(address.city==="Enter" || address.postcode==="Pincode") return;
             try {
-                const addressCookie = decodeURIComponent(existingAddressCookie.split('=')[1]);
-                if (addressCookie) {
-                    const data = JSON.parse(addressCookie);
-                    setAddress({ city: data.city || data.town || 'Unknown City', postcode: data.postcode || 'Pincode' });
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+
+                const { latitude, longitude } = position.coords;
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+                );
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-                
-                // toast.success(`Location updated`);
+
+                const data = await response.json(); console.log(data);
+                const locationPincode = data.address.postcode || 'Add Pincode';
+                const locationCity = data.address.city || data.address.town || data.address.village || data.address.state_district || data.address.state || 'Unknown City';
+
+                // If there is no saved address or the saved pincode is different from the new pincode, update it
+
+                setAddress({ city: locationCity, postcode: locationPincode });
+
+                // Set cookies with the new location data
+                const expirationTime = new Date();
+                expirationTime.setTime(expirationTime.getTime() + (60 * 60 * 1000)); // 1 hour expiry
+                const expires = `expires=${expirationTime.toUTCString()}`;
+                document.cookie = `address=${encodeURIComponent(JSON.stringify(data.address))}; ${expires}; path=/`;
+
+                const userPincodes = [
+                    {
+                        pincode: locationPincode,
+                        selected: true,
+                    },
+                ];
+
+                document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
+
+                // Show success toast
+                toast.success(`Location updated to ${locationCity} (${locationPincode})!`);
 
             } catch (error) {
-                console.error("Error parsing address cookie", error);
+                console.error("Error fetching location or geolocation not available:", error);
+                toast.error(`Failed to fetch location: ${error.message}`, {
+                    position: "bottom-center",
+                    autoClose: 5000
+                });
             }
+        };
 
-            if (userPincodesCookie) {
-                try {
-                    const pincodesCookie = decodeURIComponent(userPincodesCookie.split('=')[1]);
-                    if (pincodesCookie) {
-                        const pincodesData = JSON.parse(pincodesCookie);
-                    }
-                } catch (error) {
-                    console.error("Error parsing userpincodes cookie", error);
-                }
-            }
-        }
+        fetchLocation();
     }, []);
 
     useEffect(() => {
@@ -145,15 +112,15 @@ function Navbar() {
             </div>
 
             <ToastContainer
-                position="bottom-center" // Set position to bottom-center
-                autoClose={2000} // Auto close after 5 seconds
-                hideProgressBar={false} // Show progress bar
-                closeOnClick // Close on click
-                draggable // Enable dragging
-                pauseOnHover // Pause on hover
+                position="bottom-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                closeOnClick
+                draggable
+                pauseOnHover
                 style={{
-                    position:"fixed",
-                    top:"87vh"
+                    position: "fixed",
+                    top: "87vh"
                 }}
             />
         </div>

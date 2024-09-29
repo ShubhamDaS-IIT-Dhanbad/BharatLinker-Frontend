@@ -275,7 +275,7 @@ const SearchPage = () => {
                 <>
                     <div id="product-search-container-top">
                         <div id='product-search-container-top-div'>
-                            <MdOutlineKeyboardArrowLeft size={'30px'} onClick={() => navigate('/')} />
+                            <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
                             <input
                                 style={{ borderRadius: "5px" }}
                                 id="product-search-bar"

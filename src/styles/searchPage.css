@@ -82,12 +82,12 @@
 
 #product-search-container-top {
     width: 100%;
-    height: 57px;
+    height: 55px;
     position: fixed;
     top: 0;
     display: flex;
     align-items: center;
-    background-color:rgb(46, 35, 108);
+    background-color:rgb(255, 255, 255);
     justify-content: center;
     z-index: 999;
  }
@@ -108,10 +108,10 @@
     border: none; /* Removes the border */
     outline: none; /* Removes default focus outline (optional) */
     padding: 5px; /* Add padding if needed for better aesthetics */
-    padding-left: 0px;height: 40px;
+    padding-left: 0px;height: 35px;
     box-sizing: border-box; /* Ensures padding is included in the element's total width */
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 17px;
+    font-size: 13px;
  }
 
 .searchpage-filter-section{

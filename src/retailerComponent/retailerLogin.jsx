@@ -5,7 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie'; // Import js-cookie
 
-import '../retailerStyles/retailerLogin.css';
+import '../retailerStyles/retailerLogin.css'; // Ensure this path is correct
+import {RETAILER_SERVER} from '../../public/constant.js';
 
 const RetailerLogin = () => {
     const navigate = useNavigate(); // Hook for navigation
@@ -16,7 +17,7 @@ const RetailerLogin = () => {
         e.preventDefault(); // Prevent default form submission
 
         try {
-            const response = await axios.post('http://localhost:3001/shop/login', {
+            const response = await axios.post(`${RETAILER_SERVER}/shop/login`, { // Use the RETAILER_SERVER constant
                 phoneNumber: shopContactNumber, // Updated variable name
                 password: userPassword, // Updated variable name
             });
@@ -30,7 +31,7 @@ const RetailerLogin = () => {
 
                 toast.success('Login successful!'); // Show success toast
                 console.log(response.data.shop); // Handle the response if needed
-                navigate('/retailer/shop'); // Changed redirect path to /dashboard
+                navigate('/retailer/home'); // Changed redirect path to /dashboard
             }
         } catch (error) {
             if (error.response) {

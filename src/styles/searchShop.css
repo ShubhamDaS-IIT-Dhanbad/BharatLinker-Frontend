@@ -50,9 +50,9 @@
 }
 #shop-search-container-top {
    width: 100%;
-   height: 57px;position: fixed;
+   height: 50px;position: fixed;
    top: 0;
-   background-color: rgb(3, 52, 110);
+   background-color: rgb(255, 255, 255);
    display: flex;
    align-items: center;
    justify-content: center;
@@ -62,12 +62,12 @@
    width: 96vw;
    display: flex;
    position: fixed;
-   margin-top: 8.5px;
+   margin-top: 6.5px;
    justify-content: center;background-color: rgb(255, 255, 255);
    align-items: center;
    border: 0.0005px solid rgba(0, 0, 0, 0.365);
    top: 0px;
-   border-radius: 5px;
+   border-radius: 5px;height: 35px;
 }
 #search-shop-grid{
    min-height: 80vh;margin-top: 60px;overflow: scroll;
@@ -78,10 +78,10 @@
    border: none; /* Removes the border */
    outline: none; /* Removes default focus outline (optional) */
    padding: 5px; /* Add padding if needed for better aesthetics */
-   padding-left: 0px;height: 40px;
+   padding-left: 0px;height: 35px;
    box-sizing: border-box; /* Ensures padding is included in the element's total width */
    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-   font-size: 17px;
+   font-size: 13px;
 }
 
 

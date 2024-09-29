@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import {RETAILER_SERVER} from '../../public/constant.js';
 const RetailerSignup = () => {
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -47,7 +48,7 @@ const RetailerSignup = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3001/shop/signup', {
+            const response = await axios.post(`${RETAILER_SERVER}/shop/signup`, {
                 owner: retailerInfo,
                 shopName,
                 shopAddress,

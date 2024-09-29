@@ -158,7 +158,7 @@ const Shop = () => {
 
           <div id="shop-search-container-top">
             <div id='shop-search-container-top-div'>
-              <MdOutlineKeyboardArrowLeft size={'29px'} onClick={() => navigate('/')} />
+              <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
               <input
                 style={{ borderRadius: "5px" }}
                 id="shop-search-bar"

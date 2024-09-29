@@ -121,7 +121,7 @@ function Home() {
     const handleRetailerClick = () => {
         const retailerCookie = getCookieValue('BharatLinkerRetailer');
         if (retailerCookie) {
-            navigate('/retailer/shop');
+            navigate('/retailer/home');
         } else {
             navigate('/retailer');
         }

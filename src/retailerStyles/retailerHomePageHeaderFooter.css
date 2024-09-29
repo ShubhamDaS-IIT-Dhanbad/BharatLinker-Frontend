@@ -1,0 +1,86 @@
+.retailerHomePage {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;width: 100vw;
+}
+
+.headerDiv {
+    display: flex;flex-direction: column;
+    justify-content: space-between;align-items: flex-start;
+    background-color: rgb(46, 35, 108);gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);color: white;
+    position: fixed;
+    top: 0;z-index: 9999;
+}
+
+.headerDivUser {
+    display: flex;
+    align-items: center;
+}
+
+.headerDivUserIcon {
+    margin-right: 10px;
+}
+
+.headerDivUserLocationDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.headerDivUserLocation {
+    font-weight: bold;
+}
+
+.headerDivUserLocationName {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.headerDivSearchDiv {
+    display: flex;width: 95vw;
+    align-items: center;width: 100vw;
+    align-items: center;justify-content: center;
+}
+
+.headerDivSearchDivInput {
+    display: flex;width: 95vw;
+    align-items: center;
+    position: relative;
+}
+.headerDivSearchInput {
+    padding: 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;width: 95vw;
+}
+
+.headerDivSearchIcon {
+    position: absolute;
+    left: 10px;
+    cursor: pointer;
+}
+
+
+.homeDiv {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.homeFooter {
+    display: flex;
+    justify-content: space-evenly;width: 100vw;
+    padding: 10px;position: fixed;bottom: 0;
+    background-color: rgb(23, 21, 59);
+    border-top: 1px solid #ccc;color: white;
+}
+
+.homeFooterShop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.homeFooterShop:hover {
+    color: #007bff; /* Change to your desired hover color */
+}
