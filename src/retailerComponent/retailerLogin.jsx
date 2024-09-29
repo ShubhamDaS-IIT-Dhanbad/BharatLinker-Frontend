@@ -17,7 +17,7 @@ const RetailerLogin = () => {
         e.preventDefault(); // Prevent default form submission
 
         try {
-            const response = await axios.post(`${RETAILER_SERVER}/shop/login`, { // Use the RETAILER_SERVER constant
+            const response = await axios.post(`${RETAILER_SERVER}/shop/login`, {
                 phoneNumber: shopContactNumber, // Updated variable name
                 password: userPassword, // Updated variable name
             });
