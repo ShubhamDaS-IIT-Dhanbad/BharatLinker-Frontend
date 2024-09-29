@@ -7,7 +7,7 @@ import { MdOutlineStore, MdOutlineAdminPanelSettings } from "react-icons/md";
 import { ToastContainer } from 'react-toastify';
 
 import 'react-loading-skeleton/dist/skeleton.css';
-import '../retailerStyles/RetailerHomePageHeaderFooter.css';
+import '../retailerStyles/retailerHomePageHeaderFooter.css'
 
 import { LuLayoutDashboard } from "react-icons/lu";
 import { HiOutlineCreditCard } from "react-icons/hi2";
