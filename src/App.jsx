@@ -16,7 +16,11 @@ import RetailerSignup from './retailerComponent/retailerSignup.jsx';
 import ProtectedRoute from './components/protectedRouteRetailer.jsx';
 
 import RetailerHomePageHeaderFooter from './retailerComponent/retailerHomePageHeaderFooter.jsx';
+import RetailerProductHeaderFooter from './retailerComponent/retailerProductHeaderFooter.jsx';
 import RetailerShopPage from './retailerComponent/retailerShopPage.jsx';
+
+import RetailerUploadProduct from './retailerComponent/retailerUploadProduct.jsx';
+import RetailerUpdateProduct from './retailerComponent/retailerUpdateProduct.jsx';
 
 // ScrollToTop component
 import ScrollToTop from './components/scrollToTop.jsx'; // Adjust the path as necessary
@@ -34,12 +38,16 @@ function App() {
 
 function RoutesWithConditionalHeader({ pincode, setPincode }) {
   const location = useLocation();
-  
+
   // Check if the path starts with `/retailer/` and matches specific subroutes
-  const isRetailerHeaderFooter = location.pathname.startsWith('/retailer/home') || 
-                                 location.pathname.startsWith('/retailer/shop') || 
-                                 location.pathname.startsWith('/retailer/data');
-  
+  const isRetailerHeaderFooter = location.pathname.startsWith('/retailer/home') ||
+    location.pathname.startsWith('/retailer/shop') ||
+    location.pathname.startsWith('/retailer/data');
+
+  const isRetailerProductHeaderFooter = location.pathname.startsWith('/retailer/product') ||
+    location.pathname.startsWith('/retailer/uploadproduct') ||
+    location.pathname.startsWith('/retailer/updateproduct');
+
   const isHomepage = location.pathname === '/';
 
   return (
@@ -49,6 +57,7 @@ function RoutesWithConditionalHeader({ pincode, setPincode }) {
 
       {/* Show RetailerHomePageHeaderFooter on specific retailer routes */}
       {isRetailerHeaderFooter && <RetailerHomePageHeaderFooter />}
+      {isRetailerProductHeaderFooter&&<RetailerProductHeaderFooter />}
 
       <Routes>
         {/* Customer Routes */}
@@ -65,11 +74,13 @@ function RoutesWithConditionalHeader({ pincode, setPincode }) {
         <Route path='/retailer/signup' element={<RetailerSignup />} />
 
         {/* PROTECTED ROUTES */}
-        
+
         <Route path='/retailer/home' element={<ProtectedRoute><div>Retailer Home</div></ProtectedRoute>} />
         <Route path='/retailer/data' element={<ProtectedRoute><div>Retailer Data</div></ProtectedRoute>} />
         <Route path='/retailer/shop' element={<ProtectedRoute>< RetailerShopPage /></ProtectedRoute>} />
-        <Route path='/retailer/product' element={<ProtectedRoute><div>Retailer Dashboard</div></ProtectedRoute>} />
+        <Route path='/retailer/product' element={<ProtectedRoute><div>product dashboard</div></ProtectedRoute>} />
+        <Route path='/retailer/uploadproduct' element={<ProtectedRoute><RetailerUploadProduct/></ProtectedRoute>} />
+        <Route path='/retailer/updateproduct' element={<ProtectedRoute><RetailerUpdateProduct/></ProtectedRoute>} />
       </Routes>
     </>
   );

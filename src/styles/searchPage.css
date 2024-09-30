@@ -64,7 +64,7 @@
 #searchpage-footer{
     width: 100vh;display: flex;
     color: white;font-weight: 800;
-    height: 60px;background-color:  rgb(23, 21, 59);
+    height: 60px;background-color: rgb(114, 103, 203);
     position: fixed;
     bottom: 0;z-index: 900000;
 }

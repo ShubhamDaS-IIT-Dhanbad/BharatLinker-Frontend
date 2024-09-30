@@ -1,0 +1,157 @@
+.upload-product-container{
+    margin-top: 100px;margin-bottom: 50vh;
+}
+
+.image-upload-container{
+    min-width: 100vw;display: flex;
+    overflow: scroll;
+}
+
+
+.image-upload-box {
+    min-width: 100vw;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-direction: column;
+}
+
+.image-preview {
+    width: 90vw;
+    object-fit: cover;align-self: center;
+}
+.image-remove-button{
+    width: 50vw;padding: 10px;
+    margin: 10px;
+}
+
+.image-input{
+    min-width: 100vw;min-height: 300px;
+    display: flex;justify-content: center;align-items: center;
+}
+
+
+
+.form-group-title-div{
+    background-color: rgb(150, 202, 202);
+    min-height: 50px;display: flex;margin: 5px;
+    flex-direction: column;padding: 10px;
+}
+.form-group-title-div label{
+    font-size: 30px;font-weight: 900;
+}
+.form-group-title-div input{
+background-color: bisque;text-align: start;
+min-height: 70px;font-size: 27px;padding: 5px;
+font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+
+
+.form-group-description-div{
+    background-color: rgb(150, 202, 202);
+    min-height: 50px;display: flex;margin: 5px;
+    flex-direction: column;padding: 10px;
+}
+.form-group-description-div label{
+    font-size: 30px;font-weight: 900;
+}
+.form-group-description-div textarea{
+background-color: bisque;text-align: start;
+min-height: 70px;font-size: 27px;padding: 5px;
+font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+
+.form-group-price-div{
+    background-color: rgb(150, 202, 202);
+    min-height: 50px;display: flex;margin: 5px;
+    flex-direction: column;padding: 10px;
+}
+.form-group-price-div label{
+    font-size: 30px;font-weight: 900;
+}
+.form-group-price-div input{
+background-color: bisque;text-align: start;
+min-height: 70px;font-size: 27px;padding: 5px;
+font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+
+.form-group-discountedprice-div{
+    background-color: rgb(150, 202, 202);
+    min-height: 50px;display: flex;margin: 5px;
+    flex-direction: column;padding: 10px;
+}
+.form-group-discountedprice-div label{
+    font-size: 30px;font-weight: 900;
+}
+.form-group-discountedprice-div input{
+background-color: bisque;text-align: start;
+min-height: 70px;font-size: 27px;padding: 5px;
+font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+
+
+
+.form-group-quantity-div{
+    background-color: rgb(150, 202, 202);
+    min-height: 50px;display: flex;margin: 5px;
+    flex-direction: column;padding: 10px;
+}
+.form-group-quantity-div label{
+    font-size: 30px;font-weight: 900;
+}
+.form-group-quantity-div input{
+background-color: bisque;text-align: start;
+min-height: 70px;font-size: 27px;padding: 5px;
+font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+
+.form-group-brand-div{
+    background-color: rgb(150, 202, 202);
+    min-height: 50px;display: flex;margin: 5px;
+    flex-direction: column;padding: 10px;
+}
+.form-group-brand-div label{
+    font-size: 15px;font-weight: 900;
+}
+.form-group-brand-div input{
+background-color: bisque;text-align: start;
+min-height: 70px;font-size: 27px;padding: 5px;
+font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+.form-group-keywords-div{
+    background-color: rgb(150, 202, 202);
+    min-height: 50px;display: flex;margin: 5px;
+    flex-direction: column;padding: 10px;
+}
+.form-group-keywords-div label{
+    font-size: 15px;font-weight: 900;
+}
+.form-group-keywords-div input{
+background-color: bisque;text-align: start;
+min-height: 70px;font-size: 27px;padding: 5px;
+font-weight: 900;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+
+.upload-button-div{
+    width: 100vw;display: flex;margin-top: 100px;
+    justify-content: center;align-items: center;
+}
+.upload-button{
+    padding: 20px;font-weight: 900;
+}
