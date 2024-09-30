@@ -5,7 +5,6 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import '../styles/home.css';
 import REACT_APP_API_URL from '../../public/constant.js';
-import {RETAILER_SERVER} from '../../public/constant.js';
 import b1 from '../assets/b1.jpg';
 import HomeProductFragment from './productReferenceComponent/homeProductFragment.jsx';
 import { MdOutlineStore } from "react-icons/md";
