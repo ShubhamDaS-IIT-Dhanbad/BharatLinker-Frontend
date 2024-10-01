@@ -111,11 +111,9 @@ const Shop = () => {
       // Constructing the query
       let query = `pincode=${searchByPincode.join(',')}&keyword=${debouncedSearchQuery}`;
       if (searchByCategories.length > 0) {
-        query += `&category=${searchByCategories.join(',')}`; // Only append categories if any are selected.
+        query += `&category=${searchByCategories.join(',')}`;
       }
       const response = await axios.get(`${RETAILER_SERVER}/shop/getshops?${query}`);
-  
-      if (!response.statusText) throw new Error('Failed to fetch shops');
       
       setShops(response.data.shops || []);
     } catch (error) {
@@ -214,7 +212,7 @@ const Shop = () => {
       {showFilter && (
         <div className='searchpage-filter-section'>
           <div id='filter-section-search-page'>
-            <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} />
+            {/* <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} /> */}
             FILTER SECTION
           </div>
           <div className='filter-options-search-page'>

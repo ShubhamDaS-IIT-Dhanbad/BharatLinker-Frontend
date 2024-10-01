@@ -116,12 +116,15 @@ const SearchPage = () => {
         if (loading || !hasMoreProducts || !pincodesLoaded) return;
         setLoading(true);
         try {
+
             const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
+            console.log(searchByPincode,inputValue,selectedCategories,selectedBrands,showSortBy)
             const response = await axios.get(
                 `${RETAILER_PRODUCT_SERVER}/product/getproducts?pincode=${searchByPincode.join(',')}&keyword=${inputValue}&page=${page}&limit=${productsPerPage}
                 &categories=${selectedCategories.join(',')}&brand=${selectedBrands}&sort=${showSortBy}`
             );
             const data = response.data;
+            console.log(data)
             if (data.products && data.products.length > 0) {
                 setProducts((prevProducts) =>
                     page === 1 ? data.products : [...prevProducts, ...data.products]
@@ -218,7 +221,8 @@ const SearchPage = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [inputValue, toggleCategoryUsestate, toggleBrandUsestate, page, selectedPincodes, selectedBrands, selectedCategories, pincodesLoaded]);
+    }, [inputValue, toggleCategoryUsestate, toggleBrandUsestate, page,
+         selectedPincodes, selectedBrands, selectedCategories, pincodesLoaded]);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
