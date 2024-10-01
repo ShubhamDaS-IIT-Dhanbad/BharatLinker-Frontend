@@ -135,7 +135,7 @@ const Shop = () => {
     const newValue = event.target.value;
     setSearchQuery(newValue);
     setShops([]);
-    searchInputRef.current.focus(); // Keep focus on search input
+    searchInputRef.current.focus();
   };
 
   const toggleCategorySelection = (categoryName) => {
