@@ -4,14 +4,23 @@
     justify-content: center;
     align-items: center;
     transition: transform 0.3s ease;
-    cursor: pointer;width: 90vw;
-    padding: 5px 0px 0px 0px;padding: 10px 0px 10px 0px;
-  
+    cursor: pointer;
+    width: 90vw;
+    padding: 10px 0px;
+    outline: none;
 }
 
-.shop-card-container:hover {
-    transform: scale(1.05);
+.shop-card-container:focus {
+    outline: none; /* Ensures the div doesn't get the focus outline */
 }
+
+.shop-card-container:active {
+    outline: none; /* Removes any active state outline */
+}
+
+  
+
+
 
 .shop-card-header {
     width: 94%;
@@ -27,9 +36,7 @@
     transition: transform 0.5s ease;
 }
 
-.shop-card-container:hover .shop-card-image {
-    transform: scale(1.1);
-}
+
 
 .shop-card-details {
     padding: 10px 0px 10px 0px;
@@ -49,6 +56,10 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+}
+.shop-card-address-toggle div{
+    display: flex;font-weight: 900;
+    padding: 0;margin: 0;
 }
 
 .shop-card-address {

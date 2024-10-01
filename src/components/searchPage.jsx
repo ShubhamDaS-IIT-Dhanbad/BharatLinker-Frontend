@@ -9,6 +9,7 @@ import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 
 import LoadingSearchPage from './loadingComponents/loadingSearchPage.jsx';
+import axios from 'axios';
 
 const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
     return (
@@ -116,18 +117,11 @@ const SearchPage = () => {
         setLoading(true);
         try {
             const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-
-            const response = await fetch(
-                `${REACT_APP_API_URL}/api/v1/product/products?pincode=${searchByPincode.join(',')}&keyword=${inputValue}&page=${page}&limit=${productsPerPage}
-                &categories=${selectedCategories.join(',')}`
+            const response = await axios.get(
+                `http://localhost:3001/product/getproducts?pincode=${searchByPincode.join(',')}&keyword=${inputValue}&page=${page}&limit=${productsPerPage}
+                &categories=${selectedCategories.join(',')}&brand=${selectedBrands}&sort=${showSortBy}`
             );
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
-            }
-
-            const data = await response.json();
+            const data = response.data;
             if (data.products && data.products.length > 0) {
                 setProducts((prevProducts) =>
                     page === 1 ? data.products : [...prevProducts, ...data.products]
@@ -159,7 +153,7 @@ const SearchPage = () => {
 
     const [toggleBrandUsestate, setToggleBrandUsestate] = useState(false);
     const toggleBrandSelection = (brand) => {
-        setSelectedBrands((prevSelectedBrands) => {
+        setBrands((prevSelectedBrands) => {
             const updatedBrands = prevSelectedBrands.map(b =>
                 b.brand === brand
                     ? { ...b, selected: !b.selected }
@@ -170,7 +164,7 @@ const SearchPage = () => {
 
 
         // Update selectedCategories based on the toggled state
-        setSelectedBrands((brand) => {
+        setSelectedBrands((prevSelected) => {
             if (prevSelected.includes(brand)) {
                 // If the category is already selected, remove it
                 return prevSelected.filter(item => item !== brand);
@@ -256,11 +250,11 @@ const SearchPage = () => {
     const [sortType, setSortType] = useState();
     const sortProducts = (order) => {
         const sorted = [...products].sort((a, b) => {
-            if (order === 'lowToHigh') {
-                setSortType('lowToHigh');
+            if (order === 'price_low_to_high') {
+                setSortType('price_low_to_high');
                 return a.price - b.price; // Sort ascending
             } else {
-                setSortType('highToLow')
+                setSortType('price_high_to_low')
                 return b.price - a.price; // Sort descending
             }
         });
@@ -273,7 +267,7 @@ const SearchPage = () => {
         <>
             {!showFilter && !showSortBy && (
                 <>
-                    <div id="product-search-container-top">
+                    {/* <div id="product-search-container-top">
                         <div id='product-search-container-top-div'>
                             <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
                             <input
@@ -284,9 +278,21 @@ const SearchPage = () => {
                                 onChange={handleInputChange}
                             />
                         </div>
+                    </div> */}
+                    <div id="shop-search-container-top">
+                        <div id='shop-search-container-top-div'>
+                            <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
+                            <input
+                              style={{ borderRadius: "5px" }}
+                              id="product-search-bar"
+                              placeholder="Search"
+                              value={inputValue}
+                              onChange={handleInputChange}
+                            />
+                        </div>
                     </div>
-                    
-                    <div style={{ width: "100vw", height: "57px", backgroundColor: "white" }}></div>
+
+                    <div style={{ width: "100vw", height: "30px", backgroundColor: "white" }}></div>
                     <div id="search-product-page-container">
                         <div id="search-product-page-grid">
                             {products.map((product) => (
@@ -305,7 +311,7 @@ const SearchPage = () => {
                         </div>
                         {loading &&
                             <>
-                                <LoadingSearchPage/>
+                                <LoadingSearchPage />
                             </>}
                         {!hasMoreProducts && <p></p>}
                     </div>
@@ -364,22 +370,22 @@ const SearchPage = () => {
 
             {showSortBy && (
                 <div className='searchpage-sortby-section'>
-                    <div id='pincode-you-location'>
+                    <div id='pincode-you-location' style={{backgroundColor:"rgb(114, 103, 203)"}}>
                         <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(!showSortBy); }} />
                         SORT BY SECTION
                     </div>
                     <div id="sortby-options">
 
                         <div className="pincode-item-search-page-card"
-                            onClick={() => { sortProducts('lowToHigh'); }}>
+                            onClick={() => { sortProducts('price_low_to_high'); }}>
                             <div
-                                className={sortType === 'lowToHigh' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
+                                className={sortType === 'price_low_to_high' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>
                             <p className="pincode-item-pincode">low to high</p>
                         </div>
                         <div className="pincode-item-search-page-card"
-                            onClick={() => { sortProducts('highToLow'); }}>
-                            <div className={sortType === 'highToLow' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
+                            onClick={() => { sortProducts('price_high_to_low'); }}>
+                            <div className={sortType === 'price_high_to_low' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>
                             <p className="pincode-item-pincode">   high to low</p>
                         </div>

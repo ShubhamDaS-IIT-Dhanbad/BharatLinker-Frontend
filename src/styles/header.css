@@ -6,7 +6,7 @@
     position: fixed;
     top: 0;
     min-width: 100vw;
-    background-color: rgb(110, 60, 188);
+    background-color: rgb(132, 84, 211);
     color: rgb(255, 255, 255);
     z-index: 10000000000;
     transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
@@ -16,7 +16,7 @@
 }
 .header-div-show {
     padding: 15px 0 0;
-    height: 110px;
+    height: 100px;
     transform: translateY(0);
     opacity: 1; /* Fully visible */
 }
@@ -55,7 +55,7 @@
 
 #header-div-search-div {
     height: 40px;
-    padding: 1px 7px 10px 7px;
+    padding: 0px 7px 7px 7px;
     display: flex;
 }
 

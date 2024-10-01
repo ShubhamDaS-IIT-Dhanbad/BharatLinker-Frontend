@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../../styles/productFragment.css';
-import REACT_APP_API_URL from '../../../public/constant.js';
+import { RETAILER_PRODUCT_SERVER } from '../../../public/constant.js';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -34,7 +34,7 @@ const ReferenceCard = ({ product }) => {
     );
 };
 
-const ReferenceProductCard = ({ brand, category, pincode, shopId }) => {
+const ReferenceProductCard = ({ keyword, brand, category, pincode, shopId }) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
@@ -46,8 +46,9 @@ const ReferenceProductCard = ({ brand, category, pincode, shopId }) => {
         const fetchProductsShop = async () => {
             setLoading(true); // Set loading to true before fetching
             try {
+                const keywordString = Array.isArray(keyword) ? keyword.join(',') : keyword; // Convert array to a string
                 const response = await fetch(
-                    `${REACT_APP_API_URL}/api/v1/product/products?keyword=ear&page=${page}&limit=${productsPerPage}`
+                    `${RETAILER_PRODUCT_SERVER}/product/getproducts?keyword=${keywordString}&page=${page}&limit=${productsPerPage}`
                 );
 
                 if (!response.ok) {
@@ -56,7 +57,6 @@ const ReferenceProductCard = ({ brand, category, pincode, shopId }) => {
                 }
 
                 const data = await response.json();
-
                 if (data.products && data.products.length > 0) {
                     setProducts((prevProducts) => {
                         if (page === 1) {
@@ -104,9 +104,9 @@ const ReferenceProductCard = ({ brand, category, pincode, shopId }) => {
             {loading ? (
                 // Show skeletons while loading
                 <>
-                    <Skeleton height={250} style={{width:"40vw" }} />
-                    <Skeleton height={250} style={{width:"40vw" }} />
-                    <Skeleton height={250} style={{width:"40vw" }} />
+                    <Skeleton height={250} style={{ width: "40vw" }} />
+                    <Skeleton height={250} style={{ width: "40vw" }} />
+                    <Skeleton height={250} style={{ width: "40vw" }} />
                 </>
             ) : (
                 products.length > 0 ? (

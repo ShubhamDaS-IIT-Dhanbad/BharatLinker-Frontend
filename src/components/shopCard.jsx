@@ -8,7 +8,7 @@ function ShopCard({ shop }) {
     const navigate = useNavigate();
     const [showAddress, setShowAddress] = useState(false);
 
-    const shopImageUrl = shop.images && shop.images[0] ? shop.images[0] : 'https://via.placeholder.com/300x180';
+    const shopImageUrl = shop.shopImages && shop.shopImages[0] ? shop.shopImages[0] : 'https://via.placeholder.com/300x180';
     const shopDisplayName = shop.shopName || 'Shop Name';
 
     const toggleAddress = () => {
@@ -28,13 +28,14 @@ function ShopCard({ shop }) {
 
                     <div className="shop-card-divider"></div>
                     <div className="shop-card-address-toggle" onClick={toggleAddress} style={{ cursor: 'pointer' }}>
-                        <p>Category</p>
+                    <div>{shop?.category?.length > 0 ? shop.category[0] : <>About</>}</div>
                         {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                     </div>
 
                     {showAddress && (
                         <div className="shop-card-address">
-                            <p>Shop Address here</p> {/* Replace with actual address from shop data */}
+                            Address:
+                            <p>{shop.address}</p>
                         </div>
                     )}
 

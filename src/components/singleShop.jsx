@@ -8,7 +8,7 @@ import { IoLocationOutline } from "react-icons/io5";
 
 import ReferenceProduct from './shopReferenceComponent/shopFragment.jsx';
 import REACT_APP_API_URL from '../../public/constant.js';
-
+import axios from 'axios';
 import LoadingSingleShop from './loadingComponents/loadingSingleShop.jsx';
 
 const ShopDetails = () => {
@@ -17,17 +17,14 @@ const ShopDetails = () => {
     const [loading, setLoading] = useState(true);
     const [shopDetails, setShopDetails] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [showDescription, setShowDescription] = useState(false);
     const [showContact, setShowContact] = useState(false);
     const [showAddress, setShowAddress] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shopdetail/${shopId}`);
-                const data = await response.json();
-                setShopDetails(data.shop);
-                console.log("Fetched shop details:", data.shop);
+                const response = await axios.get(`http://localhost:3002/shop/getshopdetails?shopId=${shopId}`);
+                setShopDetails(response.data.shop);
             } catch (err) {
                 console.error("Error while fetching shop details", err);
             } finally {
@@ -58,7 +55,7 @@ const ShopDetails = () => {
         <Fragment>
             <div id="shop-details-search-container-top">
                 <div id='shop-details-search-container-top-div'>
-                    <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { navigate('/') }} />
+                    <MdOutlineKeyboardArrowLeft size={'24px'} onClick={() => { navigate('/shop') }} />
                     <input
                        style={{borderRadius:"5px"}}
                         id="shop-details-search-bar"
@@ -76,7 +73,7 @@ const ShopDetails = () => {
                     <Fragment>
                         <div id="shop-details-container">
                             <div id="shop-details-img">
-                                {shopDetails.images.map((image, index) => (
+                                {shopDetails.shopImages.map((image, index) => (
                                     <div id="shop-details-img-div" key={index}>
                                         <img src={image} id="shop-details-img-selected" />
                                     </div>
@@ -100,15 +97,15 @@ const ShopDetails = () => {
 
                             <div id="shop-details-status">
                                 <p></p>
-                                <div className={`shop-details-status-button ${1 < 0 ? 'opened' : 'closed'}`}>
-                                    {1 < 0 ? 'OPENED' : 'CLOSED'}
+                                <div className={`shop-details-status-button ${shopDetails.status==='opened' ? 'opened' : 'closed'}`}>
+                                    {shopDetails.status==='opened' ? 'OPENED' : 'CLOSED'}
                                 </div>
                             </div>
 
                             <div id="shop-details-hr"></div>
 
                             <div id="shop-details-about" onClick={toggleAddress} style={{ cursor: 'pointer' }}>
-                                <p>Address</p>
+                                <p style={{fontSize:"19px",fontWeight:"900"}}>Address</p>
                                 {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
 
@@ -121,20 +118,22 @@ const ShopDetails = () => {
                             <div id="shop-details-hr"></div>
 
                             <div id="shop-details-contact" onClick={toggleContact} style={{ cursor: 'pointer' }}>
-                                <p>Contact</p>
+                                <p style={{fontSize:"19px",fontWeight:"900"}}>Contact</p>
                                 {showContact ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
 
                             {showContact && (
                                 <div id="shop-details-description">
-                                   {shopDetails.contactNumber}
+                                   {shopDetails?.phoneNumber ? `PHN ${shopDetails?.phoneNumber}` :"" }
+                                  <br/>
+                                   {shopDetails?.email ? `Email ${shopDetails?.email}` :"" }
                                 </div>
                             )}
 
                             <div id="shop-details-hr"></div>
 
                             <div id="shop-details-similar-products">
-                                <p>Product Available</p>
+                                <p>Available Products</p>
                                 <ReferenceProduct shopId={shopDetails._id} />
                             </div>
                         </div>

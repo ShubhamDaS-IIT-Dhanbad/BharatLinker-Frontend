@@ -12,7 +12,7 @@
     margin-top: 8.5px;height: 37px;
     justify-content: center;
     align-items: center;
-    border: 0.0005px solid rgba(0, 0, 0, 0.365);
+    border: 0.0005px solid rgb(168, 159, 235);
     top: 0px;
     border-radius: 5px;
 }
@@ -49,7 +49,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin-top: 87px;
+    margin-top: 10px;
 
     ::-webkit-scrollbar{
         display: none;
@@ -183,11 +183,11 @@
 
 #shop-details-description {
     padding: 10px;
-    font-size: 10px;
+    font-size: 15px;
 }
 
 #shop-details-similar-products {
-    padding: 20px 10px;
+    padding: 20px 10px;margin-top: 30px;
     font-weight: 900;
     font-size: 17px;
 }

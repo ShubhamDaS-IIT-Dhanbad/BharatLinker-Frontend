@@ -3,11 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import "../styles/singleProduct.css";
 
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { CiSearch } from "react-icons/ci";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import ProductFragment from './productReferenceComponent/productFragment.jsx';
-import REACT_APP_API_URL from '../../public/constant.js';
+import {RETAILER_PRODUCT_SERVER,RETAILER_SERVER} from '../../public/constant.js';
 
 import LoadingSingleProduct from "./loadingComponents/loadingSingleProduct.jsx";
 
@@ -24,14 +25,15 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductData = async () => {
             try {
-                const response = await fetch(`${REACT_APP_API_URL}/api/v1/product/productsdetail/${productId}`);
+                const response = await fetch(`${RETAILER_PRODUCT_SERVER}/product/getproductdetails?productId=${productId}`);
                 const data = await response.json();
+                console.log(data)
                 setProductDetails(data.product);
                 if (data.product.images && data.product.images.length > 0) {
                     setSelectedImage(data.product.images[0]);
                 }
                 if (data.product.shop) {
-                    const shopResponse = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shopdetail/${data.product.shop}`);
+                    const shopResponse = await fetch(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${data.product.shop}`);
                     const shopData = await shopResponse.json();
                     setShopDetail(shopData.shop);
                 }
@@ -68,7 +70,7 @@ const ProductDetails = () => {
         <Fragment>
             <div id="product-details-search-container-top">
                 <div id='product-details-search-container-top-div'>
-                    <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => { navigate('/') }} />
+                    <MdOutlineKeyboardArrowLeft size={'20px'} style={{marginLeft:"5px"}} />
                     <input
                         style={{ borderRadius: "5px" }}
                         id="product-details-search-bar"
@@ -137,7 +139,8 @@ const ProductDetails = () => {
 
                             <div id="product-details-similar">
                                 <p>Similar products</p>
-                                <ProductFragment brand={productDetail.brand} />
+                                {console.log("ko",productDetail)}
+                                <ProductFragment brand={productDetail.brand} keyword={productDetail.keywords} />
                             </div>
                         </div>
                     )}

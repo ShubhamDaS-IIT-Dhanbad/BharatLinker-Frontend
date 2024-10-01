@@ -86,16 +86,16 @@
     position: fixed;
     top: 0;
     display: flex;
-    align-items: center;
-    background-color:rgb(255, 255, 255);
+    align-items: center;justify-content: center;
+    
+   background-color: rgb(114, 103, 203);
     justify-content: center;
     z-index: 999;
  }
  #product-search-container-top-div {
-    width: 96vw;
-    display: flex;background-color: white;
-    position: fixed;
-    margin-top: 8.5px;
+    width: 97vw;height: 40px;
+    display: flex;background-color: white;align-self: center;
+    position: fixed;margin-top:6.5px;
     justify-content: center;
     align-items: center;
     border: 0.0005px solid rgb(23, 21, 59);
@@ -173,5 +173,4 @@
 .pincode-item-search-page:hover {
     opacity: 0.8;
 }
-
 

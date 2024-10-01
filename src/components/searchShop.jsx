@@ -8,11 +8,14 @@ import { LiaSortSolid } from "react-icons/lia";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-import REACT_APP_API_URL from '../../public/constant.js';
+import {RETAILER_SERVER} from '../../public/constant.js';
 import { useDebounce } from 'use-debounce';
 
 import LoadingShopPage from './loadingComponents/loadingShopPage.jsx';
+import noshopfound from '../assets/noshopfound.png'
+import axios from 'axios';
 
+import { TbClockSearch } from "react-icons/tb";
 // Category card for filtering by categories
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
   return (
@@ -49,11 +52,23 @@ const Shop = () => {
   const [showFilterCategory, setShowFilterCategory] = useState(false);
 
   const [categories, setCategories] = useState([
-    { category: "mobile", selected: false },
-    { category: "laptop", selected: false },
-    { category: "earphone", selected: false },
-    { category: "television", selected: false }
-  ]);
+    { category: "Pharmacy", selected: false },
+    { category: "Book Store", selected: false },
+    { category: "Mobile Shop", selected: false },
+    { category: "Clothing Store", selected: false },
+    { category: "Grocery Store", selected: false },
+    { category: "Electronics", selected: false },
+    { category: "Furniture Store", selected: false },
+    { category: "Jewelry Store", selected: false },
+    { category: "Toy Store", selected: false },
+    { category: "Supermarket", selected: false },
+    { category: "Pet Shop", selected: false },
+    { category: "Bakery", selected: false },
+    { category: "Hardware Store", selected: false },
+    { category: "Florist", selected: false },
+    { category: "Gift Shop", selected: false }
+]);
+
 
   const navigate = useNavigate();
   const searchInputRef = useRef(null);
@@ -88,23 +103,35 @@ const Shop = () => {
     setLoading(true);
     try {
       const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-      if (searchByPincode.length === 0) { setShops([]); return; }
-      const response = await fetch(`${REACT_APP_API_URL}/api/v1/shop/shops?pincode=${searchByPincode}&keyword=${debouncedSearchQuery}`);
-      if (!response.ok) throw new Error('Failed to fetch shops');
-      const data = await response.json();
-      setShops(data.shops || []);
+      const searchByCategories = selectedCategories; 
+      if (searchByPincode.length === 0) {
+        setShops([]); 
+        return;
+      }
+  
+      // Constructing the query
+      let query = `pincode=${searchByPincode.join(',')}&keyword=${debouncedSearchQuery}`;
+      if (searchByCategories.length > 0) {
+        query += `&category=${searchByCategories.join(',')}`; // Only append categories if any are selected.
+      }
+      const response = await axios.get(`${RETAILER_SERVER}/shop/getshops?${query}`);
+  
+      if (!response.statusText) throw new Error('Failed to fetch shops');
+      
+      setShops(response.data.shops || []);
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (selectedPincodes.length > 0) {
       fetchShops();
     }
-  }, [debouncedSearchQuery, selectedPincodes]);
+  }, [debouncedSearchQuery, selectedPincodes,selectedCategories]);
 
   const handleSearchChange = (event) => {
     setLoading(true);
@@ -115,26 +142,21 @@ const Shop = () => {
   };
 
   const toggleCategorySelection = (categoryName) => {
-    setCategories((prevCategories) => {
-      return prevCategories.map((category) => {
-        if (category.category === categoryName) {
-          return {
-            ...category,
-            selected: !category.selected
-          };
-        }
-        return category;
-      });
-    });
-
-    setSelectedCategories((prevSelected) => {
-      if (prevSelected.includes(categoryName)) {
-        return prevSelected.filter(item => item !== categoryName);
-      } else {
-        return [...prevSelected, categoryName];
-      }
-    });
+    setCategories((prevCategories) =>
+      prevCategories.map((category) =>
+        category.category === categoryName
+          ? { ...category, selected: !category.selected }
+          : category
+      )
+    );
+  
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoryName)
+        ? prevSelected.filter((item) => item !== categoryName)
+        : [...prevSelected, categoryName]
+    );
   };
+  
 
   const togglePincodeSelection = (pincode) => {
     setSelectedPincodes((prevSelectedPincodes) => {
@@ -146,8 +168,6 @@ const Shop = () => {
       return updatedPincodes;
     });
   };
-
-
 
   if (error) return <div>Error: {error}</div>;
 
@@ -181,7 +201,11 @@ const Shop = () => {
                   </div>
                 ))
               ) : (
-                <p>No shops found</p>
+              <div className='no-shop-found'>
+                <TbClockSearch size={60}
+                />
+                No shop Found
+              </div>
               )}
             </div>
           )}
@@ -209,7 +233,7 @@ const Shop = () => {
             )}
 
             <div className='search-shop-page-filter-option-title' onClick={() => setShowFilterCategory(!showFilterCategory)} style={{ cursor: 'pointer' }}>
-              <p>Category</p>
+              <p>Shop Category</p>
               {showFilterCategory ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
             {showFilterCategory && (
@@ -222,8 +246,6 @@ const Shop = () => {
           </div>
         </div>
       )}
-
-
 
       <div id='searchpage-footer'>
         <div id='searchpage-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>

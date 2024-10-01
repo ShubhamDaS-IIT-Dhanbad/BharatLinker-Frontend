@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import axios from 'axios';
 import '../../styles/shopFragment.css';
-import REACT_APP_API_URL from '../../../public/constant.js';
+import { RETAILER_PRODUCT_SERVER } from '../../../public/constant.js';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-const ShopFragmentCard = ({ product }) => {
+const ShopFragmentCard = ({ product, lastElementRef }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="shop-fragment-card" onClick={() => navigate(`/product/${product._id}`)}>
+        <div className="shop-fragment-card" onClick={() => navigate(`/product/${product._id}`)} ref={lastElementRef}>
             <div className="shop-fragment-card-top">
                 <img className="shop-fragment-card-top-image" src={product.images[0]} alt={product.title} />
             </div>
@@ -34,90 +35,74 @@ const ShopFragmentCard = ({ product }) => {
     );
 };
 
-const ShopFragment = ({ brand, shopId }) => {
+const ShopFragment = ({ shopId }) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
-    const productsPerPage = 5;
-    const containerRef = useRef(null);
-    const [loading, setLoading] = useState(true); // Added loading state
+    const [loading, setLoading] = useState(true);
+    const productsPerPage = 6;
 
+    // Fetch products on page load and when page changes
     useEffect(() => {
         const fetchProducts = async () => {
-            setLoading(true); // Set loading to true when fetching starts
+            setLoading(true);
             try {
-                const response = await fetch(
-                    `${REACT_APP_API_URL}/api/v1/product/retailerproducts?shopId=${shopId}&page=${page}&limit=${productsPerPage}`
-                );
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
-                }
-
-                const data = await response.json();
-
-                if (data.products && data.products.length > 0) {
-                    setProducts((prevProducts) => {
-                        if (page === 1) {
-                            return data.products; // Replace with new data
-                        }
-                        return [...prevProducts, ...data.products]; // Append new products
-                    });
+                const response = await axios.get(`${RETAILER_PRODUCT_SERVER}/product/getproductbyshopid?shopId=${shopId}&page=${page}&limit=${productsPerPage}`);
+                const { products: newProducts } = response.data;
+                if (newProducts && newProducts.length > 0) {
+                    setProducts((prevProducts) => [...prevProducts, ...newProducts]);
                 } else {
                     setHasMoreProducts(false); // No more products to load
                 }
             } catch (error) {
                 console.error('Error fetching products:', error);
             } finally {
-                setLoading(false); // Set loading to false when fetching completes
+                setLoading(false);
             }
         };
 
-        fetchProducts();
-    }, [shopId, page]);
+        if (hasMoreProducts) {
+            fetchProducts();
+        }
+    }, [shopId, page, hasMoreProducts]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (containerRef.current) {
-                const lastCard = containerRef.current.lastChild;
-                if (lastCard) {
-                    const lastCardRect = lastCard.getBoundingClientRect();
-                    const containerRect = containerRef.current.getBoundingClientRect();
-
-                    // Check if the last card is visible in the viewport
-                    if (lastCardRect.bottom <= containerRect.bottom && hasMoreProducts) {
-                        setPage((prevPage) => prevPage + 1);
-                    }
-                }
+    // Create an intersection observer to observe the last product card
+    const observer = useRef();
+    const lastProductCardRef = useCallback((node) => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMoreProducts) {
+                setPage((prevPage) => prevPage + 1); // Load more products
             }
-        };
-
-        const currentContainer = containerRef.current;
-        currentContainer.addEventListener('scroll', handleScroll);
-        return () => {
-            currentContainer.removeEventListener('scroll', handleScroll);
-        };
-    }, [hasMoreProducts]);
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, hasMoreProducts]);
 
     return (
-        <div className='shop-fragment-container' ref={containerRef}>
-            {loading ? (
-                // Show skeleton loaders while loading
-                <>
-                    <Skeleton height={250} style={{ width: "40vw" }} />
-                    <Skeleton height={250} style={{ width: "40vw" }} />
-                    <Skeleton height={250} style={{ width: "40vw" }} />
-                </>
+        <div className='shop-fragment-container'>
+            {products.length > 0 ? (
+                products.map((product, index) => {
+                    if (products.length === index + 1) {
+                        // Attach the ref to the last product card
+                        return <ShopFragmentCard key={`${product._id}-${product.title}`} product={product} lastElementRef={lastProductCardRef} />;
+                    } else {
+                        return <ShopFragmentCard key={`${product._id}-${product.title}`} product={product} />;
+                    }
+                })
             ) : (
-                products.length > 0 ? (
-                    products.map((product) => (
-                        <ShopFragmentCard key={`${product._id}-${product.title}`} product={product} />
-                    ))
-                ) : (
-                    <p>No similar products found.</p>
-                )
+                <p>Empty</p>
             )}
+
+            {loading && (
+                <div className="skeleton-container">
+                    <Skeleton height={250} style={{ width: "40vw" }} />
+                    <Skeleton height={250} style={{ width: "40vw" }} />
+                    <Skeleton height={250} style={{ width: "40vw" }} />
+                </div>
+            )}
+
+            {/* {!hasMoreProducts && products.length > 0 && <p>Reached end of products.</p>} */}
         </div>
     );
 };
