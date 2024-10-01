@@ -9,7 +9,7 @@ import { RiSunCloudyLine } from "react-icons/ri";
 import { TbCategoryPlus } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import ExploreByCategories from './homePageComponent/exploreByCategory.jsx';
-
+import HomePageProducts from './homePageComponent/homePageProducts.jsx';
 const Home = () => {
     const containerRef = useRef(null);
     const navigate = useNavigate();
@@ -42,6 +42,7 @@ const Home = () => {
             <div id='home-body'>
                 <img src={b1} alt="Banner" id='home-body-img' />
                 <ExploreByCategories />
+                <HomePageProducts/>
             </div>
 
             <div id='home-footer'>
