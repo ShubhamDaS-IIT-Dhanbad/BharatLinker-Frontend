@@ -4,7 +4,7 @@
     align-items: center;border-bottom: 1px solid rgba(0, 0, 0, 0.477);
     font-size: 17px;font-weight: 800;
     box-shadow: rgba(52, 51, 51, 0.1) -4px 9px 25px -6px;
-    background-color: rgb(2,41,84);color: white;
+    background-color: rgb(114, 103, 203);color: white;
 }
 
 
@@ -22,9 +22,9 @@
   }
   /* General styling for the pincode search bar */
 #pincode-search-bar-home {
-    display: flex;color: aqua;
-    width: 88%;
-    font-size: 15px;
+    display: flex;color: rgb(0, 0, 0);
+    width: 88%;padding-left: 10px;
+    font-size: 17px;
     border: none; /* Removes the border */
     outline: none; /* Removes default focus outline */
     padding: 6px;
@@ -33,7 +33,7 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 #pincode-search-bar-home::placeholder {
-    color: rgb(0, 0, 0);font-weight: 600;
+    color: rgb(0, 0, 0);font-weight: 100;
     opacity: 1; /* Ensures full opacity for the placeholder text */
 }
 

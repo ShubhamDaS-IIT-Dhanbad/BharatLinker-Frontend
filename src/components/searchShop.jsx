@@ -8,7 +8,7 @@ import { LiaSortSolid } from "react-icons/lia";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
-import {RETAILER_SERVER} from '../../public/constant.js';
+import { RETAILER_SERVER } from '../../public/constant.js';
 import { useDebounce } from 'use-debounce';
 
 import LoadingShopPage from './loadingComponents/loadingShopPage.jsx';
@@ -45,7 +45,7 @@ const Shop = () => {
   const [selectedPincodes, setSelectedPincodes] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const [showPincode, setShowPincode] = useState(true);
+  const [showPincode, setShowPincode] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showSortBy, setShowSortBy] = useState(false);
   const [showFilterCategory, setShowFilterCategory] = useState(false);
@@ -66,7 +66,7 @@ const Shop = () => {
     { category: "Hardware Store", selected: false },
     { category: "Florist", selected: false },
     { category: "Gift Shop", selected: false }
-]);
+  ]);
 
 
   const navigate = useNavigate();
@@ -102,19 +102,19 @@ const Shop = () => {
     setLoading(true);
     try {
       const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-      const searchByCategories = selectedCategories; 
+      const searchByCategories = selectedCategories;
       if (searchByPincode.length === 0) {
-        setShops([]); 
+        setShops([]);
         return;
       }
-  
+
       // Constructing the query
       let query = `pincode=${searchByPincode.join(',')}&keyword=${debouncedSearchQuery}`;
       if (searchByCategories.length > 0) {
         query += `&category=${searchByCategories.join(',')}`;
       }
       const response = await axios.get(`${RETAILER_SERVER}/shop/getshops?${query}`);
-      
+
       setShops(response.data.shops || []);
     } catch (error) {
       setError(error.message);
@@ -122,13 +122,13 @@ const Shop = () => {
       setLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     if (selectedPincodes.length > 0) {
       fetchShops();
     }
-  }, [debouncedSearchQuery, selectedPincodes,selectedCategories]);
+  }, [debouncedSearchQuery, selectedPincodes, selectedCategories]);
 
   const handleSearchChange = (event) => {
     setLoading(true);
@@ -146,14 +146,14 @@ const Shop = () => {
           : category
       )
     );
-  
+
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryName)
         ? prevSelected.filter((item) => item !== categoryName)
         : [...prevSelected, categoryName]
     );
   };
-  
+
 
   const togglePincodeSelection = (pincode) => {
     setSelectedPincodes((prevSelectedPincodes) => {
@@ -188,7 +188,7 @@ const Shop = () => {
           </div>
 
           {loading ? (
-            <LoadingShopPage/>
+            <LoadingShopPage />
           ) : (
             <div id="search-shop-grid">
               {shops.length > 0 ? (
@@ -198,11 +198,12 @@ const Shop = () => {
                   </div>
                 ))
               ) : (
-              <div className='no-shop-found'>
-                <TbClockSearch size={60}
-                />
-                No shop Found
-              </div>
+                <div className='no-shop-found'>
+                  <TbClockSearch size={60}
+                  />
+                  <div>No shop Found</div>
+                  <div style={{ fontWeight: "900" }}>In Your Area</div>
+                </div>
               )}
             </div>
           )}
@@ -212,7 +213,7 @@ const Shop = () => {
       {showFilter && (
         <div className='searchpage-filter-section'>
           <div id='filter-section-search-page'>
-            {/* <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} /> */}
+            <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} />
             FILTER SECTION
           </div>
           <div className='filter-options-search-page'>

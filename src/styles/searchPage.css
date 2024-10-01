@@ -133,7 +133,6 @@
 .filter-option-title{
     display: flex;padding: 10px;justify-content: space-between;
     width: 90%;font-weight: 900;font-size: 20px;
-   border-bottom: 2px solid rgb(50, 50, 50);
 }
 #filter-pincode-options,#filter-category-options,#filter-brand-options{
     width: 100%;max-height: 40vh;

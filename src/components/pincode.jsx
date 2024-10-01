@@ -47,8 +47,11 @@ const Pincode = () => {
         }
     }, []);
 
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
+    const handleInputChange = (e) => {
+        const { value } = e.target;
+        if (value.length <= 6) { // Manually enforce the max length
+            setInputValue(value);
+        }
     };
 
     const handleAddPincode = () => {
@@ -112,8 +115,10 @@ const Pincode = () => {
                         id="pincode-search-bar-home"
                         placeholder="Add Pincode"
                         value={inputValue}
+                        type='number'
                         onChange={handleInputChange}
                     />
+
                     <IoMdAdd size={35} onClick={handleAddPincode} />
                 </div>
             </div>
@@ -139,7 +144,7 @@ const Pincode = () => {
                 closeOnClick // Close on click
                 draggable // Enable dragging
                 pauseOnHover // Pause on hover
-            /> 
+            />
         </div>
     );
 };
