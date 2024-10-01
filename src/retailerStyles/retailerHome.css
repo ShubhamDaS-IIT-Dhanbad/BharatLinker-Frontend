@@ -1,0 +1,8 @@
+.retailer-home{
+    width: 30vw;display: flex;
+    margin-top: 150px;
+    width: 100vw;align-items: center;justify-content: center;
+}
+.retailer-home-png{
+    max-width: 30vw;
+}

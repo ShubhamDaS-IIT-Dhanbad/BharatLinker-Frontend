@@ -7,14 +7,14 @@
 .headerDiv {
     display: flex;flex-direction: column;
     justify-content: space-between;align-items: flex-start;
-    background-color: rgb(46, 35, 108);gap: 10px;
+    background-color: rgb(135, 162, 255);gap: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);color: white;
     position: fixed;
     top: 0;z-index: 9999;
 }
 
 .headerDivUser {
-    display: flex;
+    display: flex;padding: 10px;
     align-items: center;
 }
 
@@ -70,7 +70,7 @@
     display: flex;
     justify-content: space-evenly;width: 100vw;
     padding: 10px;position: fixed;bottom: 0;
-    background-color: rgb(23, 21, 59);
+    background-color: rgb(135, 162, 255);
     border-top: 1px solid #ccc;color: white;
 }
 
@@ -82,5 +82,5 @@
 }
 
 .homeFooterShop:hover {
-    color: #007bff; /* Change to your desired hover color */
+    color: #ff004c; /* Change to your desired hover color */
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { useRef } from 'react';
 import axios from 'axios';
 import { RiImageAddLine } from 'react-icons/ri';
 import { FiEdit, FiSave } from 'react-icons/fi'; // Icons for edit/save
@@ -7,10 +8,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../retailerStyles/retailerShopPage.css';
 
-import {RETAILER_SERVER} from '../../public/constant.js';
+import { RETAILER_SERVER } from '../../public/constant.js';
 import { IoPlaySkipBackOutline } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa";
 
 const RetailerShopFragment = () => {
+    const inputRef = useRef(null);
+
     const [shop, setShop] = useState(null);
     const [shopImages, setShopImages] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
@@ -245,7 +250,7 @@ const RetailerShopFragment = () => {
                 {showAddress && (
                     <div className="retailer-shop-address">
                         {!isEditing ? (
-                            <p style={{padding:"10px",fontWeight:"900"}}>{shop?.address}</p>
+                            <p style={{ padding: "10px", fontWeight: "900" }}>{shop?.address}</p>
                         ) : (
                             <textarea
                                 name="address"
@@ -267,7 +272,7 @@ const RetailerShopFragment = () => {
                 {showContact && (
                     <div className="retailer-shop-contact">
                         {!isEditing ? (
-                            <p style={{padding:"10px",fontWeight:"900"}}>{shop?.phoneNumber}</p>
+                            <p style={{ padding: "10px", fontWeight: "900" }}>{shop?.phoneNumber}</p>
                         ) : (
                             <input
                                 type="tel"
@@ -296,17 +301,26 @@ const RetailerShopFragment = () => {
                     ))}
                     {isEditing && pincodes.length < maxPincodes && (
                         <div>
-                            <input
-                                type="text"
-                                placeholder="Add Pincode"
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleAddPincode(e.target.value);
-                                        e.target.value = ''; // Clear input after adding
+                            <div className='retailer-pincode-section-add-pincode'>
+                                <input
+                                    type="text"
+                                    className='retailer-pincode-section-add-pincode-input'
+                                    placeholder="Add Pincode"
+                                    ref={inputRef}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleAddPincode(e.target.value);
+                                            e.target.value = ''; // Clear input after adding
+                                        }
+                                    }}
+                                />
+                                <FaPlus onClick={() => {
+                                    if (inputRef.current) {
+                                        handleAddPincode(inputRef.current.value);
+                                        inputRef.current.value = ''; // Clear input after adding
                                     }
-                                }}
-                                className='retailer-pincode-section-add-pincode'
-                            />
+                                }} size={30} />
+                            </div>
                         </div>
                     )}
                 </div>
@@ -318,9 +332,13 @@ const RetailerShopFragment = () => {
                         <div style={{ display: "flex", widthL: "100vw" }}
                             className='retailer-save-discard'
                         >
-
-                            <IoPlaySkipBackOutline size={30} onClick={() => setIsEditing(!isEditing)} className="retailer-discard-button" />
-                            <FiSave size={30} onClick={handleSaveChanges} className="retailer-save-button" />
+                            <div className='retailer-shop-action-buttons-close' onClick={() => setIsEditing(!isEditing)} >
+                                close
+                                {/* <IoClose size={30} className="retailer-discard-button" /> */}
+                            </div>
+                            <div className='retailer-shop-action-buttons-save' onClick={handleSaveChanges}>
+                                Save
+                            </div>
                         </div>
                     ) : (
                         <FiEdit onClick={toggleEditMode} className="retailer-edit-button" />

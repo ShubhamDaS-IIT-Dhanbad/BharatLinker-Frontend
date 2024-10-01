@@ -6,7 +6,7 @@
     position: fixed;
     top: 0;
     min-width: 100vw;
-    background-color: rgb(132, 84, 211);
+    background-color: rgb(135, 162, 255);
     color: rgb(255, 255, 255);
     z-index: 10000000000;
     transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */

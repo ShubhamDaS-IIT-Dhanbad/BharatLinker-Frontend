@@ -51,9 +51,8 @@ function RetailerHomePageHeaderFooter() {
                     <HiOutlineUserCircle className="headerDivUserIcon" size={35} />
                     <div className="headerDivUserLocationDiv">
                         <p className="headerDivUserLocation">Retailer</p>
-                        <div className="headerDivUserLocationName" onClick={() => navigate('/pincode')}>
-                            Hi, {shopDetails?.owner?.firstName || 'Retailer'}
-                            <TbChevronDown size={15} />
+                        <div className="headerDivUserLocationName">
+                            Hi, {shopDetails?.shopName || 'Retailer'}
                         </div>
                     </div>
                 </div>

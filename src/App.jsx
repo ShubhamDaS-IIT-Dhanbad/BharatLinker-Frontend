@@ -15,6 +15,7 @@ import RetailerLogin from './retailerComponent/retailerLogin.jsx';
 import RetailerSignup from './retailerComponent/retailerSignup.jsx';
 import ProtectedRoute from './components/protectedRouteRetailer.jsx';
 
+import RetailerHome from './retailerComponent/retailerHome.jsx'
 import RetailerHomePageHeaderFooter from './retailerComponent/retailerHomePageHeaderFooter.jsx';
 import RetailerProductHeaderFooter from './retailerComponent/retailerProductHeaderFooter.jsx';
 import RetailerShopPage from './retailerComponent/retailerShopPage.jsx';
@@ -75,7 +76,7 @@ function RoutesWithConditionalHeader({ pincode, setPincode }) {
 
         {/* PROTECTED ROUTES */}
 
-        <Route path='/retailer/home' element={<ProtectedRoute><div>Retailer Home</div></ProtectedRoute>} />
+        <Route path='/retailer/home' element={<ProtectedRoute><RetailerHome/></ProtectedRoute>} />
         <Route path='/retailer/data' element={<ProtectedRoute><div>Retailer Data</div></ProtectedRoute>} />
         <Route path='/retailer/shop' element={<ProtectedRoute>< RetailerShopPage /></ProtectedRoute>} />
         <Route path='/retailer/product' element={<ProtectedRoute><div>product dashboard</div></ProtectedRoute>} />

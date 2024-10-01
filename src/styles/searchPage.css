@@ -88,7 +88,8 @@
     display: flex;
     align-items: center;justify-content: center;
     
-   background-color: rgb(114, 103, 203);
+   background-color:rgb(114, 103, 203);
+   border: 10px solid black;
     justify-content: center;
     z-index: 999;
  }

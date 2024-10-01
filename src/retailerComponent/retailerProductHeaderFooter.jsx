@@ -13,6 +13,7 @@ import '../retailerStyles/retailerHomePageHeaderFooter.css'
 
 import { AiOutlineProduct } from "react-icons/ai";
 import { HiOutlineCreditCard } from "react-icons/hi2";
+import { LuStepBack } from "react-icons/lu";
 
 function RetailerHomePageHeaderFooter() {
     const [searchInput, setSearchInput] = useState('');
@@ -44,7 +45,7 @@ function RetailerHomePageHeaderFooter() {
     return (
         <div>
             <div className="headerDiv">
-                <div className="headerDivUser">
+                {/* <div className="headerDivUser">
                     <HiOutlineUserCircle className="headerDivUserIcon" size={35} />
                     <div className="headerDivUserLocationDiv">
                         <p className="headerDivUserLocation">Retailer</p>
@@ -53,9 +54,9 @@ function RetailerHomePageHeaderFooter() {
                             <TbChevronDown size={15} />
                         </div>
                     </div>
-                </div>
+                </div> */}
 
-                <div className="headerDivSearchDiv">
+                <div className="headerDivSearchDiv" style={{marginTop:"10px"}}>
                     <div className="headerDivSearchDivInput">
                         <BiSearchAlt style={{color:"white"}} className="headerDivSearchIcon" onClick={handleSearchSubmit} />
                         <input
@@ -93,8 +94,8 @@ function RetailerHomePageHeaderFooter() {
                     Update
                 </div>
                 <div className="homeFooterShop" onClick={() => navigate('/retailer/shop')}>
-                    <MdOutlineStore size={30} />
-                    Shop
+                    <LuStepBack size={30} />
+                    Back
                 </div>
             </div>
         </div>
