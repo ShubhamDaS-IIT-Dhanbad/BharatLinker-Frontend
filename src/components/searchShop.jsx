@@ -12,7 +12,6 @@ import {RETAILER_SERVER} from '../../public/constant.js';
 import { useDebounce } from 'use-debounce';
 
 import LoadingShopPage from './loadingComponents/loadingShopPage.jsx';
-import noshopfound from '../assets/noshopfound.png'
 import axios from 'axios';
 
 import { TbClockSearch } from "react-icons/tb";

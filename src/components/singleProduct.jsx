@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import "../styles/singleProduct.css";
 
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { CiSearch } from "react-icons/ci";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 

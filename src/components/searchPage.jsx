@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import ProductCard from './productCard.jsx';
 import '../styles/searchPage.css';
-import REACT_APP_API_URL from '../../public/constant.js';
+import {RETAILER_PRODUCT_SERVER} from '../../public/constant.js';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
@@ -118,7 +118,7 @@ const SearchPage = () => {
         try {
             const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
             const response = await axios.get(
-                `http://localhost:3001/product/getproducts?pincode=${searchByPincode.join(',')}&keyword=${inputValue}&page=${page}&limit=${productsPerPage}
+                `${RETAILER_PRODUCT_SERVER}/product/getproducts?pincode=${searchByPincode.join(',')}&keyword=${inputValue}&page=${page}&limit=${productsPerPage}
                 &categories=${selectedCategories.join(',')}&brand=${selectedBrands}&sort=${showSortBy}`
             );
             const data = response.data;

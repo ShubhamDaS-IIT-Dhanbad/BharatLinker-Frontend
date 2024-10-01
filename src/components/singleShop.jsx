@@ -7,7 +7,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
 
 import ReferenceProduct from './shopReferenceComponent/shopFragment.jsx';
-import REACT_APP_API_URL from '../../public/constant.js';
+import {RETAILER_SERVER} from '../../public/constant.js';
 import axios from 'axios';
 import LoadingSingleShop from './loadingComponents/loadingSingleShop.jsx';
 
@@ -23,7 +23,7 @@ const ShopDetails = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:3002/shop/getshopdetails?shopId=${shopId}`);
+                const response = await axios.get(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${shopId}`);
                 setShopDetails(response.data.shop);
             } catch (err) {
                 console.error("Error while fetching shop details", err);
