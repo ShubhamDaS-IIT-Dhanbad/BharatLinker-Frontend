@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import ProductCard from './productCard.jsx';
 import '../styles/searchPage.css';
-import {RETAILER_PRODUCT_SERVER} from '../../public/constant.js';
+import { RETAILER_PRODUCT_SERVER } from '../../public/constant.js';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 
+import { TbClockSearch } from "react-icons/tb";
 import LoadingSearchPage from './loadingComponents/loadingSearchPage.jsx';
 import axios from 'axios';
 
@@ -118,7 +119,7 @@ const SearchPage = () => {
         try {
 
             const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-            console.log(searchByPincode,inputValue,selectedCategories,selectedBrands,showSortBy)
+            console.log(searchByPincode, inputValue, selectedCategories, selectedBrands, showSortBy)
             const response = await axios.get(
                 `${RETAILER_PRODUCT_SERVER}/product/getproducts?pincode=${searchByPincode.join(',')}&keyword=${inputValue}&page=${page}&limit=${productsPerPage}
                 &categories=${selectedCategories.join(',')}&brand=${selectedBrands}&sort=${showSortBy}`
@@ -222,7 +223,7 @@ const SearchPage = () => {
     useEffect(() => {
         fetchProducts();
     }, [inputValue, toggleCategoryUsestate, toggleBrandUsestate, page,
-         selectedPincodes, selectedBrands, selectedCategories, pincodesLoaded]);
+        selectedPincodes, selectedBrands, selectedCategories, pincodesLoaded]);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -287,37 +288,47 @@ const SearchPage = () => {
                         <div id='shop-search-container-top-div'>
                             <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
                             <input
-                              style={{ borderRadius: "5px" }}
-                              id="product-search-bar"
-                              placeholder="Search"
-                              value={inputValue}
-                              onChange={handleInputChange}
+                                style={{ borderRadius: "5px" }}
+                                id="product-search-bar"
+                                placeholder="Search"
+                                value={inputValue}
+                                onChange={handleInputChange}
                             />
                         </div>
                     </div>
 
                     <div style={{ width: "100vw", height: "30px", backgroundColor: "white" }}></div>
                     <div id="search-product-page-container">
-                        <div id="search-product-page-grid">
-                            {products.map((product) => (
-                                <div key={product?._id}>
-                                    {product?.images && product?.title && product?.price && (
-                                        <ProductCard
-                                            id={product._id || '123ffsekn'}
-                                            image={product.images[0]}
-                                            title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
-                                            price={product.price}
-                                            quantity={product.quantityAvailable}
-                                        />
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                        {loading &&
-                            <>
-                                <LoadingSearchPage />
-                            </>}
-                        {!hasMoreProducts && <p></p>}
+                        {
+                            products.length > 0 ? (
+                                <>
+                                    <div id="search-product-page-grid">
+                                        {products.map((product) => (
+                                            <div key={product?._id}>
+                                                {product?.images && product?.title && product?.price && (
+                                                    <ProductCard
+                                                        id={product._id || '123ffsekn'}
+                                                        image={product.images[0]}
+                                                        title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
+                                                        price={product.price}
+                                                        quantity={product.quantityAvailable}
+                                                    />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                !hasMoreProducts && (
+                                    <div className='no-shop-found'>
+                                        <TbClockSearch size={60} />
+                                        No Product Found
+                                    </div>
+                                )
+                            )
+                        }
+
+                        {loading && <LoadingSearchPage />}
                     </div>
                 </>
             )}
@@ -374,7 +385,7 @@ const SearchPage = () => {
 
             {showSortBy && (
                 <div className='searchpage-sortby-section'>
-                    <div id='pincode-you-location' style={{backgroundColor:"rgb(114, 103, 203)"}}>
+                    <div id='pincode-you-location' style={{ backgroundColor: "rgb(114, 103, 203)" }}>
                         <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(!showSortBy); }} />
                         SORT BY SECTION
                     </div>
