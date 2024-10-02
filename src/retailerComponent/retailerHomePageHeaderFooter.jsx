@@ -5,11 +5,13 @@ import { BiSearchAlt } from 'react-icons/bi';
 import { MdOutlineStore, MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { ToastContainer } from 'react-toastify';
 
+
 import 'react-loading-skeleton/dist/skeleton.css';
 import '../retailerStyles/retailerHomePageHeaderFooter.css';
 
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { HiOutlineCreditCard } from 'react-icons/hi2';
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 function RetailerHomePageHeaderFooter() {
     const [searchInput, setSearchInput] = useState('');
@@ -52,18 +54,23 @@ function RetailerHomePageHeaderFooter() {
         <div>
             <div className="headerDiv">
                 <div className="headerDivUser">
-                    <HiOutlineUserCircle className="headerDivUserIcon" size={35} />
-                    <div className="headerDivUserLocationDiv">
-                        <p className="headerDivUserLocation">Retailer</p>
-                        <div className="headerDivUserLocationName">
-                            Hi, {shopDetails?.shopName || 'Retailer'}
+                    <div style={{ display: "flex" }}>
+                        <HiOutlineUserCircle className="headerDivUserIcon" size={35} />
+                        <div className="headerDivUserLocationDiv">
+                            <p className="headerDivUserLocation">Retailer</p>
+                            <div className="headerDivUserLocationName">
+                                Hi, <span className='headerDivUserLocationName-shop-name'>{shopDetails?.shopName || 'Retailer'}</span>
+                            </div>
                         </div>
+                    </div>
+                    <div style={{marginRight:"20px"}} onClick={()=>navigate('/')}>
+                        <IoIosCloseCircleOutline size={30} />
                     </div>
                 </div>
 
                 <div className="headerDivSearchDiv">
                     <div className="headerDivSearchDivInput">
-                        <BiSearchAlt style={{color:"white"}} className="headerDivSearchIcon" onClick={handleSearchSubmit} />
+                        <BiSearchAlt style={{ color: "white" }} className="headerDivSearchIcon" onClick={handleSearchSubmit} />
                         <input
                             className="headerDivSearchInput"
                             placeholder="Search"

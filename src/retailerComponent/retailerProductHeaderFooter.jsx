@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 import '../retailerStyles/retailerHomePageHeaderFooter.css';
+import '../retailerStyles/retailerProductHeaderFooter.css';
 
 function RetailerHomePageHeaderFooter() {
     const [searchInput, setSearchInput] = useState('');
@@ -40,7 +41,7 @@ function RetailerHomePageHeaderFooter() {
 
     // Conditionally set the color based on current route
     const getActiveStyle = (path) => {
-        return location.pathname === path ? { color: 'black' } : { color: 'white' };
+        return location.pathname === path ? { color: 'rgb(42, 255, 67)' } : { color: 'white' };
     };
 
     return (
@@ -89,7 +90,7 @@ function RetailerHomePageHeaderFooter() {
                 </div>
                 <div
                     className="homeFooterShop"
-                    onClick={() => navigate('/retailer/shop')}
+                    onClick={() => navigate('/retailer/home')}
                     style={getActiveStyle('/retailer/shop')}
                 >
                     <LuStepBack size={30} />

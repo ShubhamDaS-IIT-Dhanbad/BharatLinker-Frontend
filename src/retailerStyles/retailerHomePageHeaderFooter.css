@@ -3,11 +3,18 @@
     flex-direction: column;
     height: 100vh;width: 100vw;
 }
+.headerDivUserLocationName-shop-name {
+    font-size: 16px;
+    padding-left: 5px;
+    color: rgb(42, 255, 67);
+    font-weight: 900;
+    text-shadow: 0px 0px 0px rgb(169, 210, 174); /* Change values as needed */
+}
 
 .headerDiv {
     display: flex;flex-direction: column;
     justify-content: space-between;align-items: flex-start;
-    background-color: rgb(135, 162, 255);gap: 10px;
+    background-color: rgb(161, 132, 255);gap: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);color: white;
     position: fixed;
     top: 0;z-index: 9999;
@@ -15,7 +22,8 @@
 
 .headerDivUser {
     display: flex;padding: 10px;
-    align-items: center;
+    align-items: center;justify-content: space-between;
+    width: 100%;
 }
 
 .headerDivUserIcon {
@@ -23,7 +31,7 @@
 }
 
 .headerDivUserLocationDiv {
-    display: flex;
+    display: flex;justify-content: center;
     flex-direction: column;
 }
 
@@ -70,7 +78,7 @@
     display: flex;
     justify-content: space-evenly;width: 100vw;
     padding: 10px;position: fixed;bottom: 0;
-    background-color: rgb(135, 162, 255);
+    background-color: rgb(161, 132, 255);
     border-top: 1px solid #ccc;color: white;
 }
 
@@ -85,6 +93,6 @@
     color: #ff004c; /* Change to your desired hover color */
 }
 .homeFooterShop.active {
-    color: #000000; /* Example active color */
+    color: rgb(42, 255, 67); /* Example active color */
     font-weight: bold;
 }

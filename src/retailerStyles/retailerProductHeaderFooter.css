@@ -1,0 +1,108 @@
+.retailer_home_page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+.header_div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: rgb(240, 142, 214);
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+}
+
+.header_div_user {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.header_div_user_icon {
+    margin-right: 10px;
+}
+
+.header_div_user_location_div {
+    display: flex;
+    flex-direction: column;
+}
+
+.header_div_user_location {
+    font-weight: bold;
+}
+
+.header_div_user_location_name {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.header_div_search_div {
+    display: flex;
+    width: 95vw;
+    align-items: center;
+    width: 100vw;
+    justify-content: center;
+}
+
+.header_div_search_div_input {
+    display: flex;
+    width: 95vw;
+    align-items: center;
+    position: relative;
+}
+
+.header_div_search_input {
+    padding: 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 95vw;
+}
+
+.header_div_search_icon {
+    position: absolute;
+    left: 10px;
+    cursor: pointer;
+}
+
+.home_div {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.home_footer {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100vw;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    background-color: rgb(240, 142, 214);
+    border-top: 1px solid #ccc;
+    color: white;
+}
+
+.home_footer_section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.home_footer_section:hover {
+    color: #ff004c; /* Change to your desired hover color */
+}
+
+.home_footer_section.active {
+    color: #000000; /* Example active color */
+    font-weight: bold;
+}
