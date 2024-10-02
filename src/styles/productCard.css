@@ -3,32 +3,37 @@
     width:47vw;max-width: 200px;
     display: flex;
     flex-direction: column;
-    height: 340px;margin-top: 10px;
+    min-height: 390px;margin-top: 10px;
+    min-height: 390px;
     z-index: 3;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
 
-
+.product-card-top{
+    height: 210px;
+    background-color: aquamarine;
+}
 .product-card-top-image {
-    width: 100%;height: 190px;
-    min-height: 190px;border-radius: 5px;
+    width: 100%;min-height: 200px;background-color: aqua;
+    border-radius: 5px;height: 100%;
 }
 #product-card-shop-price{
     display: flex;flex-direction: column;
-    font-size: 15px;height: 100%;padding: 3px 5px 3px 5px;
-    font-size: 15px;font-weight: 900;
+    font-size: 19px;height: 100%;padding: 3px 5px 3px 5px;
+    font-size: 19px;font-weight: 900;
     justify-content: space-between;
 }
 .product-card-bottom {
-    width: 100%;height: 140px;
+    width: 100%;min-height: 190px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     color: #000000;
-    background-color: rgb(255, 255, 255);
 }
+
+
 
 .product-card-shop-detail {
     display: flex;
@@ -42,7 +47,8 @@
 
 .product-card-shop {
     font-size: 21px;
-    font-weight: 900;
+    margin-top: 19px;color: rgb(0, 0, 0);
+    font-weight: 1000;
 }
 
 
@@ -55,7 +61,8 @@
 
 .product-card-shop-name {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 12.5px;
+    font-size: 15px;
+    margin-top: 17px;
     font-weight: 900;
     letter-spacing: 1;
 }
