@@ -27,6 +27,8 @@ const RetailerShopFragment = () => {
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [loadingUpdate, setLoadingUpdate] = useState(false);
 
+    const [loading,setLoading]=useState(true);
+
     const maxImages = 5;
     const maxPincodes = 5;
 
@@ -47,8 +49,10 @@ const RetailerShopFragment = () => {
     };
 
     const fetchShopData = async () => {
+        const loadingToast = toast.loading('Fetching shop Data...');
         const retailerData = getBharatLinkerRetailerCookie();
         if (retailerData) {
+
             const shopId = retailerData.id;
             try {
                 const response = await axios.get(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${shopId}`);
@@ -56,10 +60,13 @@ const RetailerShopFragment = () => {
                 setShop(shopData);
                 setShopImages(shopData.shopImages || []);
                 setPincodes(shopData.pinCodes || []);
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching shop details:', error);
+                toast.dismiss(loadingToast); // Dismiss loading toast
             }
         }
+        toast.dismiss(loadingToast);
     };
 
     useEffect(() => {
@@ -94,6 +101,7 @@ const RetailerShopFragment = () => {
     };
 
     const handleImageDelete = (index) => {
+
         const imageToDelete = shopImages[index];
         const deleteUrl = `${RETAILER_SERVER}/shop/deleteshopimage?shopId=${shop?._id}&imageUrl=${encodeURIComponent(imageToDelete)}`;
 

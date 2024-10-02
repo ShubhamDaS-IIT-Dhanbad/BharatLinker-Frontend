@@ -64,7 +64,7 @@
 #searchpage-footer{
     width: 100vh;display: flex;
     color: white;font-weight: 800;
-    height: 60px;background-color: rgb(114, 103, 203);
+    height: 60px;background-color: rgb(158, 149, 224);
     position: fixed;
     bottom: 0;z-index: 900000;
 }
@@ -88,7 +88,7 @@
     display: flex;
     align-items: center;justify-content: center;
     
-   background-color:rgb(114, 103, 203);
+    background-color: rgb(158, 149, 224);
    border: 10px solid black;
     justify-content: center;
     z-index: 999;
