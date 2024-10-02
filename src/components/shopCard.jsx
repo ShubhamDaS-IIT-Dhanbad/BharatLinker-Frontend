@@ -21,7 +21,7 @@ function ShopCard({ shop }) {
             </div>
 
             <div className='shop-card-details'>
-                <span className='shop-card-name'>{shopDisplayName}</span>
+                <span className='shop-card-name'>{shopDisplayName.toUpperCase()}</span>
 
                 <div className="shop-card-info">
 
