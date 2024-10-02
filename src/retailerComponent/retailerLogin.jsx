@@ -34,8 +34,7 @@ const RetailerLogin = () => {
                 Cookies.set('BharatLinkerRetailer', JSON.stringify(response.data.shop), { expires: 7 }); // Add BharatLinkerRetailer cookie
 
                 toast.dismiss(loadingToast); // Dismiss loading toast
-                toast.success('Login successful!'); // Show success toast
-                console.log(response.data.shop); // Handle the response if needed
+                toast.success('Login successful!');
                 navigate('/retailer/home'); // Changed redirect path to /dashboard
             }
         } catch (error) {

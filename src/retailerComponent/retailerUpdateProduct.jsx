@@ -73,7 +73,6 @@ const RetailerSingleProduct = () => {
     };
 
     const handleSaveChanges = async () => {
-        console.log("ko", editedProduct)
         try {
             await axios.put(`${RETAILER_PRODUCT_SERVER}/product/updateproductdata?productId=${productId}`, {
 

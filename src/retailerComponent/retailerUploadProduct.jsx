@@ -30,11 +30,9 @@ const UploadProduct = () => {
 
     useEffect(() => {
         const retailerData = getBharatLinkerRetailerCookie();
-        console.log(retailerData)
         if (retailerData) {
             setShop(retailerData.id);
             setPincodes(retailerData.pincodes);
-            console.log(pincodes)
         }
     }, []);
 
