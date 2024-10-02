@@ -42,20 +42,25 @@ export const useUserLocation = () => {
       const locationPincode = data.address.postcode || 'Add Pincode';
       const locationCity = data.address.city || data.address.town || data.address.village || data.address.state_district || data.address.state || 'Unknown City';
 
-      setAddress({ city: locationCity, postcode: locationPincode });
+      // Validate pincode to ensure it's a number
+      if (!isNaN(locationPincode)) {
+        setAddress({ city: locationCity, postcode: locationPincode });
 
-      // Set user pincodes based on fetched location
-      const userPincodes = [{ pincode: locationPincode, selected: true }];
-      setUserPincodes(userPincodes);
+        // Set user pincodes based on fetched location
+        const userPincodes = [{ pincode: locationPincode, selected: true }];
+        setUserPincodes(userPincodes);
 
-      // Set cookies for address and user pincodes
-      const expirationTime = new Date();
-      expirationTime.setTime(expirationTime.getTime() + (60 * 60 * 1000)); // 1 hour expiry
-      const expires = `expires=${expirationTime.toUTCString()}`;
-      document.cookie = `address=${encodeURIComponent(JSON.stringify(data.address))}; ${expires}; path=/`;
-      document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
+        // Set cookies for address and user pincodes
+        const expirationTime = new Date();
+        expirationTime.setTime(expirationTime.getTime() + (60 * 60 * 1000)); // 1 hour expiry
+        const expires = `expires=${expirationTime.toUTCString()}`;
+        document.cookie = `address=${encodeURIComponent(JSON.stringify(data.address))}; ${expires}; path=/`;
+        document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
 
-      toast.success(`Location updated to ${locationCity} (${locationPincode})!`);
+        toast.success(`Location updated to ${locationCity} (${locationPincode})!`);
+      } else {
+        toast.error('Invalid pincode fetched, not added to the list.');
+      }
     } catch (error) {
       toast.error(`Failed to fetch location: ${error.message}`);
     }
