@@ -53,19 +53,19 @@ const Home = () => {
             </div>
 
             <div id='home-footer'>
-                <div id='home-footer-shop' onClick={() => navigate('/')} style={getActiveStyle('/')}>
+                <div id='home-footer-shop'style={{fontWeight:"bold"}} onClick={() => navigate('/')} style={getActiveStyle('/')}>
                     <RiSunCloudyLine size={40} />
                     Home
                 </div>
-                <div id='home-footer-shop' onClick={() => navigate('/product')} style={getActiveStyle('/product')}>
+                <div id='home-footer-shop' style={{fontWeight:"bold"}} onClick={() => navigate('/product')} style={getActiveStyle('/product')}>
                     <TbCategoryPlus size={40} />
                     Products
                 </div>
-                <div id='home-footer-shop' onClick={() => navigate('/shop')} style={getActiveStyle('/shop')}>
+                <div id='home-footer-shop' style={{fontWeight:"bold"}} onClick={() => navigate('/shop')} style={getActiveStyle('/shop')}>
                     <MdOutlineStore size={40} />
                     Shop
                 </div>
-                <div id='home-footer-shop' onClick={handleRetailerClick} style={getActiveStyle('/retailer')}>
+                <div id='home-footer-shop' style={{fontWeight:"bold"}} onClick={handleRetailerClick} style={getActiveStyle('/retailer')}>
                     <MdOutlineAdminPanelSettings size={40} />
                     Retailer
                 </div>
