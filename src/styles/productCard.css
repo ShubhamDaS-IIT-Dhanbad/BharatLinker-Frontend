@@ -13,10 +13,10 @@
 
 .product-card-top{
     height: 210px;
-    background-color: aquamarine;
+    background-color: rgb(236, 239, 238);
 }
 .product-card-top-image {
-    width: 100%;min-height: 200px;background-color: aqua;
+    width: 100%;min-height: 200px;background-color: rgb(246, 247, 247);
     border-radius: 5px;height: 100%;
 }
 #product-card-shop-price{
