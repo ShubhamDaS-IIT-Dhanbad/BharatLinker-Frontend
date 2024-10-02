@@ -41,7 +41,7 @@ const Home = () => {
 
     // Helper function to determine active style
     const getActiveStyle = (path) => {
-        return location.pathname === path ? { color: '#000000', fontWeight: 'bold' } : {};
+        return location.pathname === path ? { color: '#000000', fontWeight: 'bolder' } : {};
     };
 
     return (
