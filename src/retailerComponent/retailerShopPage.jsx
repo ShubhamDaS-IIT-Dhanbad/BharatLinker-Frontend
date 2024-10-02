@@ -49,7 +49,6 @@ const RetailerShopFragment = () => {
     };
 
     const fetchShopData = async () => {
-        const loadingToast = toast.loading('Fetching shop Data...');
         const retailerData = getBharatLinkerRetailerCookie();
         if (retailerData) {
 
@@ -57,16 +56,14 @@ const RetailerShopFragment = () => {
             try {
                 const response = await axios.get(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${shopId}`);
                 const shopData = response.data.shop;
-                toast.dismiss(loadingToast); // Dismiss loading toast
+
                 setShop(shopData);
                 setShopImages(shopData.shopImages || []);
                 setPincodes(shopData.pinCodes || []);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching shop details:', error);
-                toast.dismiss(loadingToast); // Dismiss loading toast
             }
-            toast.dismiss(loadingToast); // Dismiss loading toast
         }
     };
 
