@@ -5,6 +5,7 @@ import { IoMdAdd } from "react-icons/io";
 import { RiDeleteBackLine } from "react-icons/ri";
 import { toast, ToastContainer } from 'react-toastify';
 import { useUserPincode } from '../hooks/useUserPincode.jsx';
+import locationi1 from '../assets/turnonlocation.png';
 import 'react-toastify/dist/ReactToastify.css';
 
 import '../styles/pincode.css';
@@ -68,7 +69,11 @@ const Pincode = () => {
                         />
                     ))
                 ) : (
-                    <div>No pincodes available</div>
+                    <div style={{height:"70vh",display:"flex",justifyContent:"center"
+                        ,alignItems:"center"
+                    }}>
+                        <img src={locationi1}/>
+                    </div>
                 )}
             </div>
             <ToastContainer
