@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
+import React, {useRef, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 import '../styles/home.css';
-import b1 from '../assets/b1.jpg';
-import bh1 from '../../public/bharatlinkerlogo.png'
 import bh2 from '../../public/bh2.jpg'
 import { MdOutlineStore } from "react-icons/md";
 import { RiSunCloudyLine } from "react-icons/ri";
