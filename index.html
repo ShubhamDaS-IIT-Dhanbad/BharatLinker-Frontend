@@ -8,9 +8,8 @@
   <link rel="icon" href="/vit.svg" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/vit.svg" sizes="180x180"> <!-- For Apple devices -->
   <link rel="icon" href="/vit.svg" type="image/png" sizes="192x192"> <!-- For Android devices -->
-
   <link rel="icon" href="/favicon.ico" />
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bharat Linker - Connecting People</title>
   <meta name="description"
@@ -34,10 +33,12 @@
 
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
 
-  <script async src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script async src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Include jQuery before Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 
 </html>
