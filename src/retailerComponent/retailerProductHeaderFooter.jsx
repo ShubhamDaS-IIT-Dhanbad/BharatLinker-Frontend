@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { HiOutlineUserCircle } from 'react-icons/hi';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { BiSearchAlt } from 'react-icons/bi';
-import { TbChevronDown } from "react-icons/tb";
-import { MdOutlineStore, MdOutlineAdminPanelSettings } from "react-icons/md";
-import { ToastContainer } from 'react-toastify';
+import { AiOutlineProduct } from "react-icons/ai";
 import { FiUploadCloud } from "react-icons/fi";
-import { LuArrowBigUpDash } from "react-icons/lu";
+import { LuStepBack } from "react-icons/lu";
+import { ToastContainer } from 'react-toastify';
 
 import 'react-loading-skeleton/dist/skeleton.css';
-import '../retailerStyles/retailerHomePageHeaderFooter.css'
-
-import { AiOutlineProduct } from "react-icons/ai";
-import { HiOutlineCreditCard } from "react-icons/hi2";
-import { LuStepBack } from "react-icons/lu";
+import '../retailerStyles/retailerHomePageHeaderFooter.css';
 
 function RetailerHomePageHeaderFooter() {
     const [searchInput, setSearchInput] = useState('');
     const [shopDetails, setShopDetail] = useState({});
     const navigate = useNavigate();
+    const location = useLocation();  // Get current location
 
     // Function to get retailer data from the cookie
     const getBharatLinkerRetailerCookie = () => {
@@ -39,7 +34,13 @@ function RetailerHomePageHeaderFooter() {
 
     const handleSearchSubmit = () => {
         if (searchInput.trim()) {
+            // Perform search logic
         }
+    };
+
+    // Conditionally set the color based on current route
+    const getActiveStyle = (path) => {
+        return location.pathname === path ? { color: 'black' } : { color: 'white' };
     };
 
     return (
@@ -69,21 +70,28 @@ function RetailerHomePageHeaderFooter() {
                 />
             </div>
 
-            <div className="homeFooter">
-
-                <div className="homeFooterShop" onClick={() => navigate('/retailer/product')}>
+            <div className="homeFooter" style={{zIndex:"90000"}}>
+                <div
+                    className="homeFooterShop"
+                    onClick={() => navigate('/retailer/product')}
+                    style={getActiveStyle('/retailer/product')}
+                >
                     <AiOutlineProduct size={30} />
                     Product
                 </div>
-                <div className="homeFooterShop" onClick={() => navigate('/retailer/uploadproduct')}>
+                <div
+                    className="homeFooterShop"
+                    onClick={() => navigate('/retailer/uploadproduct')}
+                    style={getActiveStyle('/retailer/uploadproduct')}
+                >
                     <FiUploadCloud size={30} />
                     Upload
                 </div>
-                {/* <div className="homeFooterShop" onClick={() => navigate('/retailer/productupdate')}>
-                    <LuArrowBigUpDash size={30} />
-                    Update
-                </div> */}
-                <div className="homeFooterShop" onClick={() => navigate('/retailer/shop')}>
+                <div
+                    className="homeFooterShop"
+                    onClick={() => navigate('/retailer/shop')}
+                    style={getActiveStyle('/retailer/shop')}
+                >
                     <LuStepBack size={30} />
                     Back
                 </div>

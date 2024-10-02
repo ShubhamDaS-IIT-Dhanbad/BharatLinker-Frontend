@@ -97,7 +97,7 @@ const ShopDetails = () => {
                             </div>
 
                             <div id="shop-details-status">
-                                <p></p>
+                                <p></p>{console.log(shopDetails.status)}
                                 <div className={`shop-details-status-button ${shopDetails.status==='opened' ? 'opened' : 'closed'}`}>
                                     {shopDetails.status==='opened' ? 'OPENED' : 'CLOSED'}
                                 </div>

@@ -1,8 +1,12 @@
 .retailer-home{
-    width: 30vw;display: flex;
+    width: 30vw;display: flex;flex-direction: column;
     margin-top: 150px;
     width: 100vw;align-items: center;justify-content: center;
 }
 .retailer-home-png{
     max-width: 30vw;
+}
+.retailer-open-closed-div{
+    font-weight: 900;
+    margin-top: 20px;
 }

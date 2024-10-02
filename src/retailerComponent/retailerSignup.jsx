@@ -210,7 +210,7 @@ const RetailerSignup = () => {
                     required
                 />
             </div>
-            <img className="shop-data-signup-form-img" src={s1} alt="Signup" />
+            {/* <img className="shop-data-signup-form-img" src={s1} alt="Signup" /> */}
             <div className="button-group">
                 <button className="retailer-signup-button-next" onClick={() => setCurrentStep(1)}>
                     Back

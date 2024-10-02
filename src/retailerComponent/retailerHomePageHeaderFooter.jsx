@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { BiSearchAlt } from 'react-icons/bi';
-import { TbChevronDown } from "react-icons/tb";
-import { MdOutlineStore, MdOutlineAdminPanelSettings } from "react-icons/md";
+import { MdOutlineStore, MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-loading-skeleton/dist/skeleton.css';
-import '../retailerStyles/retailerHomePageHeaderFooter.css'
+import '../retailerStyles/retailerHomePageHeaderFooter.css';
 
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiOutlineCreditCard } from "react-icons/hi2";
+import { LuLayoutDashboard } from 'react-icons/lu';
+import { HiOutlineCreditCard } from 'react-icons/hi2';
 
 function RetailerHomePageHeaderFooter() {
     const [searchInput, setSearchInput] = useState('');
     const [shopDetails, setShopDetail] = useState({});
     const navigate = useNavigate();
+    const location = useLocation(); // Get the current location
 
     // Function to get retailer data from the cookie
     const getBharatLinkerRetailerCookie = () => {
@@ -36,6 +36,7 @@ function RetailerHomePageHeaderFooter() {
 
     const handleSearchSubmit = () => {
         if (searchInput.trim()) {
+            // Add your search functionality here
         }
     };
 
@@ -43,6 +44,9 @@ function RetailerHomePageHeaderFooter() {
         document.cookie = "BharatLinkerRetailer=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         navigate('/');
     };
+
+    // Define active class for current route
+    const isActive = (path) => location.pathname === path ? 'active' : '';
 
     return (
         <div>
@@ -82,19 +86,31 @@ function RetailerHomePageHeaderFooter() {
             </div>
 
             <div className="homeFooter">
-                <div className="homeFooterShop" onClick={() => navigate('/retailer/home')}>
+                <div
+                    className={`homeFooterShop ${isActive('/retailer/home')}`}
+                    onClick={() => navigate('/retailer/home')}
+                >
                     <LuLayoutDashboard size={30} />
                     Home
                 </div>
-                <div className="homeFooterShop" onClick={() => navigate('/retailer/product')}>
+                <div
+                    className={`homeFooterShop ${isActive('/retailer/product')}`}
+                    onClick={() => navigate('/retailer/product')}
+                >
                     <HiOutlineCreditCard size={30} />
                     Product
                 </div>
-                <div className="homeFooterShop" onClick={() => navigate('/retailer/shop')}>
+                <div
+                    className={`homeFooterShop ${isActive('/retailer/shop')}`}
+                    onClick={() => navigate('/retailer/shop')}
+                >
                     <MdOutlineStore size={30} />
                     Shop
                 </div>
-                <div className="homeFooterShop" onClick={handleLogout}>
+                <div
+                    className={`homeFooterShop ${isActive('/logout')}`} // Update path as per your requirement
+                    onClick={handleLogout}
+                >
                     <MdOutlineAdminPanelSettings size={30} />
                     LogOut
                 </div>

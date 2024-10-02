@@ -84,3 +84,7 @@
 .homeFooterShop:hover {
     color: #ff004c; /* Change to your desired hover color */
 }
+.homeFooterShop.active {
+    color: #000000; /* Example active color */
+    font-weight: bold;
+}
