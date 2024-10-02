@@ -10,3 +10,14 @@
     font-weight: 900;
     margin-top: 20px;
 }
+
+.retailer-div-open-input{
+padding: 10px;margin: 30px 0px 10px 0px;
+width: 50vw;background-color: rgb(123, 231, 123);
+}
+
+.retailer-div-closed-input{
+    padding: 10px;margin: 10px;
+    width: 50vw;
+    background-color: rgb(243, 121, 121);
+}

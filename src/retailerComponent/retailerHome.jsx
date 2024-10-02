@@ -70,11 +70,11 @@ const RetailerHome = () => {
             <div className='retailer-open-closed-div'>
                 YOUR SHOP IS {shopStatus.toUpperCase()}
             </div>
-            <button onClick={() => handleShopStatusChange('opened')}>
+            <button className="retailer-div-open-input" onClick={() => handleShopStatusChange('opened')}>
                 OPEN
             </button>
-            <button onClick={() => handleShopStatusChange('closed')}>
-                CLOSED
+            <button className="retailer-div-closed-input" onClick={() => handleShopStatusChange('closed')}>
+                CLOSE
             </button>
         </div>
     );
