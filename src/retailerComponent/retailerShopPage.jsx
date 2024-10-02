@@ -66,7 +66,6 @@ const RetailerShopFragment = () => {
                 toast.dismiss(loadingToast); // Dismiss loading toast
             }
         }
-        toast.dismiss(loadingToast);
     };
 
     useEffect(() => {

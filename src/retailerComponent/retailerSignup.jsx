@@ -21,7 +21,7 @@ const RetailerSignup = () => {
     const [shopPhoneNumber, setShopPhoneNumber] = useState('');
     const [shopPassword, setShopPassword] = useState('');
     const [shopConfirmPassword, setShopConfirmPassword] = useState('');
-    const [shopPinCodes, setShopPinCodes] = useState(['742136']); // For up to 5 pin codes
+    const [shopPinCodes, setShopPinCodes] = useState(''); // For up to 5 pin codes
     const [shopAddress, setShopAddress] = useState('');
 
     const handlePinCodeChange = (index, value) => {
