@@ -57,7 +57,7 @@ const Home = () => {
                     <RiSunCloudyLine size={40} />
                     Home
                 </div>
-                <div id='home-footer-shop' onClick={() => navigate('/product')} style={getActiveStyle('/product')}>
+                <div id='home-footer-shop' onClick={() => navigate('/search')} style={getActiveStyle('/product')}>
                     <TbCategoryPlus size={40} />
                     Products
                 </div>
