@@ -4,9 +4,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the toastify CSS
 import '../retailerStyles/retailerHome.css';
 import bharatlinker from '../retailerAssets/bharatlinker.png';
-import {RETAILER_SERVER} from '../../public/constant.js'
+import { RETAILER_SERVER } from '../../public/constant.js';
+
 const RetailerHome = () => {
     const [shopStatus, setShopStatus] = useState('closed'); // Default shop status
+    const [loading, setLoading] = useState(false); // Loading state for UI feedback
 
     // Helper function to get retailer data from the cookie
     const getBharatLinkerRetailerCookie = () => {
@@ -41,6 +43,9 @@ const RetailerHome = () => {
             const shopId = retailerData.id;
 
             try {
+                // Set loading to true while the request is being processed
+                setLoading(true);
+
                 // Send request to update the shop status in the backend
                 await axios.put(`${RETAILER_SERVER}/shop/openclosed?shopId=${shopId}&number=${newStatus === 'opened' ? '1' : '0'}`);
 
@@ -59,6 +64,9 @@ const RetailerHome = () => {
             } catch (error) {
                 console.error('Error updating shop status:', error);
                 toast.error('Error updating shop status.');
+            } finally {
+                // Turn off loading once the request is finished
+                setLoading(false);
             }
         }
     };
@@ -68,12 +76,20 @@ const RetailerHome = () => {
             <ToastContainer /> {/* Toast container to display notifications */}
             <img className='retailer-home-png' src={bharatlinker} alt="Bharat Linker" />
             <div className='retailer-open-closed-div'>
-                YOUR SHOP IS {shopStatus.toUpperCase()}
+                {loading ? 'Processing...' : `YOUR SHOP IS ${shopStatus.toUpperCase()}`}
             </div>
-            <button className="retailer-div-open-input" onClick={() => handleShopStatusChange('opened')}>
+            <button 
+                className="retailer-div-open-input" 
+                onClick={() => handleShopStatusChange('opened')}
+                disabled={loading} // Disable button during loading
+            >
                 OPEN
             </button>
-            <button className="retailer-div-closed-input" onClick={() => handleShopStatusChange('closed')}>
+            <button 
+                className="retailer-div-closed-input" 
+                onClick={() => handleShopStatusChange('closed')}
+                disabled={loading} // Disable button during loading
+            >
                 CLOSE
             </button>
         </div>
