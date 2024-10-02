@@ -47,19 +47,19 @@ const Home = () => {
 
             <div id='home-footer'>
                 <div id='home-footer-shop' onClick={() => navigate('/')}>
-                    <RiSunCloudyLine size={35} />
+                    <RiSunCloudyLine size={40} />
                     Home
                 </div>
                 <div id='home-footer-shop' onClick={() => navigate('/search')}>
-                    <TbCategoryPlus size={35} />
+                    <TbCategoryPlus size={40} />
                     Products
                 </div>
                 <div id='home-footer-shop' onClick={() => navigate('/shop')}>
-                    <MdOutlineStore size={35} />
+                    <MdOutlineStore size={40} />
                     Shop
                 </div>
                 <div id='home-footer-shop' onClick={handleRetailerClick}>
-                    <MdOutlineAdminPanelSettings size={35} />
+                    <MdOutlineAdminPanelSettings size={40} />
                     Retailer
                 </div>
             </div>
