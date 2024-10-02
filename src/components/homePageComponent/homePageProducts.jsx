@@ -20,7 +20,6 @@ const HomePageProducts = () => {
             setLoading(true);
             // Get selected pincodes from the hook
             const selectedPincodes =userPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-            console.log("Fetching products for pincodes", selectedPincodes);
             const response = await axios.get(`${RETAILER_PRODUCT_SERVER}/product/gethomepageproducts?pincodes=${selectedPincodes}&page=${page}&limit=10`);
             
             const { products, totalPages } = response.data;

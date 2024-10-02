@@ -26,7 +26,6 @@ const ProductDetails = () => {
             try {
                 const response = await fetch(`${RETAILER_PRODUCT_SERVER}/product/getproductdetails?productId=${productId}`);
                 const data = await response.json();
-                console.log(data)
                 setProductDetails(data.product);
                 if (data.product.images && data.product.images.length > 0) {
                     setSelectedImage(data.product.images[0]);
@@ -138,7 +137,6 @@ const ProductDetails = () => {
 
                             <div id="product-details-similar">
                                 <p>Similar products</p>
-                                {console.log("ko",productDetail)}
                                 <ProductFragment brand={productDetail.brand} keyword={productDetail.keywords} />
                             </div>
                         </div>
