@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, {useState } from 'react';
 import '../retailerStyles/retailerSignup.css';
 import r1 from '../retailerAssets/signup.png';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RETAILER_SERVER } from '../../public/constant.js';
+import {useNavigate} from 'react-router-dom';
 
 const RetailerSignup = () => {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
 
     // Retailer Info states
@@ -30,50 +32,57 @@ const RetailerSignup = () => {
         setShopPinCodes(updatedPinCodes);
     };
 
-    const handleSignupSubmit = async (e) => {
-        // Check if passwords match
-        if (shopPassword !== shopConfirmPassword) {
-            toast.error('Passwords do not match.'); // Show error toast
-            return;
-        }
-
-        const retailerInfo = {
-            firstName: retailerFirstName,
-            middleName: retailerMiddleName,
-            lastName: retailerLastName,
-            phoneNumber: retailerPhoneNumber,
-            email: retailerEmail,
-        };
-
-        // Show "Registering" toast
-        const registeringToastId = toast.loading('Registering...');
-
-        try {
-            const response = await axios.post(`${RETAILER_SERVER}/shop/signup`, {
-                owner: retailerInfo,
-                shopName,
-                shopAddress,
-                shopPinCodes,
-                email: retailerEmail,
-                shopPhoneNumber,
-                password: shopPassword,
-            });
-
-            toast.update(registeringToastId, { render: 'We will contact you within 24 hours.', type: 'success', isLoading: false, autoClose: 5000 });
-            console.log(response.data); // Handle the response as needed
-        } catch (error) {
-            if (error.response) {
-                toast.update(registeringToastId, { render: 'Error during signup: ' + error.response.data.message, type: 'error', isLoading: false, autoClose: 5000 });
-                console.error('Error during signup:', error.response.data);
-            } else if (error.request) {
-                toast.update(registeringToastId, { render: 'Error during signup: No response from server', type: 'error', isLoading: false, autoClose: 5000 });
-                console.error('Error during signup:', error.request);
-            } else {
-                toast.update(registeringToastId, { render: 'Error during signup: ' + error.error.message, type: 'error', isLoading: false, autoClose: 5000 });
-                console.error('Error during signup:', error.error.message);
+    
+        const handleSignupSubmit = async (e) => {
+            // Check if passwords match
+            if (shopPassword !== shopConfirmPassword) {
+                toast.error('Passwords do not match.'); // Show error toast
+                return;
             }
-        }
-    };
+    
+            const retailerInfo = {
+                firstName: retailerFirstName,
+                middleName: retailerMiddleName,
+                lastName: retailerLastName,
+                phoneNumber: retailerPhoneNumber,
+                email: retailerEmail,
+            };
+    
+            // Show "Registering" toast
+            const registeringToastId = toast.loading('Registering...');
+    
+            try {
+                const response = await axios.post(`${RETAILER_SERVER}/shop/signup`, {
+                    owner: retailerInfo,
+                    shopName,
+                    shopAddress,
+                    pinCodes: shopPinCodes,
+                    email: retailerEmail,
+                    shopPhoneNumber,
+                    password: shopPassword,
+                });
+    
+                toast.update(registeringToastId, { render: 'We will contact you within 24 hours.', type: 'success', isLoading: false, autoClose: 5000 });
+    
+                setTimeout(() => {
+                    navigate('/');
+                }, 1000);
+    
+            } catch (error) {
+                if (error.response) {
+                    toast.update(registeringToastId, { render: 'Error during signup: ' + error.response.data.message, type: 'error', isLoading: false, autoClose: 5000 });
+                    console.error('Error during signup:', error.response.data);
+                } else if (error.request) {
+                    toast.update(registeringToastId, { render: 'Error during signup: No response from server', type: 'error', isLoading: false, autoClose: 5000 });
+                    console.error('Error during signup:', error.request);
+                } else {
+                    toast.update(registeringToastId, { render: 'Error during signup: ' + error.error.message, type: 'error', isLoading: false, autoClose: 5000 });
+                    console.error('Error during signup:', error.error.message);
+                }
+            }
+        };
+    
+    
 
     // Validate Retailer Info
     const validateRetailerInfo = () => {
@@ -157,6 +166,9 @@ const RetailerSignup = () => {
         </div>
     );
 
+
+
+    // Render Shop Info section
     // Render Shop Info section
     const renderShopInfo = () => (
         <div className="shop-signup-form">
@@ -180,12 +192,11 @@ const RetailerSignup = () => {
                     required
                 />
                 <input
-                    type="number"
+                    type="number" // Change here to ensure only numbers are accepted
                     placeholder={`Pin Code`}
                     className="shop-signup-input"
                     onChange={(e) => handlePinCodeChange(0, e.target.value)}
                 />
-
                 <input
                     type="text"
                     placeholder="Shop Phone Number (For Login)"
@@ -230,6 +241,7 @@ const RetailerSignup = () => {
             </div>
         </div>
     );
+
 
     return (
         <>
