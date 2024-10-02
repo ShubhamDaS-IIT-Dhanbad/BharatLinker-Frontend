@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import '../retailerStyles/retailerSignup.css';
 import r1 from '../retailerAssets/signup.png';
-import s1 from '../retailerAssets/signupshop.png';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { RETAILER_SERVER } from '../../public/constant.js';
 
-import {RETAILER_SERVER} from '../../public/constant.js';
 const RetailerSignup = () => {
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -24,7 +23,6 @@ const RetailerSignup = () => {
     const [shopConfirmPassword, setShopConfirmPassword] = useState('');
     const [shopPinCodes, setShopPinCodes] = useState(['742136']); // For up to 5 pin codes
     const [shopAddress, setShopAddress] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
 
     const handlePinCodeChange = (index, value) => {
         const updatedPinCodes = [...shopPinCodes];
@@ -44,8 +42,11 @@ const RetailerSignup = () => {
             middleName: retailerMiddleName,
             lastName: retailerLastName,
             phoneNumber: retailerPhoneNumber,
-            email: retailerEmail
+            email: retailerEmail,
         };
+
+        // Show "Registering" toast
+        const registeringToastId = toast.loading('Registering...');
 
         try {
             const response = await axios.post(`${RETAILER_SERVER}/shop/signup`, {
@@ -55,20 +56,21 @@ const RetailerSignup = () => {
                 shopPinCodes,
                 email: retailerEmail,
                 shopPhoneNumber,
-                password: shopPassword
+                password: shopPassword,
             });
-            toast.success('We will contact you within 24 hours.'); // Show success toast
+            
+            toast.update(registeringToastId, { render: 'We will contact you within 24 hours.', type: 'success', isLoading: false, autoClose: 5000 });
             console.log(response.data); // Handle the response as needed
         } catch (error) {
             if (error.response) {
-                toast.error('Error during signup: ' + error.response.data.message); // Show error toast
+                toast.update(registeringToastId, { render: 'Error during signup: ' + error.response.data.message, type: 'error', isLoading: false, autoClose: 5000 });
                 console.error('Error during signup:', error.response.data);
             } else if (error.request) {
-                toast.error('Error during signup: No response from server'); // Show error toast
+                toast.update(registeringToastId, { render: 'Error during signup: No response from server', type: 'error', isLoading: false, autoClose: 5000 });
                 console.error('Error during signup:', error.request);
             } else {
-                toast.error('Error during signup: ' + error.message); // Show error toast
-                console.error('Error during signup:', error.message);
+                toast.update(registeringToastId, { render: 'Error during signup: ' + error.error.message, type: 'error', isLoading: false, autoClose: 5000 });
+                console.error('Error during signup:', error.error.message);
             }
         }
     };
@@ -210,7 +212,6 @@ const RetailerSignup = () => {
                     required
                 />
             </div>
-            {/* <img className="shop-data-signup-form-img" src={s1} alt="Signup" /> */}
             <div className="button-group">
                 <button className="retailer-signup-button-next" onClick={() => setCurrentStep(1)}>
                     Back

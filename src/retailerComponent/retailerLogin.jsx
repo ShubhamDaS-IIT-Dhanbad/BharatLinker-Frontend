@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie'; // Import js-cookie
 
 import '../retailerStyles/retailerLogin.css'; // Ensure this path is correct
-import {RETAILER_SERVER} from '../../public/constant.js';
+import { RETAILER_SERVER } from '../../public/constant.js';
 
 const RetailerLogin = () => {
     const navigate = useNavigate(); // Hook for navigation
@@ -16,6 +16,9 @@ const RetailerLogin = () => {
     const handleRetailerLogin = async (e) => {
         e.preventDefault(); // Prevent default form submission
 
+        // Show "Logging in..." toast
+        const loadingToast = toast.loading('Logging in...');
+
         try {
             const response = await axios.post(`${RETAILER_SERVER}/shop/login`, {
                 phoneNumber: shopContactNumber, // Updated variable name
@@ -24,16 +27,19 @@ const RetailerLogin = () => {
 
             // Check if the status is pending
             if (response.data.shop.registerStatus === 'pending') {
+                toast.dismiss(loadingToast); // Dismiss loading toast
                 toast.warn('Your Shop is not verified. Please wait until we verify.'); // Show pending status toast
             } else {
                 // Store retailer data in cookies
                 Cookies.set('BharatLinkerRetailer', JSON.stringify(response.data.shop), { expires: 7 }); // Add BharatLinkerRetailer cookie
 
+                toast.dismiss(loadingToast); // Dismiss loading toast
                 toast.success('Login successful!'); // Show success toast
                 console.log(response.data.shop); // Handle the response if needed
                 navigate('/retailer/home'); // Changed redirect path to /dashboard
             }
         } catch (error) {
+            toast.dismiss(loadingToast); // Dismiss loading toast
             if (error.response) {
                 toast.error('Login failed: ' + error.response.data.message); // Show error toast
             } else {
