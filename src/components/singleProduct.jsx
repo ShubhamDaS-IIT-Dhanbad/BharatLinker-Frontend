@@ -68,7 +68,7 @@ const ProductDetails = () => {
         <Fragment>
             <div id="product-details-search-container-top">
                 <div id='product-details-search-container-top-div'>
-                    <MdOutlineKeyboardArrowLeft size={'20px'} style={{marginLeft:"5px"}} />
+                    <MdOutlineKeyboardArrowLeft size={'20px'} style={{marginLeft:"5px"}} onClick={()=>navigate('/search')}/>
                     <input
                         style={{ borderRadius: "5px" }}
                         id="product-details-search-bar"
