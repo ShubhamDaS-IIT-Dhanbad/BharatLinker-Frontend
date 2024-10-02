@@ -181,13 +181,13 @@ const RetailerSignup = () => {
                 />
                 <input
                     type="text"
-                    placeholder={`Pin Code Separate By comma (max 5)`}
+                    placeholder={`Pin Code`}
                     className="shop-signup-input"
                     onChange={(e) => handlePinCodeChange(0, e.target.value)}
                 />
                 <input
                     type="text"
-                    placeholder="Shop Phone Number (Required For Login)"
+                    placeholder="Shop Phone Number (For Login)"
                     className="shop-signup-input"
                     value={shopPhoneNumber}
                     onChange={(e) => setShopPhoneNumber(e.target.value)}
