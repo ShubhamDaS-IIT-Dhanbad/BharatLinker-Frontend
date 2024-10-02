@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 import { RiDeleteBackLine } from "react-icons/ri";
 import { toast, ToastContainer } from 'react-toastify';
+import { useUserPincode } from '../hooks/useUserPincode.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 
 import '../styles/pincode.css';
@@ -27,80 +28,14 @@ const PinCodeCard = ({ pincodeObj, togglePincodeSelection, handleDeletePincode }
 
 const Pincode = () => {
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState('');
-    const [userPincodes, setUserPincodes] = useState([]);
-
-    useEffect(() => {
-        const getCookieValue = (name) => {
-            const value = document.cookie.split('; ').find((row) => row.startsWith(`${name}=`));
-            return value ? decodeURIComponent(value.split('=')[1]) : null;
-        };
-
-        const pincodesCookie = getCookieValue('userpincodes');
-        if (pincodesCookie) {
-            try {
-                const pincodesData = JSON.parse(pincodesCookie);
-                setUserPincodes(pincodesData);
-            } catch (error) {
-                console.error("Error parsing userpincodes cookie", error);
-            }
-        }
-    }, []);
-
-    const handleInputChange = (e) => {
-        const { value } = e.target;
-        if (value.length <= 6) { // Manually enforce the max length
-            setInputValue(value);
-        }
-    };
-
-    const handleAddPincode = () => {
-        if (inputValue.trim() === '') {
-            toast.error("Pincode cannot be empty!"); // Show error if input is empty
-            return;
-        }
-
-        if (userPincodes.some(pincode => pincode.pincode === inputValue)) {
-            toast.error(`Pincode ${inputValue} already exists!`); // Show error if pincode exists
-            return;
-        }
-
-        const newPincode = { pincode: inputValue, selected: true };
-
-        setUserPincodes(prevPincodes => {
-            const updatedPincodes = [...prevPincodes, newPincode];
-            const expires = new Date();
-            expires.setTime(expires.getTime() + 60 * 60 * 1000);
-            document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(updatedPincodes))}; expires=${expires.toUTCString()}; path=/`;
-            return updatedPincodes;
-        });
-
-        setInputValue(''); // Clear input after adding
-        toast.success(`Pincode ${inputValue} added successfully!`); // Show success toast
-    };
-
-    const togglePincodeSelection = (pincode) => {
-        setUserPincodes(prevPincodes => {
-            const updatedPincodes = prevPincodes.map(pin =>
-                pin.pincode === pincode ? { ...pin, selected: !pin.selected } : pin
-            );
-            const expires = new Date();
-            expires.setTime(expires.getTime() + 15 * 60 * 1000);
-            document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(updatedPincodes))}; expires=${expires.toUTCString()}; path=/`;
-            return updatedPincodes;
-        });
-    };
-
-    const handleDeletePincode = (pincode) => {
-        setUserPincodes(prevPincodes => {
-            const updatedPincodes = prevPincodes.filter(pin => pin.pincode !== pincode);
-            const expires = new Date();
-            expires.setTime(expires.getTime() + 15 * 60 * 1000);
-            document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(updatedPincodes))}; expires=${expires.toUTCString()}; path=/`;
-            toast.success(`Pincode ${pincode} deleted successfully!`); // Show success toast on deletion
-            return updatedPincodes;
-        });
-    };
+    const {
+        userPincodes, 
+        inputValue, 
+        handleInputChange, 
+        handleAddPincode, 
+        togglePincodeSelection, 
+        handleDeletePincode 
+    } = useUserPincode();
 
     return (
         <div>
@@ -118,7 +53,6 @@ const Pincode = () => {
                         type='number'
                         onChange={handleInputChange}
                     />
-
                     <IoMdAdd size={35} onClick={handleAddPincode} />
                 </div>
             </div>

@@ -45,20 +45,9 @@ function RetailerHomePageHeaderFooter() {
     return (
         <div>
             <div className="headerDiv">
-                {/* <div className="headerDivUser">
-                    <HiOutlineUserCircle className="headerDivUserIcon" size={35} />
-                    <div className="headerDivUserLocationDiv">
-                        <p className="headerDivUserLocation">Retailer</p>
-                        <div className="headerDivUserLocationName" onClick={() => navigate('/pincode')}>
-                            Hi, {shopDetails?.owner?.firstName || 'Retailer'}
-                            <TbChevronDown size={15} />
-                        </div>
-                    </div>
-                </div> */}
-
-                <div className="headerDivSearchDiv" style={{marginTop:"10px"}}>
+                <div className="headerDivSearchDiv" style={{ marginTop: "10px" }}>
                     <div className="headerDivSearchDivInput">
-                        <BiSearchAlt style={{color:"white"}} className="headerDivSearchIcon" onClick={handleSearchSubmit} />
+                        <BiSearchAlt style={{ color: "white" }} className="headerDivSearchIcon" onClick={handleSearchSubmit} />
                         <input
                             className="headerDivSearchInput"
                             placeholder="Search"
@@ -81,6 +70,7 @@ function RetailerHomePageHeaderFooter() {
             </div>
 
             <div className="homeFooter">
+
                 <div className="homeFooterShop" onClick={() => navigate('/retailer/product')}>
                     <AiOutlineProduct size={30} />
                     Product
@@ -89,10 +79,10 @@ function RetailerHomePageHeaderFooter() {
                     <FiUploadCloud size={30} />
                     Upload
                 </div>
-                <div className="homeFooterShop" onClick={() => navigate('/retailer/productupdate')}>
-                    <LuArrowBigUpDash  size={30} />
+                {/* <div className="homeFooterShop" onClick={() => navigate('/retailer/productupdate')}>
+                    <LuArrowBigUpDash size={30} />
                     Update
-                </div>
+                </div> */}
                 <div className="homeFooterShop" onClick={() => navigate('/retailer/shop')}>
                     <LuStepBack size={30} />
                     Back

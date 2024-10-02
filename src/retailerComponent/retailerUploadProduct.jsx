@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { RETAILER_PRODUCT_SERVER } from '../../public/constant.js';
 import '../retailerStyles/retailerUploadProduct.css';
@@ -7,17 +7,39 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 
 const UploadProduct = () => {
-    const [title, setTitle] = useState('shubha das');
-    const [description, setDescription] = useState('helow boys');
-    const [price, setPrice] = useState('999');
-    const [discountedPrice, setDiscountedPrice] = useState('99');
-    const [quantityAvailable, setQuantityAvailable] = useState('100');
-    const [brand, setBrand] = useState(['levus', 'lavus']);
-    const [shop, setShop] = useState('66f6ce446dbd4fe3597bf30d');
-    const [keywords, setKeywords] = useState(['742136', '742138']);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [price, setPrice] = useState('');
+    const [quantityAvailable, setQuantityAvailable] = useState('');
+    const [brand, setBrand] = useState('');
+    const [category, setCategory] = useState('');
+    const [pincodes, setPincodes] = useState('');
+    const [shop,setShop] = useState('');
     const [images, setImages] = useState([null, null, null]);
     const [isUploading, setIsUploading] = useState(false); // State for tracking upload status
 
+
+
+    const getBharatLinkerRetailerCookie = () => {
+        const cookieName = 'BharatLinkerRetailer=';
+        const cookieArray = document.cookie.split('; ');
+        const foundCookie = cookieArray.find(row => row.startsWith(cookieName));
+        const data = foundCookie ? JSON.parse(decodeURIComponent(foundCookie.split('=')[1])) : null;
+        return data;
+    };
+
+    useEffect(() => {
+        const retailerData = getBharatLinkerRetailerCookie();
+        console.log(retailerData)
+        if (retailerData) {
+            setShop(retailerData.id);
+            setPincodes(retailerData.pincodes);
+            console.log(pincodes)
+        }
+    }, []);
+
+
+    
     // Handle image change
     const handleImageChange = (index, files) => {
         if (files && files[0]) {
@@ -44,13 +66,11 @@ const UploadProduct = () => {
         formData.append('title', title);
         formData.append('description', description);
         formData.append('price', price);
-        formData.append('discountedPrice', discountedPrice);
         formData.append('quantityAvailable', quantityAvailable);
-        formData.append('shop', '66f6ce446dbd4fe3597bf30d');
-
-        // Append brand and keywords arrays
-        brand.forEach((brandItem, idx) => formData.append(`brand[${idx}]`, brandItem));
-        keywords.forEach((keyword, idx) => formData.append(`keywords[${idx}]`, keyword));
+        formData.append('shop', shop);
+        formData.append('brand', brand);
+        formData.append('category', category);
+        formData.append('pincodes',pincodes);
 
         // Append images
         images.forEach((image) => {
@@ -60,26 +80,24 @@ const UploadProduct = () => {
         });
 
         try {
-            const response = await axios.post(`${RETAILER_PRODUCT_SERVER}/product/uploadproduct`, formData, {
+            await axios.post(`${RETAILER_PRODUCT_SERVER}/product/uploadproduct`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            toast.success('Product uploaded successfully!'); // Show success toast
+            toast.success('Product uploaded successfully!');
             // Reset form fields after successful submission
             setTitle('');
             setDescription('');
             setPrice('');
             setQuantityAvailable('');
-            setDiscountedPrice('');
-            setBrand([]);
-            setShop('');
-            setKeywords([]);
+            setBrand('');
+            setCategory('');
             setImages([null, null, null]);
         } catch (error) {
-            toast.error('Error uploading product. Please try again.'); // Show error toast
+            toast.error('Error uploading product. Please try again.');
         } finally {
-            setIsUploading(false); // Reset uploading state
+            setIsUploading(false);
         }
     };
 
@@ -122,7 +140,7 @@ const UploadProduct = () => {
                                     </div>
                                 )}
                                 <input
-                                    style={{ display: "none" }} // Use 'none' instead of 'hidden' to hide the input
+                                    style={{ display: 'none' }}
                                     type="file"
                                     accept="image/*"
                                     id={`image-upload-${idx}`}
@@ -161,14 +179,6 @@ const UploadProduct = () => {
                         required
                     />
                 </div>
-                <div className="form-group-discountedprice-div">
-                    <label>Discounted Price:</label>
-                    <input
-                        type="number"
-                        value={discountedPrice}
-                        onChange={(e) => setDiscountedPrice(e.target.value)}
-                    />
-                </div>
                 <div className="form-group-quantity-div">
                     <label>Quantity Available:</label>
                     <input
@@ -179,31 +189,30 @@ const UploadProduct = () => {
                     />
                 </div>
                 <div className="form-group-brand-div">
-                    <label>Brand (comma-separated):</label>
+                    <label>Brand</label>
                     <input
                         type="text"
-                        value={brand.join(',')}
-                        onChange={(e) => setBrand(e.target.value.split(','))}
+                        value={brand}
+                        onChange={(e) => setBrand(e.target.value)}
                         required
                     />
                 </div>
-                <div className="form-group-keywords-div">
-                    <label>Keywords (comma-separated):</label>
+                <div className="form-group-brand-div">
+                    <label>Category</label>
                     <input
                         type="text"
-                        value={keywords.join(',')}
-                        onChange={(e) => setKeywords(e.target.value.split(','))}
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
                         required
                     />
                 </div>
-
                 <div className="upload-button-div">
                     <button className="upload-button" type="submit" disabled={isUploading}>
                         {isUploading ? 'Uploading...' : 'Upload Product'}
                     </button>
                 </div>
             </form>
-            <ToastContainer /> {/* Include ToastContainer for toast notifications */}
+            <ToastContainer />
         </div>
     );
 };

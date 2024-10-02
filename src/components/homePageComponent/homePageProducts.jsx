@@ -4,61 +4,29 @@ import ProductCard from '../productCard.jsx';
 import LoadingSearchPage from '../loadingComponents/loadingSearchPage.jsx';
 import { TbClockSearch } from 'react-icons/tb';
 import { RETAILER_PRODUCT_SERVER } from '../../../public/constant.js';
+import { useUserPincode } from '../../hooks/useUserPincode.jsx'; // Import your custom hook
 import '../../styles/homePageProducts.css';
 
 const HomePageProducts = () => {
+    const {userPincodes } = useUserPincode(); // Use custom hook for pincodes
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [hasMoreProducts, setHasMoreProducts] = useState(true);
-    const [pincodeArray, setPincodeArray] = useState([]);
-    const [searchByPincode, setSearchNyPincode] = useState([]);
-    const [pincodesLoaded, setPincodesLoaded] = useState(false);
-    const [pincodeLoading, setPincodeLoading] = useState(true);
-
-    // Fetch the pincode from cookies
-    const getCookieValue = (cookieName) => {
-        const name = cookieName + "=";
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const cookieArray = decodedCookie.split(';');
-        for (let cookie of cookieArray) {
-            cookie = cookie.trim();
-            if (cookie.startsWith(name)) {
-                return cookie.substring(name.length);
-            }
-        }
-        return null;
-    };
-
-    useEffect(() => {
-        const pincodesCookie = getCookieValue('userpincodes');
-        if (pincodesCookie) {
-            try {
-                const pincodesData = JSON.parse(pincodesCookie);
-                setPincodeArray(pincodesData);
-                setPincodesLoaded(true); // Set pincodes as loaded
-            } catch (error) {
-                console.error("Error parsing userpincodes cookie", error);
-            }
-        } else {
-            console.log("No pincodes found in cookie.");
-        }
-        setPincodeLoading(false);
-    }, []);
 
     const fetchProducts = async (page) => {
         try {
             setLoading(true);
+            // Get selected pincodes from the hook
+            const selectedPincodes =userPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
+            console.log("Fetching products for pincodes", selectedPincodes);
+            const response = await axios.get(`${RETAILER_PRODUCT_SERVER}/product/gethomepageproducts?pincodes=${selectedPincodes}&page=${page}&limit=10`);
             
-            setSearchNyPincode(pincodeArray.filter(pin => pin.selected).map(pin => pin.pincode));
-            console.log("ji",searchByPincode)
-            const response = await axios.get(`${RETAILER_PRODUCT_SERVER}/product/gethomepageproducts?pincodes=742136&page=${page}&limit=10`);
-            console.log(response);
-            const { products, totalPages, currentPage } = response.data;
-            setProducts(products);
+            const { products, totalPages } = response.data;
+            setProducts(prevProducts => (page === 1 ? products : [...prevProducts, ...products]));
             setTotalPages(totalPages);
-            setCurrentPage(currentPage);
+            setCurrentPage(page);
             setHasMoreProducts(products.length > 0);
         } catch (error) {
             console.error('Error fetching products:', error.response?.data?.message || error.message);
@@ -68,13 +36,14 @@ const HomePageProducts = () => {
         }
     };
 
-    useEffect(() => {
-            fetchProducts(currentPage);
-    }, [currentPage,pincodeArray,setPincodeArray]);
-
     const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
+        fetchProducts(newPage);
     };
+
+    // Fetch products on initial load or when pincodes change
+    useEffect(() => {
+        fetchProducts(currentPage);
+    }, [currentPage,userPincodes]); // Run effect when currentPage oruserPincodes changes
 
     return (
         <div id="search-product-page-container">

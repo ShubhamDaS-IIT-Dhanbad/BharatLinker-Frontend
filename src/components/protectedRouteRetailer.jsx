@@ -15,11 +15,11 @@ const getCookieValue = (cookieName) => {
   return null;
 };
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ element }) => {
   const retailerCookie = getCookieValue('BharatLinkerRetailer');
 
-  // If the cookie exists, allow access to the route, otherwise redirect to login
-  return retailerCookie ? children : <Navigate to="/retailer/login" />;
+  // If the cookie exists, return the element (allow access), otherwise redirect to login
+  return retailerCookie ? element : <Navigate to="/retailer/login" />;
 };
 
 export default ProtectedRoute;
