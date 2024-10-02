@@ -57,6 +57,7 @@ const RetailerShopFragment = () => {
             try {
                 const response = await axios.get(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${shopId}`);
                 const shopData = response.data.shop;
+                toast.dismiss(loadingToast); // Dismiss loading toast
                 setShop(shopData);
                 setShopImages(shopData.shopImages || []);
                 setPincodes(shopData.pinCodes || []);
@@ -65,6 +66,7 @@ const RetailerShopFragment = () => {
                 console.error('Error fetching shop details:', error);
                 toast.dismiss(loadingToast); // Dismiss loading toast
             }
+            toast.dismiss(loadingToast); // Dismiss loading toast
         }
     };
 

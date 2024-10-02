@@ -58,7 +58,7 @@ const RetailerSignup = () => {
                 shopPhoneNumber,
                 password: shopPassword,
             });
-            
+
             toast.update(registeringToastId, { render: 'We will contact you within 24 hours.', type: 'success', isLoading: false, autoClose: 5000 });
             console.log(response.data); // Handle the response as needed
         } catch (error) {
@@ -180,11 +180,12 @@ const RetailerSignup = () => {
                     required
                 />
                 <input
-                    type="text"
+                    type="number"
                     placeholder={`Pin Code`}
                     className="shop-signup-input"
                     onChange={(e) => handlePinCodeChange(0, e.target.value)}
                 />
+
                 <input
                     type="text"
                     placeholder="Shop Phone Number (For Login)"
