@@ -25,6 +25,7 @@ const ShopDetails = () => {
             try {
                 const response = await axios.get(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${shopId}`);
                 setShopDetails(response.data.shop);
+                setLoading(false);
             } catch (err) {
                 console.error("Error while fetching shop details", err);
             } finally {

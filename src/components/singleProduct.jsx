@@ -30,6 +30,7 @@ const ProductDetails = () => {
                 if (data.product.images && data.product.images.length > 0) {
                     setSelectedImage(data.product.images[0]);
                 }
+                setLoading(false);
                 if (data.product.shop) {
                     const shopResponse = await fetch(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${data.product.shop}`);
                     const shopData = await shopResponse.json();
