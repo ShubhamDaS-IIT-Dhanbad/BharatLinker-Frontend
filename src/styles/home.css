@@ -1,6 +1,6 @@
 #home-div{
     display: flex;flex-direction: column;
-   margin-top: 119px;max-width: 100vw;
+   margin-top: 90px;max-width: 100vw;
 }
 #home-body{
     display: flex;flex-direction: column;
@@ -8,7 +8,7 @@
     padding-top: 20px;max-width: 100vw;margin-bottom: 90px;
 }
 #home-body-img{
-    width: 96%;
+    width: 100%;height:25vh;
 }
 #home-footer {
     width: 100vw;

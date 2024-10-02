@@ -4,6 +4,8 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import '../styles/home.css';
 import b1 from '../assets/b1.jpg';
+import bh1 from '../../public/bharatlinkerlogo.png'
+import bh2 from '../../public/bh2.jpg'
 import { MdOutlineStore } from "react-icons/md";
 import { RiSunCloudyLine } from "react-icons/ri";
 import { TbCategoryPlus } from "react-icons/tb";
@@ -40,7 +42,7 @@ const Home = () => {
     return (
         <div id='home-div' ref={containerRef}>
             <div id='home-body'>
-                <img src={b1} alt="Banner" id='home-body-img' />
+                <img src={bh2} alt="Banner" id='home-body-img' />
                 <ExploreByCategories />
                 <HomePageProducts/>
             </div>
