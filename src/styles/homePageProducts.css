@@ -1,3 +1,31 @@
-#search-product-page-container{
-    margin-top: 50px;
+
+#search-product-home-page-grid{
+    width: 100%;
+    display: flex;
+   flex-wrap: wrap;justify-content: center;
+    gap: 3px;
+    margin-top: 20px;
+}
+#search-product-home-page-container{
+    width: 100%;background-color: rgb(255, 255, 255);
+    display: flex;flex-direction: column;  min-height: 100vh;
+    overflow: scroll;
+    margin-bottom: 67px;
+}
+
+.pagination-controls{
+    display: flex;margin-top: 90px;
+    gap: 10px;
+}
+.pagination-controls-previous{
+   width: 100px;height: 50px;
+   background-color: rgb(34, 34, 36);
+   border: 1px solid black;
+   color: rgb(255, 255, 255);font-weight: 900;
+}
+.pagination-controls-next-button{
+    width: 100px;height: 50px;
+    background-color: rgb(38, 38, 40);
+    border: 1px solid black;
+    color: rgb(255, 255, 255);font-weight: 900;
 }

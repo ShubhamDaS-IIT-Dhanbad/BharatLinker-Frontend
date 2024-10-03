@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 import ShopCard from './shopCard.jsx';
 import '../styles/searchShop.css';
 
@@ -15,6 +15,7 @@ import LoadingShopPage from './loadingComponents/loadingShopPage.jsx';
 import axios from 'axios';
 
 import { TbClockSearch } from "react-icons/tb";
+
 // Category card for filtering by categories
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
   return (
@@ -69,6 +70,9 @@ const Shop = () => {
   ]);
 
 
+  const location = useLocation(); // Get current location
+  const shopsFetchedRef = useRef(false);
+
   const navigate = useNavigate();
   const searchInputRef = useRef(null);
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500); // Debounce for 500ms
@@ -85,7 +89,6 @@ const Shop = () => {
     }
     return null;
   };
-
   useEffect(() => {
     const pincodesCookie = getCookieValue('userpincodes');
     if (pincodesCookie) {
@@ -98,6 +101,10 @@ const Shop = () => {
     }
   }, []);
 
+
+
+
+
   const fetchShops = async () => {
     setLoading(true);
     try {
@@ -107,14 +114,13 @@ const Shop = () => {
         setShops([]);
         return;
       }
-
-      // Constructing the query
       let query = `pincode=${searchByPincode.join(',')}&keyword=${debouncedSearchQuery}`;
       if (searchByCategories.length > 0) {
         query += `&category=${searchByCategories.join(',')}`;
       }
       const response = await axios.get(`${RETAILER_SERVER}/shop/getshops?${query}`);
 
+      shopsFetchedRef.current = true;
       setShops(response.data.shops || []);
     } catch (error) {
       setError(error.message);
@@ -122,19 +128,16 @@ const Shop = () => {
       setLoading(false);
     }
   };
-
-
   useEffect(() => {
-    if (selectedPincodes.length > 0) {
       fetchShops();
-    }
   }, [debouncedSearchQuery, selectedPincodes, selectedCategories]);
+
 
   const handleSearchChange = (event) => {
     setLoading(true);
     const newValue = event.target.value;
     setSearchQuery(newValue);
-    setShops([]);
+    setShops([]); // Set shops to empty while searching
     searchInputRef.current.focus();
   };
 
@@ -154,7 +157,6 @@ const Shop = () => {
     );
   };
 
-
   const togglePincodeSelection = (pincode) => {
     setSelectedPincodes((prevSelectedPincodes) => {
       const updatedPincodes = prevSelectedPincodes.map(pin =>
@@ -172,13 +174,12 @@ const Shop = () => {
     <>
       {!showFilter && !showSortBy && (
         <>
-
-          <div id="shop-search-container-top">
-            <div id='shop-search-container-top-div'>
-              <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
+          <div id="search-shop-container-top">
+            <div id='search-shop-container-top-div'>
+              <MdOutlineKeyboardArrowLeft size={'40px'} onClick={() => navigate('/')} />
               <input
                 style={{ borderRadius: "5px" }}
-                id="shop-search-bar"
+                id="search-shop-bar"
                 ref={searchInputRef}
                 value={searchQuery}
                 onChange={handleSearchChange}
@@ -198,9 +199,8 @@ const Shop = () => {
                   </div>
                 ))
               ) : (
-                <div className='no-shop-found'>
-                  <TbClockSearch size={60}
-                  />
+                <div className='search-no-shop-found'>
+                  <TbClockSearch size={60} />
                   <div>No shop Found</div>
                   <div style={{ fontWeight: "900" }}>In Your Area</div>
                 </div>
@@ -211,18 +211,18 @@ const Shop = () => {
       )}
 
       {showFilter && (
-        <div className='searchpage-filter-section'>
-          <div id='filter-section-search-page'>
-            <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} />
+        <div className='search-page-filter-section'>
+          <div id='filter-section-search-shop'>
+            <MdOutlineKeyboardArrowLeft size={'40px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} />
             FILTER SECTION
           </div>
-          <div className='filter-options-search-page'>
+          <div className='filter-options-search-shop'>
             <div className="search-shop-page-filter-option-title" onClick={() => setShowPincode(!showPincode)} style={{ cursor: 'pointer' }}>
               <p>Pincode</p>
               {showPincode ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
             {showPincode && (
-              <div id="filter-search-shop-pincode-options">
+              <div id="filter-shop-pincode-options">
                 {selectedPincodes.map(pincodeObj => <PinCodeCard
                   key={pincodeObj.pincode}
                   pincodeObj={pincodeObj}
@@ -235,23 +235,35 @@ const Shop = () => {
               {showFilterCategory ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
             </div>
             {showFilterCategory && (
-              <div id="filter-search-shop-pincode-options">
+              <div id="filter-shop-category-options">
                 {categories.map((cat, idx) => (
                   <CategoryCard key={idx} categoryObj={cat} toggleCategorySelection={toggleCategorySelection} />
                 ))}
+              </div>
+            )}
+
+            <div className="search-shop-page-filter-option-title" onClick={() => setShowSortBy(!showSortBy)} style={{ cursor: 'pointer' }}>
+              <p>Sort By</p>
+              {showSortBy ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+            </div>
+            {showSortBy && (
+              <div id="sort-options">
+                <p>Sort by Name</p>
+                <p>Sort by Rating</p>
+                <p>Sort by Distance</p>
               </div>
             )}
           </div>
         </div>
       )}
 
-      <div id='searchpage-footer'>
-        <div id='searchpage-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
-          <LiaSortSolid size={25} />
+      <div id='search-shop-footer'>
+        <div id='search-shop-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
+          <LiaSortSolid size={33} />
           SORT BY
         </div>
-        <div id='searchpage-footer-filterby' onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }}>
-          <MdFilterList size={25} />
+        <div id='search-shop-footer-filterby' onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }}>
+          <MdFilterList size={33} />
           FILTER BY
         </div>
       </div>
@@ -260,3 +272,4 @@ const Shop = () => {
 };
 
 export default Shop;
+

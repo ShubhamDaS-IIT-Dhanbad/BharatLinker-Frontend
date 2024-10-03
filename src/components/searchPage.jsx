@@ -1,46 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import ProductCard from './productCard.jsx';
+import ProductCard from './ProductCard.jsx';
 import '../styles/searchPage.css';
-import { RETAILER_PRODUCT_SERVER } from '../../public/constant.js';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList, MdOutlineKeyboardArrowLeft } from "react-icons/md";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-
-
+import { toast, ToastContainer } from 'react-toastify';
 import { TbClockSearch } from "react-icons/tb";
 import LoadingSearchPage from './loadingComponents/loadingSearchPage.jsx';
-import axios from 'axios';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts, resetProducts } from '../redux/features/searchProductSlice.jsx';
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"; // Added missing import for IoIosArrowDown and IoIosArrowUp
 
 const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
     return (
-        <div className="pincode-item-search-page-card"
-            onClick={() => togglePincodeSelection(pincodeObj.pincode)}>
-            <div
-                className={pincodeObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}>
-            </div>
+        <div className="pincode-item-search-page-card" onClick={() => togglePincodeSelection(pincodeObj.pincode)}>
+            <div className={pincodeObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
             <p className="pincode-item-pincode">{pincodeObj.pincode}</p>
         </div>
     );
 };
+
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
     return (
-        <div className="pincode-item-search-page-card"
-            onClick={() => toggleCategorySelection(categoryObj.category)}>
-            <div
-                className={categoryObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}>
-            </div>
+        <div className="pincode-item-search-page-card" onClick={() => toggleCategorySelection(categoryObj.category)}>
+            <div className={categoryObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
             <p className="pincode-item-pincode">{categoryObj.category}</p>
         </div>
     );
 };
+
 const BrandCard = ({ brandObj, toggleBrandSelection }) => {
     return (
-        <div className="pincode-item-search-page-card"
-            onClick={() => toggleBrandSelection(brandObj.brand)}>
-            <div
-                className={brandObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}>
-            </div>
+        <div className="pincode-item-search-page-card" onClick={() => toggleBrandSelection(brandObj.brand)}>
+            <div className={brandObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
             <p className="pincode-item-pincode">{brandObj.brand}</p>
         </div>
     );
@@ -48,22 +41,26 @@ const BrandCard = ({ brandObj, toggleBrandSelection }) => {
 
 const SearchPage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
+
+    const { products, loading, hasMoreProducts } = useSelector((state) => state.products);
+
+    // State Management
     const [inputValue, setInputValue] = useState(query);
-    const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const productsPerPage = 16;
-    const [loading, setLoading] = useState(false);
-    const [hasMoreProducts, setHasMoreProducts] = useState(true);
     const [showFilter, setShowFilter] = useState(false);
-    const [showSortBy, setShowSortBy] = useState(false);
-    const [pincodeLoading, setPincodeLoading] = useState(true);
-    const [pincodesLoaded, setPincodesLoaded] = useState(false);
+    const [showSortBy, setShowSortBy] = useState('');
+    const [selectedPincodes, setSelectedPincodes] = useState([]);
+
 
     const [showPincode, setShowPincode] = useState(false);
     const [showCategory, setShowCategory] = useState(false);
     const [showBrand, setShowBrand] = useState(false);
+    const [sortType, setSortType] = useState();
+
 
     const [brands, setBrands] = useState([
         { brand: "Apple", selected: false },
@@ -71,19 +68,15 @@ const SearchPage = () => {
         { brand: "Sony", selected: false },
         { brand: "LG", selected: false }
     ]);
-
     const [categories, setCategories] = useState([
         { category: "mobile", selected: false },
         { category: "laptop", selected: false },
         { category: "earphone", selected: false },
         { category: "television", selected: false }
     ]);
-
-    const [selectedPincodes, setSelectedPincodes] = useState([]);
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
 
-    // Function to get cookie value
     const getCookieValue = (cookieName) => {
         const name = cookieName + "=";
         const decodedCookie = decodeURIComponent(document.cookie);
@@ -100,281 +93,197 @@ const SearchPage = () => {
     useEffect(() => {
         const pincodesCookie = getCookieValue('userpincodes');
         if (pincodesCookie) {
-            try {
-                const pincodesData = JSON.parse(pincodesCookie);
-                setSelectedPincodes(pincodesData); // Set all pincodes, not just selected ones
-                setPincodesLoaded(true); // Set pincodes as loaded
-            } catch (error) {
-                console.error("Error parsing userpincodes cookie", error);
-            }
-        } else {
-            console.log("No pincodes found in cookie.");
+            const pincodesData = JSON.parse(pincodesCookie);
+            setSelectedPincodes(pincodesData);
         }
-        setPincodeLoading(false);
     }, []);
 
-    const fetchProducts = async () => {
-        if (loading || !hasMoreProducts || !pincodesLoaded) return;
-        setLoading(true);
-        try {
-
-            const searchByPincode = selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
-            const response = await axios.get(
-                `${RETAILER_PRODUCT_SERVER}/product/getproducts?pincode=${searchByPincode.join(',')}&keyword=${inputValue}&page=${page}&limit=${productsPerPage}
-                &categories=${selectedCategories.join(',')}&brand=${selectedBrands}&sort=${showSortBy}`
-            );
-            const data = response.data;
-            if (data.products && data.products.length > 0) {
-                setProducts((prevProducts) =>
-                    page === 1 ? data.products : [...prevProducts, ...data.products]
-                );
-            } else {
-                setHasMoreProducts(false);
-            }
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    useEffect(() => {
+        const params = {
+            inputValue,
+            page,
+            productsPerPage,
+            selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
+            selectedCategories,
+            selectedBrands,
+            showSortBy:sortType
+        };
+        dispatch(fetchProducts(params));
+    }, [page, showSortBy,inputValue, selectedCategories, selectedBrands,selectedPincodes]);
 
     const togglePincodeSelection = (pincode) => {
         setSelectedPincodes((prevSelectedPincodes) => {
-            const updatedPincodes = prevSelectedPincodes.map(pin =>
+            return prevSelectedPincodes.map(pin =>
                 pin.pincode === pincode
                     ? { ...pin, selected: !pin.selected }
                     : pin
             );
-            return updatedPincodes; // Return updated pincode list
         });
-        setSearchParams({ query: inputValue });
-        setProducts([]); // Reset products on pincode change
-        setPage(1); // Reset page
-        setHasMoreProducts(true); // Reset product loading
+        setSearchParams({ query: "" });
+        setPage(1);
+
     };
 
-    const [toggleBrandUsestate, setToggleBrandUsestate] = useState(false);
     const toggleBrandSelection = (brand) => {
         setBrands((prevSelectedBrands) => {
-            const updatedBrands = prevSelectedBrands.map(b =>
+            return prevSelectedBrands.map(b =>
                 b.brand === brand
                     ? { ...b, selected: !b.selected }
                     : b
             );
-            return updatedBrands;
         });
-
-
-        // Update selectedCategories based on the toggled state
         setSelectedBrands((prevSelected) => {
             if (prevSelected.includes(brand)) {
-                // If the category is already selected, remove it
                 return prevSelected.filter(item => item !== brand);
             } else {
-                // If the category is not selected, add it
                 return [...prevSelected, brand];
             }
         });
-
-        setToggleBrandUsestate(!toggleBrandUsestate);
-        setProducts([]);
         setPage(1);
-        setHasMoreProducts(true);
+        (true);
     };
 
-
-    const [toggleCategoryUsestate, setToggleCategoryUsestate] = useState(false);
     const toggleCategorySelection = (categoryName) => {
         setCategories((prevCategories) => {
             return prevCategories.map((category) => {
                 if (category.category === categoryName) {
                     return {
                         ...category,
-                        selected: !category.selected // Toggle the selected state
+                        selected: !category.selected
                     };
                 }
                 return category;
             });
         });
-
-        // Update selectedCategories based on the toggled state
         setSelectedCategories((prevSelected) => {
             if (prevSelected.includes(categoryName)) {
-                // If the category is already selected, remove it
                 return prevSelected.filter(item => item !== categoryName);
             } else {
-                // If the category is not selected, add it
                 return [...prevSelected, categoryName];
             }
         });
-
-        // Manage other state resets
-        setToggleCategoryUsestate(!toggleCategoryUsestate);
-        setProducts([]);  // Reset products
-        setPage(1);       // Reset pagination
-        setHasMoreProducts(true);  // Reset flag for loading more products
+        setPage(1);
+        (true);
     };
-
-
-
-
-    useEffect(() => {
-        fetchProducts();
-    }, [inputValue, toggleCategoryUsestate, toggleBrandUsestate, page,
-        selectedPincodes, selectedBrands, selectedCategories, pincodesLoaded]);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
         setSearchParams({ query: event.target.value });
-        setProducts([]); // Reset products on input change
-        setPage(1); // Reset page
-        setHasMoreProducts(true); // Allow fetching of new products
+        setPage(1);
+        (true);
     };
-
-    const handleScroll = () => {
-        const scrollTop = window.scrollY;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = window.innerHeight;
-
-        if (scrollHeight - scrollTop <= clientHeight + 50 && hasMoreProducts && !loading) {
-            setPage((prevPage) => prevPage + 1);
+    const handleNextClick = () => {
+        if (hasMoreProducts) {
+            setPage(prev => prev + 1);
+        } else {
+            toast.info('No more products available');
         }
     };
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [hasMoreProducts, loading]);
-
-
-
-    const [sortType, setSortType] = useState();
-    const sortProducts = (order) => {
-        const sorted = [...products].sort((a, b) => {
-            if (order === 'price_low_to_high') {
-                setSortType('price_low_to_high');
-                return a.price - b.price; // Sort ascending
-            } else {
-                setSortType('price_high_to_low')
-                return b.price - a.price; // Sort descending
-            }
-        });
-        setProducts(sorted);
-    };
-
-
-
     return (
         <>
-            {!showFilter && !showSortBy && (
+            <ToastContainer />
+            <div style={{ width: "100vw", height: "30px", backgroundColor: "white" }}></div>
+            {!showFilter && !showSortBy &&
                 <>
-                    {/* <div id="product-search-container-top">
+                    <div id="product-search-container-top">
                         <div id='product-search-container-top-div'>
-                            <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
+                            <MdOutlineKeyboardArrowLeft className='product-search-container-top-div-MdOutlineKeyboardArrowLeft' size={'35px'} onClick={() => navigate('/')} />
                             <input
                                 style={{ borderRadius: "5px" }}
-                                id="product-search-bar"
-                                placeholder="Search"
-                                value={inputValue}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                    </div> */}
-                    <div id="shop-search-container-top">
-                        <div id='shop-search-container-top-div'>
-                            <MdOutlineKeyboardArrowLeft size={'25px'} onClick={() => navigate('/')} />
-                            <input
-                                style={{ borderRadius: "5px" }}
-                                id="product-search-bar"
+                                id="product-search-bar-input"
                                 placeholder="Search"
                                 value={inputValue}
                                 onChange={handleInputChange}
                             />
                         </div>
                     </div>
-
-                    <div style={{ width: "100vw", height: "30px", backgroundColor: "white" }}></div>
-                    <div id="search-product-page-container">
-                        {
-                            products.length > 0 ? (
-                                <>
-                                    <div id="search-product-page-grid">
-                                        {products.map((product) => (
-                                            <div key={product?._id}>
-                                                {product?.images && product?.title && product?.price && (
-                                                    <ProductCard
-                                                        id={product._id || '123ffsekn'}
-                                                        image={product.images[0]}
-                                                        title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
-                                                        price={product.price}
-                                                        quantity={product.quantityAvailable}
-                                                    />
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </>
-                            ) : (
-                                !hasMoreProducts && (
-                                    <div className='no-shop-found'>
-                                        <TbClockSearch size={60} />
-                                        <div>No Product Found</div>
-                                        <div style={{fontWeight:"900"}}>In Your Area</div>
-                                    </div>
-                                )
+                    <div id="product-page-container">
+                        {products.length > 0 ? (
+                            <>
+                                <div id="product-page-grid">
+                                    {products.map((product) => (
+                                        <ProductCard
+                                            key={product._id}
+                                            id={product._id}
+                                            image={product.images[0]}
+                                            title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
+                                            price={product.price}
+                                            quantity={product.quantityAvailable}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="product-page-pagination-controls-p">
+                                    <button
+                                        onClick={handleNextClick}
+                                        className="product-page-pagination-controls-next-button-p"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            !hasMoreProducts && (
+                                <div className='no-product-found'>
+                                    <TbClockSearch size={60} />
+                                    <div>No Product Found</div>
+                                    <div style={{ fontWeight: "900" }}>In Your Area</div>
+                                </div>
                             )
-                        }
-
+                        )}
                         {loading && <LoadingSearchPage />}
                     </div>
                 </>
-            )}
+            }
 
             {showFilter && (
-                <div className='searchpage-filter-section'>
-                    <div id='filter-section-search-page'>
-                        <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} />
+                <div className='product-filter-section'>
+                    <div id='filter-section-product-page'>
+                        <MdOutlineKeyboardArrowLeft size={'40px'} onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }} />
                         FILTER SECTION
                     </div>
-                    <div id="filter-options-search-page">
-                        <div onClick={() => setShowPincode(!showPincode)} className="filter-option-title">
+                    <div id="filter-options-product-page">
+                        <div onClick={() => setShowPincode(!showPincode)} className="search-shop-page-filter-option-title">
                             <p>Pincode</p>
                             {showPincode ? <IoIosArrowUp size="25px" /> : <IoIosArrowDown size="25px" />}
                         </div>
                         {showPincode && (
                             <div id="filter-pincode-options">
                                 {selectedPincodes.map((pincodeObj) => (
-                                    <PinCodeCard
-                                        key={pincodeObj.pincode}
+                                    <PinCodeCard key={pincodeObj.pincode}
                                         pincodeObj={pincodeObj}
                                         togglePincodeSelection={togglePincodeSelection}
                                     />
                                 ))}
                             </div>
                         )}
-
-                        <div onClick={() => setShowCategory(!showCategory)} className="filter-option-title">
+                        <div onClick={() => setShowCategory(!showCategory)} className="search-shop-page-filter-option-title">
                             <p>Category</p>
                             {showCategory ? <IoIosArrowUp size="25px" /> : <IoIosArrowDown size="25px" />}
                         </div>
                         {showCategory && (
                             <div id="filter-category-options">
-                                {categories.map((cat, idx) => (
-                                    <CategoryCard key={idx} categoryObj={cat} toggleCategorySelection={toggleCategorySelection} />
+                                {categories.map((categoryObj) => (
+                                    <CategoryCard
+                                        key={categoryObj.category}
+                                        categoryObj={categoryObj}
+                                        toggleCategorySelection={toggleCategorySelection}
+                                    />
                                 ))}
                             </div>
                         )}
-
-                        <div onClick={() => setShowBrand(!showBrand)} className="filter-option-title">
+                        <div onClick={() => setShowBrand(!showBrand)} className="search-shop-page-filter-option-title">
                             <p>Brand</p>
                             {showBrand ? <IoIosArrowUp size="25px" /> : <IoIosArrowDown size="25px" />}
                         </div>
                         {showBrand && (
                             <div id="filter-brand-options">
-                                {brands.map((cat, idx) => (
-                                    <BrandCard key={idx} brandObj={cat} toggleBrandSelection={toggleBrandSelection} />
+                                {brands.map((brandObj) => (
+                                    <BrandCard
+                                        key={brandObj.brand}
+                                        brandObj={brandObj}
+                                        toggleBrandSelection={toggleBrandSelection}
+                                    />
                                 ))}
                             </div>
                         )}
@@ -384,21 +293,20 @@ const SearchPage = () => {
 
             {showSortBy && (
                 <div className='searchpage-sortby-section'>
-                    <div id='pincode-you-location' style={{ backgroundColor: "rgb(114, 103, 203)" }}>
-                        <MdOutlineKeyboardArrowLeft size={'27px'} onClick={() => { setShowSortBy(!showSortBy); }} />
+                    <div id='product-sort-by-header'>
+                        <MdOutlineKeyboardArrowLeft size={'40px'} onClick={() => { setShowSortBy(!showSortBy); }} />
                         SORT BY SECTION
                     </div>
-                    <div id="sortby-options">
-
-                        <div className="pincode-item-search-page-card"
-                            onClick={() => { sortProducts('price_low_to_high'); }}>
+                    <div id="product-page-sortby-options">
+                        <div className="search-shop-page-filter-option-title"
+                            onClick={() => { setSortType('price_low_to_high'); }}>
                             <div
                                 className={sortType === 'price_low_to_high' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>
                             <p className="pincode-item-pincode">low to high</p>
                         </div>
-                        <div className="pincode-item-search-page-card"
-                            onClick={() => { sortProducts('price_high_to_low'); }}>
+                        <div className="search-shop-page-filter-option-title"
+                            onClick={() => { setSortType('price_high_to_low'); }}>
                             <div className={sortType === 'price_high_to_low' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>
                             <p className="pincode-item-pincode">   high to low</p>
@@ -407,14 +315,14 @@ const SearchPage = () => {
                 </div>
             )}
 
-            {/* Footer */}
-            <div id='searchpage-footer'>
-                <div id='searchpage-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
-                    <LiaSortSolid size={25} />
+
+            <div id='product-footer'>
+                <div id='product-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
+                    <LiaSortSolid size={33} />
                     SORT BY
                 </div>
-                <div id='searchpage-footer-filterby' onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }}>
-                    <MdFilterList size={25} />
+                <div id='product-footer-filterby' onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }}>
+                    <MdFilterList size={33} />
                     FILTER BY
                 </div>
             </div>
@@ -423,4 +331,5 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
+
 

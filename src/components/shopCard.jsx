@@ -14,9 +14,13 @@ function ShopCard({ shop }) {
         setShowAddress(!showAddress);
     };
 
+    const handleCardClick = () => {
+        navigate(`/shop/${shop._id}`, { state: { fromShopCard: true } }); // Set fromShopCard to true
+    };
+      
     return (
         <div className="shop-card-container">
-            <div className="shop-card-header" onClick={() => navigate(`/shop/${shop._id}`)}>
+            <div className="shop-card-header" onClick={handleCardClick}>
                 <img className="shop-card-image" src={shopImageUrl} alt={shopDisplayName} />
             </div>
 
@@ -24,10 +28,9 @@ function ShopCard({ shop }) {
                 <span className='shop-card-name'>{shopDisplayName.toUpperCase()}</span>
 
                 <div className="shop-card-info">
-
                     <div className="shop-card-divider"></div>
                     <div className="shop-card-address-toggle" onClick={toggleAddress} style={{ cursor: 'pointer' }}>
-                    <div>{shop?.category?.length > 0 ? shop.category[0] : <>About</>}</div>
+                        <div>{shop?.category?.length > 0 ? shop.category[0] : <>About</>}</div>
                         {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                     </div>
 

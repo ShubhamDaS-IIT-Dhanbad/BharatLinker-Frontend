@@ -1,176 +1,184 @@
-#search-product-page-container{
-    width: 100%;background-color: rgb(255, 255, 255);
-    display: flex;flex-direction: column;  min-height: 100vh;
-    overflow: scroll;
-    margin-bottom: 67px;
-}
-.search-product-page-query{
-    padding-left: 2.5vw;width:fit-content;
-    margin-top: 1px;color: rgb(0, 0, 0);height: 60px;
-    font-size: 13px;
-}
-#product-details-about{
-    display: flex;flex-direction: row;
-    font-size: 20px;font-weight: 900;
-}
-#search-product-page-grid {
+#product-page-container {
     width: 100%;
-    display: flex;
-   flex-wrap: wrap;justify-content: center;
-    gap: 3px;
-    margin-top: 20px;
-}
-#search-container-top-div{
-   width: 96vw;display: flex;
-   position:fixed ;margin-top: 8.5px;
-   border: 1px solid black;
-   top: 0px;border-radius: 5px;
-}
-#search-container-top{
-    width: 100%;height: 57px;position:fixed ;top: 0;
-    background-color: rgb(255, 255, 255);display: flex;
-    align-items: center;justify-content: center;
-}
-#search-container-top-div input{
-    color: black;
-}
-
-/* Container for the search bar */
-#search-container {
-    width: 100vw;
     background-color: rgb(255, 255, 255);
-    position: fixed;
-    top: 0;
-    height: 57px;
     display: flex;
-    align-items: center;
-    padding: 0 10px;
-    box-sizing: border-box; /* Ensures padding is included in width/height */
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: scroll;
+    margin-bottom:200px;
 }
-
-/* Styling for the input element */
-#search-bar {
-    width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: white;
-    padding: 0;
-    margin: 0;
-    font-size: 16px; /* Adjust font size as needed */
-}
-
-
-#searchpage-footer{
-    width: 100vh;display: flex;
-    color: white;font-weight: 800;
-    height: 60px;background-color: rgb(158, 149, 224);
-    position: fixed;
-    bottom: 0;z-index: 900000;
-}
-#searchpage-footer-sortby{
- display: flex;width: 50vw;
- justify-content: center;align-items: center;
- 
-}
-#searchpage-footer-filterby{
-    display: flex;width: 50vw;
-    justify-content: center;align-items: center;
-}
-
-
 
 #product-search-container-top {
     width: 100%;
     height: 55px;
     position: fixed;
     top: 0;
+    background-color: rgb(135, 162, 255);
     display: flex;
-    align-items: center;justify-content: center;
-    
-    background-color: rgb(158, 149, 224);
-   border: 10px solid black;
+    align-items: center;
     justify-content: center;
     z-index: 999;
- }
- #product-search-container-top-div {
-    width: 97vw;height: 40px;
-    display: flex;background-color: white;align-self: center;
-    position: fixed;margin-top:6.5px;
+}
+
+#product-search-container-top-div {
+    width: 96vw;
+    display: flex;
+    position: fixed;
+    margin-top: 6.5px;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    align-items: center;
+    border: 0.0005px solid rgba(0, 0, 0, 0.365);
+    top: 0px;
+    border-radius: 5px;border-radius: 5px;
+    border: 1px solid black;
+    height: 40px;
+}
+.product-search-container-top-div-MdOutlineKeyboardArrowLeft{
+   color: rgba(0, 0, 0, 0.559);
+   margin-right: -3px;
+}
+#product-search-bar-input {
+    width: 100%;
+    color: black;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+}
+#product-search-bar-input:placeholder-shown{
+    font-size: 19px;
+}
+#product-page-grid {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 20px;
+}
+
+/* FOOTER DONE */
+#product-footer {
+    width: 100vh;
+    display: flex;
+    color: rgb(255, 255, 255);
+    font-weight: 900;
+    height: 60px;
+    background-color: rgb(135, 162, 255);
+    position: fixed;
+    bottom: 0;
+    z-index: 900000;
+}
+
+#product-footer-sortby,
+#product-footer-filterby {
+    display: flex;
+    width: 50vw;font-size: 19px;
     justify-content: center;
     align-items: center;
-    border: 0.0005px solid rgb(23, 21, 59);
-    top: 0px;
-    border-radius: 5px;
- }
-  
- #product-search-bar {
-    width: 100%; /* Makes the search bar full width */
-    border: none; /* Removes the border */
-    outline: none; /* Removes default focus outline (optional) */
-    padding: 5px; /* Add padding if needed for better aesthetics */
-    padding-left: 0px;height: 35px;
-    box-sizing: border-box; /* Ensures padding is included in the element's total width */
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 13px;
- }
-
-.searchpage-filter-section{
-  width: 100%;margin-bottom: 67px;
-}
-#filter-section-search-page{
-    width: 100vw;position: fixed;top: 0;
-    height: 56px;display: flex;justify-content: center;
-    align-items: center;border-bottom: 1px solid rgba(0, 0, 0, 0.477);
-    font-size: 17px;font-weight: 800;z-index: 1000;
-    box-shadow: rgba(52, 51, 51, 0.1) -4px 9px 25px -6px;
-    background-color: white;
-}
-#filter-options-search-page{
-    display: flex;flex-direction: column;margin-top: 67px;
-    gap: 10px;justify-content: center;align-items: center;
-    overflow-y: scroll;margin-bottom: 67px;
-}
-.filter-option-title{
-    display: flex;padding: 10px;justify-content: space-between;
-    width: 90%;font-weight: 900;font-size: 20px;
-}
-#filter-pincode-options,#filter-category-options,#filter-brand-options{
-    width: 100%;max-height: 40vh;
-    overflow: scroll;
 }
 
 
 
-
-
-
-
-.pincode-item-search-page-card {
+/* FILTER OPTION */
+.product-filter-section {
     display: flex;
-    align-items: center; /* Center items vertically */
-    padding: 10px 15px; /* Add some padding */
-    border-radius: 5px; /* Rounded corners */
-    margin: 5px 0; /* Space between items */
-    cursor: pointer; /* Indicate clickable items */
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    transition: background-color 0.3s ease; 
-    
-}
-.pincode-item-pincode{
-    margin-left: 15px;
-    display: flex;flex-grow: 1;
- }
-.pincode-item-unselected-search-page{
-    border-radius: 5px;
-    margin-left: 10px;
-    width: 20px;height: 20px;
-    border: 1px solid black;
-    color: white; 
-    
-}
-.pincode-item-search-page:hover {
-    opacity: 0.8;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+    margin-top: 30px;
 }
 
+.filter-option-title {
+    display: flex;
+    padding: 15px;
+    justify-content: space-between;
+    width: 95%;
+    border-bottom: 1px solid black;
+    font-weight: 900;
+    font-size: 25px;
+}
+
+#filter-section-product-page {
+    background-color: rgb(135, 162, 255);
+    width: 100vw;color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 57px;
+    font-size: 20px;
+    font-weight: 900;
+    position: fixed;
+    top: 0;
+}
+
+#filter-options-product-page {
+    width: 100vw;
+}
+
+.pincode-item-selected,
+.pincode-item-unselected {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid black;
+}
+
+.pincode-item-selected {
+    background-color: rgb(13, 255, 8);
+}
+
+.pincode-item-unselected {
+    background-color: rgb(251, 255, 255);
+}
+
+#product-sort-by-header {
+    height: 57px;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background-color: rgb(135, 162, 255);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 19px;
+    font-weight: 900;
+}
+
+#sortby-options {
+    margin-top: 77px;
+}
+
+.pincode-item-product-page-card {
+    margin: 3px;
+    font-size: 19px;
+    font-weight: 900;
+    border-bottom: 1px solid black;
+    display: flex;
+    padding: 10px;
+}
+.pincode-item-search-page-card{
+    display: flex;font-size: 19px;margin-left: 20px;
+    padding: 10px;font-weight: 900;
+}
+.product-page-pagination-controls-next-button-p{
+  border-radius: 5px;background-color: black;color: white;
+    padding: 15px;font-size: 20px;
+}
+.product-page-pagination-controls-p{
+    width: 100vw;height: 70px;
+    margin-top: 50px;display: flex;justify-content: center;
+    align-items: center;
+}
+
+
+#product-page-sortby-options{
+    margin-top: 37px;
+}
