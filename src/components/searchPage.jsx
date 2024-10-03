@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import ProductCard from './ProductCard.jsx';
+import ProductCard from './productCard.jsx';
 import '../styles/searchPage.css';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList, MdOutlineKeyboardArrowLeft } from "react-icons/md";
