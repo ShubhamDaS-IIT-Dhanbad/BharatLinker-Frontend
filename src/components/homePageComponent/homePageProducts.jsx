@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../../redux/features/homeProductSlice.jsx';
+import { fetchProducts, setCurrentPage } from '../../redux/features/homeProductSlice.jsx';
 import ProductCard from '../productCard.jsx';
 import LoadingSearchPage from '../loadingComponents/loadingSearchPage.jsx';
 import { TbClockSearch } from 'react-icons/tb';
@@ -14,8 +14,7 @@ const HomePageProducts = () => {
     const [fetching, setFetching] = useState(false);
     const { userPincodes } = useUserPincode();
 
-    const { products, loading, hasMoreProducts, error } = useSelector((state) => state.homepageproducts);
-    const [currentPage, setCurrentPage] = useState(1);
+    const { products, loading, hasMoreProducts, currentPage, error } = useSelector((state) => state.homepageproducts); // Use Redux currentPage
     const selectedPincodes = userPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
 
     // Fetch products when component mounts or when page/pincode changes
@@ -32,7 +31,7 @@ const HomePageProducts = () => {
     useEffect(() => {
         const handleScroll = () => {
             if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 100 && !loading && hasMoreProducts) {
-                setCurrentPage((prev) => prev + 1);  // Load next page
+                dispatch(setCurrentPage(currentPage + 1));  // Increment page via Redux
             }
         };
         window.addEventListener('scroll', handleScroll);
@@ -40,7 +39,7 @@ const HomePageProducts = () => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [loading, hasMoreProducts]);
+    }, [loading, hasMoreProducts, currentPage, dispatch]);
 
     if (error) return <div>Error: {error}</div>;
 

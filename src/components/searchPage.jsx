@@ -106,12 +106,12 @@ const SearchPage = () => {
             selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
             selectedCategories,
             selectedBrands,
-            showSortBy:sortType
+            showSortBy: sortType
         };
         dispatch(resetProducts())
         dispatch(fetchProducts(params));
-    }, [page, showSortBy,inputValue, selectedCategories, selectedBrands,selectedPincodes]);
-    useEffect(()=>{
+    }, [page, showSortBy, inputValue, selectedCategories, selectedBrands, selectedPincodes]);
+    useEffect(() => {
         const params = {
             inputValue,
             page,
@@ -119,11 +119,11 @@ const SearchPage = () => {
             selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
             selectedCategories,
             selectedBrands,
-            showSortBy:sortType
+            showSortBy: sortType
         };
         dispatch(fetchProducts(params));
-    },[page])
-    
+    }, [page])
+
     const togglePincodeSelection = (pincode) => {
         setSelectedPincodes((prevSelectedPincodes) => {
             return prevSelectedPincodes.map(pin =>
