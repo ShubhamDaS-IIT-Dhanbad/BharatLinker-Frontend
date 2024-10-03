@@ -3,7 +3,7 @@ import axios from 'axios';
 import { RETAILER_PRODUCT_SERVER } from '../../../public/constant.js';
 
 const initialState = {
-    products: {}, // Store products by page number
+    products: [], // Store all fetched products in an array
     loading: false,
     currentPage: 1,
     totalPages: 1,
@@ -30,7 +30,7 @@ const productsSlice = createSlice({
             state.currentPage = action.payload; // Update currentPage
         },
         resetProducts: (state) => {
-            state.products = {};
+            state.products = []; // Reset products array
             state.currentPage = 1; // Reset to first page
             state.totalPages = 1;
             state.hasMoreProducts = true;
@@ -47,14 +47,18 @@ const productsSlice = createSlice({
                 const { products, totalPages } = action.payload;
 
                 if (products.length > 0) {
-                    // Store products in a dictionary by page number
-                    state.products[state.currentPage] = products;
+                    // Filter out duplicate products by checking their unique IDs
+                    const newProducts = products.filter(
+                        product => !state.products.some(existingProduct => existingProduct._id === product._id)
+                    );
+                    
+                    // Append new, non-duplicate products to the existing products array
+                    state.products = [...state.products, ...newProducts];
     
                     // Update total pages and loading status
                     state.totalPages = totalPages;
                     state.hasMoreProducts = state.currentPage < totalPages; // Check if more products are available
-                    state.currentPage+=1;
-                    
+                    state.currentPage += 1;  // Move to the next page
                 } else {
                     state.hasMoreProducts = false; // No more products available
                 }
