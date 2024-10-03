@@ -12,7 +12,7 @@ import { useLocation } from "react-router-dom";
 import { useUserLocation } from './hooks/useUserLocation.jsx';
 import { useUserPincode } from './hooks/useUserPincode.jsx';
 import ScrollToTop from './components/scrollToTop.jsx';
-import RetailerRoutes from './retailerComponent/retailerRoutes.jsx'; // Import Retailer routes
+import RetailerRoutes from './retailerComponent/retailerRoutes.jsx';
 
 
 
@@ -21,7 +21,7 @@ import RetailerProductHeaderFooter from './retailerComponent/retailerProductHead
 
 
 function App() {
-  const { address, userPincodes, setUserPincodes } = useUserLocation();
+  const { address, userPincodes} = useUserLocation();
   const { inputValue, handleInputChange, handleAddPincode, togglePincodeSelection, handleDeletePincode } = useUserPincode(userPincodes);
 
   return (
@@ -40,7 +40,7 @@ function App() {
   );
 }
 
-function RoutesWithConditionalHeader({ address, userPincodes, inputValue, handleInputChange, handleAddPincode, togglePincodeSelection, handleDeletePincode }) {
+function RoutesWithConditionalHeader({ address}) {
   const location = useLocation();
 
   const isRetailerHeaderFooter = location.pathname.startsWith('/retailer/home') || location.pathname.startsWith('/retailer/shop') || location.pathname.startsWith('/retailer/data');
