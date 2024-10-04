@@ -65,13 +65,12 @@ const Shop = () => {
     { category: "Florist", selected: false },
     { category: "Gift Shop", selected: false }
   ]);
-
-  const fetchShopsData = () => {
+  const fetchShopsData = (pincodes) => {
     const params = {
       inputValue: debouncedSearchQuery,
       selectedCategories,
       selectedBrands: [],
-      selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
+      selectedPincodes: pincodes.filter(pin => pin.selected).map(pin => pin.pincode), // Use the provided pincodes here
       page: currentPage,
       shopsPerPage: numberOfShops
     };
@@ -101,17 +100,19 @@ const Shop = () => {
       try {
         const pincodesData = JSON.parse(pincodesCookie);
         setSelectedPincodes(pincodesData);
-        if (shops.length === 0) fetchShopsData();
+
+        if (shops.length === 0) {
+            fetchShopsData(pincodesData);
+        }
       } catch (error) {
         console.error("Error parsing userpincodes cookie", error);
       }
     }
   }, []);
 
-  // Fetch shops data when search query or selected pincodes change
   useEffect(() => {
     if (!isInitialRender) {
-      fetchShopsData();
+      fetchShopsData(selectedPincodes); // Use the updated selectedPincodes directly
     } else {
       const timer = setTimeout(() => {
         setIsInitialRender(false);
@@ -250,7 +251,7 @@ const Shop = () => {
 
 
 
-      {showSortBy && 
+      {showSortBy &&
         <div className='search-page-filter-section'>
           <div id='filter-section-search-shop'>
             <MdOutlineKeyboardArrowLeft size={'40px'} onClick={() => { setShowFilter(false); setShowSortBy(!showSortBy); }} />
@@ -258,19 +259,19 @@ const Shop = () => {
           </div>
         </div>
       }
-          <div id='search-shop-footer'>
-            <div id='search-shop-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
-              <LiaSortSolid size={33} />
-              SORT BY
-            </div>
-            <div id='search-shop-footer-filterby' onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }}>
-              <MdFilterList size={33} />
-              FILTER BY
-            </div>
-          </div>
-        </>
-      );
+      <div id='search-shop-footer'>
+        <div id='search-shop-footer-sortby' onClick={() => { setShowSortBy(!showSortBy); setShowFilter(false); }}>
+          <LiaSortSolid size={33} />
+          SORT BY
+        </div>
+        <div id='search-shop-footer-filterby' onClick={() => { setShowSortBy(false); setShowFilter(!showFilter); }}>
+          <MdFilterList size={33} />
+          FILTER BY
+        </div>
+      </div>
+    </>
+  );
 };
 
-      export default Shop;
+export default Shop;
 

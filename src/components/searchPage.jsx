@@ -81,33 +81,12 @@ const SearchPage = () => {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
 
-    const getCookieValue = (cookieName) => {
-        const name = cookieName + "=";
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const cookieArray = decodedCookie.split(';');
-        for (let cookie of cookieArray) {
-            cookie = cookie.trim();
-            if (cookie.startsWith(name)) {
-                return cookie.substring(name.length);
-            }
-        }
-        return null;
-    };
-
-    useEffect(() => {
-        const pincodesCookie = getCookieValue('userpincodes');
-        if (pincodesCookie) {
-            const pincodesData = JSON.parse(pincodesCookie);
-            setSelectedPincodes(pincodesData);
-        }
-    }, []);
-
-    const fetchProduct = () => {
+    const fetchProduct = (pincodesData) => {
         const params = {
             inputValue,
             page: 1,
             productsPerPage,
-            selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
+            selectedPincodes: pincodesData.filter(pin => pin.selected).map(pin => pin.pincode),
             selectedCategories,
             selectedBrands,
             showSortBy: sortType
@@ -116,15 +95,35 @@ const SearchPage = () => {
         dispatch(fetchProducts(params));
     }
 
+    const getCookieValue = (cookieName) => {
+        const name = cookieName + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookie.split(';');
+        for (let cookie of cookieArray) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name)) {
+                return cookie.substring(name.length);
+
+            }
+        }
+        return null;
+    };
     useEffect(() => {
-        if (products.length === 0 && !loading && currentPage === 1) {
-            fetchProduct();
+        const pincodesCookie = getCookieValue('userpincodes');
+        if (pincodesCookie) {
+            const pincodesData = JSON.parse(pincodesCookie);
+            setSelectedPincodes(pincodesData);
+            if (pincodesData.length > 0 && !loading && currentPage === 1) {
+                fetchProduct(pincodesData);
+            }
         }
     }, []);
+
+
     const [isInitialRender, setIsInitialRender] = useState(true);
     useEffect(() => {
         if (!isInitialRender) {
-            fetchProduct();
+            fetchProduct(selectedPincodes);
         } else {
             setTimeout(() => {
                 setIsInitialRender(false);
@@ -223,7 +222,7 @@ const SearchPage = () => {
                                 value={inputValue}
                                 onChange={handleInputChange}
                             />
-                            < TbHomeMove  onClick={()=>navigate('/')} size={25} style={{paddingRight:"10px"}} />
+                            < TbHomeMove onClick={() => navigate('/')} size={25} style={{ paddingRight: "10px" }} />
                         </div>
                     </div>
 
@@ -250,13 +249,13 @@ const SearchPage = () => {
                                 )}
                             </>
                         ) : (
-                            !hasMoreProducts && (
-                                <div className='no-product-found'>
-                                    <TbClockSearch size={60} />
-                                    <div>No Product Found</div>
-                                    <div style={{ fontWeight: "900" }}>In Your Area</div>
-                                </div>
-                            )
+                            !loading &&
+                            <div className='no-product-found'>
+                                <TbClockSearch size={60} />
+                                <div>No Product Found</div>
+                                <div style={{ fontWeight: "900" }}>In Your Area</div>
+                            </div>
+
                         )}
                         {loading && <LoadingSearchPage />}
                     </div>
