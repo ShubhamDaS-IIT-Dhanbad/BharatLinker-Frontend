@@ -214,8 +214,6 @@ const SearchPage = () => {
             <div style={{ width: "100vw", height: "30px", backgroundColor: "white" }}></div>
             {!showFilter && !showSortBy &&
                 <>
-
-
                     <div id='product-search-container-top'>
                         <div id='search-header-div-search-div-1'>
                             <BiSearchAlt id='header-div-search-div-search' />

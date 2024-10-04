@@ -64,10 +64,7 @@
     border: 1px solid black;
     height: 40px;
 }
-.product-search-container-top-div-MdOutlineKeyboardArrowLeft{
-   color: rgba(0, 0, 0, 0.559);
-   margin-right: -3px;
-}
+
 #product-search-bar-input {
     width: 100%;
     color: black;
