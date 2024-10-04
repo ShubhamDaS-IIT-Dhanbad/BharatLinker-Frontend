@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, setCurrentPage } from '../../redux/features/homeProductSlice.jsx';
 import ProductCard from '../productCard.jsx';
 import LoadingSearchPage from '../loadingComponents/loadingSearchPage.jsx';
+
 import { TbClockSearch } from 'react-icons/tb';
 import { useUserPincode } from '../../hooks/useUserPincode.jsx';
+import { IoIosArrowDown } from "react-icons/io";
+
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../styles/homePageProducts.css';
@@ -14,38 +17,38 @@ const HomePageProducts = () => {
     const [fetching, setFetching] = useState(false);
     const { userPincodes } = useUserPincode();
 
-    const { products, loading, hasMoreProducts, currentPage, error } = useSelector((state) => state.homepageproducts); // Use Redux currentPage
+    // Redux state
+    const { products, loading, hasMoreProducts, currentPage, error } = useSelector((state) => state.homepageproducts);
     const selectedPincodes = userPincodes.filter(pin => pin.selected).map(pin => pin.pincode);
 
-    // Fetch products when component mounts or when page/pincode changes
+    // Fetch products when component mounts, if no products are loaded
     useEffect(() => {
-        if (hasMoreProducts && !fetching && !loading) {
+        if (products.length === 0 && !loading && currentPage === 1) {
             setFetching(true);
-            dispatch(fetchProducts({ selectedPincodes, page: currentPage })).finally(() => {
+            dispatch(fetchProducts({ selectedPincodes, page: 1 })).finally(() => {
                 setFetching(false);
             });
         }
-    }, [currentPage, selectedPincodes, hasMoreProducts, fetching, loading, dispatch]);
+    }, []);
 
-    // Infinite scroll logic
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 100 && !loading && hasMoreProducts) {
-                dispatch(setCurrentPage(currentPage + 1));  // Increment page via Redux
-            }
-        };
-        window.addEventListener('scroll', handleScroll);
+    // Handle "Load More" button click
+    const handleLoadMore = () => {
+        if (!loading && hasMoreProducts && !fetching) {
+            setFetching(true);
+            dispatch(setCurrentPage(currentPage + 1));
+            dispatch(fetchProducts({ selectedPincodes, page: currentPage + 1 })).finally(() => {
+                setFetching(false);
+            });
+        }
+    };
 
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [loading, hasMoreProducts, currentPage, dispatch]);
-
+    // Error handling
     if (error) return <div>Error: {error}</div>;
 
     return (
         <div id="search-product-home-page-container">
             {loading && <LoadingSearchPage />}
+
             {!loading && products.length > 0 ? (
                 <div id="search-product-home-page-grid">
                     {products.map((product) => (
@@ -69,6 +72,13 @@ const HomePageProducts = () => {
                         <p>No Product Found</p>
                     </div>
                 )
+            )}
+
+            {/* Load More Button */}
+            {hasMoreProducts && !loading && (
+                <div className='load-more-container'>
+                    < IoIosArrowDown size={30} className="load-more-container" onClick={handleLoadMore} />
+                </div>
             )}
 
             <ToastContainer

@@ -8,13 +8,18 @@ import { toast, ToastContainer } from 'react-toastify';
 import { TbClockSearch } from "react-icons/tb";
 import LoadingSearchPage from './loadingComponents/loadingSearchPage.jsx';
 
+
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, resetProducts } from '../redux/features/searchProductSlice.jsx';
+import { fetchProducts, resetProducts, setCurrentPage } from '../redux/features/searchProductSlice.jsx';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"; // Added missing import for IoIosArrowDown and IoIosArrowUp
+import { TbHomeMove } from "react-icons/tb";
+
+import { BiSearchAlt } from "react-icons/bi";
+
 
 const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
     return (
-        <div className="pincode-item-search-page-card" onClick={() => togglePincodeSelection(pincodeObj.pincode)}>
+        <div className="pincode-item-product-page-card" onClick={() => togglePincodeSelection(pincodeObj.pincode)}>
             <div className={pincodeObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
             <p className="pincode-item-pincode">{pincodeObj.pincode}</p>
         </div>
@@ -23,7 +28,7 @@ const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
 
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
     return (
-        <div className="pincode-item-search-page-card" onClick={() => toggleCategorySelection(categoryObj.category)}>
+        <div className="pincode-item-product-page-card" onClick={() => toggleCategorySelection(categoryObj.category)}>
             <div className={categoryObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
             <p className="pincode-item-pincode">{categoryObj.category}</p>
         </div>
@@ -32,12 +37,14 @@ const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
 
 const BrandCard = ({ brandObj, toggleBrandSelection }) => {
     return (
-        <div className="pincode-item-search-page-card" onClick={() => toggleBrandSelection(brandObj.brand)}>
+        <div className="pincode-item-product-page-card" onClick={() => toggleBrandSelection(brandObj.brand)}>
             <div className={brandObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
             <p className="pincode-item-pincode">{brandObj.brand}</p>
         </div>
     );
 };
+
+
 
 const SearchPage = () => {
     const navigate = useNavigate();
@@ -45,23 +52,20 @@ const SearchPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
 
-    const { products, loading, hasMoreProducts } = useSelector((state) => state.products);
+    // Redux state selectors
+    const { products, loading, hasMoreProducts, currentPage } = useSelector((state) => state.searchproducts); // Select current page here
 
     // State Management
     const [inputValue, setInputValue] = useState(query);
-    const [page, setPage] = useState(1);
-    const productsPerPage = 16;
+    const productsPerPage = 20;
     const [showFilter, setShowFilter] = useState(false);
     const [showSortBy, setShowSortBy] = useState('');
     const [selectedPincodes, setSelectedPincodes] = useState([]);
-
-
+    const [fetching, setFetching] = useState(false);
     const [showPincode, setShowPincode] = useState(false);
     const [showCategory, setShowCategory] = useState(false);
     const [showBrand, setShowBrand] = useState(false);
     const [sortType, setSortType] = useState();
-
-
     const [brands, setBrands] = useState([
         { brand: "Apple", selected: false },
         { brand: "Samsung", selected: false },
@@ -98,31 +102,36 @@ const SearchPage = () => {
         }
     }, []);
 
-    useEffect(() => {
+    const fetchProduct = () => {
         const params = {
             inputValue,
-            page,
+            page: 1,
             productsPerPage,
             selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
             selectedCategories,
             selectedBrands,
             showSortBy: sortType
         };
-        dispatch(resetProducts())
+        dispatch(resetProducts());
         dispatch(fetchProducts(params));
-    }, [page, showSortBy, inputValue, selectedCategories, selectedBrands, selectedPincodes]);
+    }
+
     useEffect(() => {
-        const params = {
-            inputValue,
-            page,
-            productsPerPage,
-            selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
-            selectedCategories,
-            selectedBrands,
-            showSortBy: sortType
-        };
-        dispatch(fetchProducts(params));
-    }, [page])
+        if (products.length === 0 && !loading && currentPage === 1) {
+            fetchProduct();
+        }
+    }, []);
+    const [isInitialRender, setIsInitialRender] = useState(true);
+    useEffect(() => {
+        if (!isInitialRender) {
+            fetchProduct();
+        } else {
+            setTimeout(() => {
+                setIsInitialRender(false);
+            }, 2000);
+        }
+    }, [inputValue, selectedPincodes, selectedBrands, selectedCategories, sortType]);
+
 
     const togglePincodeSelection = (pincode) => {
         setSelectedPincodes((prevSelectedPincodes) => {
@@ -132,9 +141,6 @@ const SearchPage = () => {
                     : pin
             );
         });
-        setSearchParams({ query: "" });
-        setPage(1);
-
     };
 
     const toggleBrandSelection = (brand) => {
@@ -152,8 +158,6 @@ const SearchPage = () => {
                 return [...prevSelected, brand];
             }
         });
-        setPage(1);
-        (true);
     };
 
     const toggleCategorySelection = (categoryName) => {
@@ -175,23 +179,34 @@ const SearchPage = () => {
                 return [...prevSelected, categoryName];
             }
         });
-        setPage(1);
-        (true);
     };
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
         setSearchParams({ query: event.target.value });
-        setPage(1);
-        (true);
     };
-    const handleNextClick = () => {
-        if (hasMoreProducts) {
-            setPage(prev => prev + 1);
-        } else {
-            toast.info('No more products available');
+
+
+    const handleLoadMore = () => {
+        if (!loading && hasMoreProducts && !fetching) {
+            setFetching(true);
+
+            // Increment page and dispatch action to fetch more products
+            dispatch(setCurrentPage(currentPage + 1));
+            const params = {
+                inputValue,
+                page: currentPage + 1, // Load next page
+                productsPerPage,
+                selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
+                selectedCategories,
+                selectedBrands,
+                showSortBy: sortType
+            };
+            dispatch(fetchProducts(params)).finally(() => setFetching(false));
         }
     };
+
+
 
     return (
         <>
@@ -199,18 +214,21 @@ const SearchPage = () => {
             <div style={{ width: "100vw", height: "30px", backgroundColor: "white" }}></div>
             {!showFilter && !showSortBy &&
                 <>
-                    <div id="product-search-container-top">
-                        <div id='product-search-container-top-div'>
-                            <MdOutlineKeyboardArrowLeft className='product-search-container-top-div-MdOutlineKeyboardArrowLeft' size={'35px'} onClick={() => navigate('/')} />
+
+
+                    <div id='product-search-container-top'>
+                        <div id='search-header-div-search-div-1'>
+                            <BiSearchAlt id='header-div-search-div-search' />
                             <input
-                                style={{ borderRadius: "5px" }}
-                                id="product-search-bar-input"
+                                id='search-page-header-div-input'
                                 placeholder="Search"
                                 value={inputValue}
                                 onChange={handleInputChange}
                             />
+                            < TbHomeMove  onClick={()=>navigate('/')} size={25} style={{paddingRight:"10px"}} />
                         </div>
                     </div>
+
                     <div id="product-page-container">
                         {products.length > 0 ? (
                             <>
@@ -226,14 +244,12 @@ const SearchPage = () => {
                                         />
                                     ))}
                                 </div>
-                                <div className="product-page-pagination-controls-p">
-                                    <button
-                                        onClick={handleNextClick}
-                                        className="product-page-pagination-controls-next-button-p"
-                                    >
-                                        Next
-                                    </button>
-                                </div>
+
+                                {hasMoreProducts && !loading && (
+                                    <div className='search-page-load-more-container'>
+                                        < IoIosArrowDown size={30} className="search-page-load-more-icon" onClick={handleLoadMore} />
+                                    </div>
+                                )}
                             </>
                         ) : (
                             !hasMoreProducts && (
@@ -311,14 +327,14 @@ const SearchPage = () => {
                         SORT BY SECTION
                     </div>
                     <div id="product-page-sortby-options">
-                        <div className="search-shop-page-filter-option-title"
+                        <div className="search-shop-page-sortby-option-title"
                             onClick={() => { setSortType('price_low_to_high'); }}>
                             <div
                                 className={sortType === 'price_low_to_high' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>
                             <p className="pincode-item-pincode">low to high</p>
                         </div>
-                        <div className="search-shop-page-filter-option-title"
+                        <div className="search-shop-page-sortby-option-title"
                             onClick={() => { setSortType('price_high_to_low'); }}>
                             <div className={sortType === 'price_high_to_low' ? 'pincode-item-selected' : 'pincode-item-unselected'}>
                             </div>

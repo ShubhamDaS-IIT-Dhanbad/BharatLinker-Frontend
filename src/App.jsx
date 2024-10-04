@@ -24,7 +24,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div></div>}>
         <RoutesWithConditionalHeader
           address={address}
           userPincodes={userPincodes}
