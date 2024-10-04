@@ -219,7 +219,7 @@ const SearchPage = () => {
                             <BiSearchAlt id='header-div-search-div-search' />
                             <input
                                 id='search-page-header-div-input'
-                                placeholder="Search"
+                                placeholder="Search Products"
                                 value={inputValue}
                                 onChange={handleInputChange}
                             />

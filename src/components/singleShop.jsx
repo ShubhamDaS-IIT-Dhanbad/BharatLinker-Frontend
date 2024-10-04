@@ -7,9 +7,13 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
 
 import ReferenceProduct from './shopReferenceComponent/shopFragment.jsx';
-import {RETAILER_SERVER} from '../../public/constant.js';
+import { RETAILER_SERVER } from '../../public/constant.js';
 import axios from 'axios';
 import LoadingSingleShop from './loadingComponents/loadingSingleShop.jsx';
+
+import { BiSearchAlt } from "react-icons/bi";
+import { TbHomeMove } from "react-icons/tb";
+import { MdOutlineStore } from "react-icons/md";
 
 const ShopDetails = () => {
     const { shopId } = useParams();
@@ -54,21 +58,23 @@ const ShopDetails = () => {
 
     return (
         <Fragment>
-            <div id="shop-details-search-container-top">
+
+            <div id='shop-details-search-container-top'>
                 <div id='shop-details-search-container-top-div'>
-                    <MdOutlineKeyboardArrowLeft size={'24px'} onClick={() => { navigate('/shop') }} />
+                    <BiSearchAlt size={40} id='header-div-search-div-search' />
                     <input
-                       style={{borderRadius:"5px"}}
-                        id="shop-details-search-bar"
+                        id='shop-details-search-bar'
                         value={searchQuery}
                         onChange={handleSearchChange}
                         placeholder="Search Products"
                         onKeyDown={handleEnter}
                     />
+                    < MdOutlineStore   onClick={() => { navigate('/shop') }}  size={35} style={{ paddingRight: "10px" }} />
                 </div>
             </div>
+
             {loading ? (
-                <LoadingSingleShop/>
+                <LoadingSingleShop />
             ) : (
                 shopDetails && (
                     <Fragment>
@@ -98,15 +104,15 @@ const ShopDetails = () => {
 
                             <div id="shop-details-status">
                                 <p></p>{console.log(shopDetails.status)}
-                                <div className={`shop-details-status-button ${shopDetails.status==='opened' ? 'opened' : 'closed'}`}>
-                                    {shopDetails.status==='opened' ? 'OPENED' : 'CLOSED'}
+                                <div className={`shop-details-status-button ${shopDetails.status === 'opened' ? 'opened' : 'closed'}`}>
+                                    {shopDetails.status === 'opened' ? 'OPENED' : 'CLOSED'}
                                 </div>
                             </div>
 
                             <div id="shop-details-hr"></div>
 
                             <div id="shop-details-about" onClick={toggleAddress} style={{ cursor: 'pointer' }}>
-                                <p style={{fontSize:"19px",fontWeight:"900"}}>Address</p>
+                                <p style={{ fontSize: "19px", fontWeight: "900" }}>Address</p>
                                 {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
 
@@ -119,15 +125,15 @@ const ShopDetails = () => {
                             <div id="shop-details-hr"></div>
 
                             <div id="shop-details-contact" onClick={toggleContact} style={{ cursor: 'pointer' }}>
-                                <p style={{fontSize:"19px",fontWeight:"900"}}>Contact</p>
+                                <p style={{ fontSize: "19px", fontWeight: "900" }}>Contact</p>
                                 {showContact ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                             </div>
 
                             {showContact && (
                                 <div id="shop-details-description">
-                                   {shopDetails?.phoneNumber ? `PHN ${shopDetails?.phoneNumber}` :"" }
-                                  <br/>
-                                   {shopDetails?.email ? `Email ${shopDetails?.email}` :"" }
+                                    {shopDetails?.phoneNumber ? `PHN ${shopDetails?.phoneNumber}` : ""}
+                                    <br />
+                                    {shopDetails?.email ? `Email ${shopDetails?.email}` : ""}
                                 </div>
                             )}
 

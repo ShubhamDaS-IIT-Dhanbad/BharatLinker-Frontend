@@ -35,7 +35,11 @@
     -webkit-box-shadow: 0 0 0px 1000px white inset !important;
     box-shadow: 0 0 0px 1000px white inset !important;
 }
-
+#header-div-search-div-search {
+    font-size: 29px;
+    margin-left: 10px;
+    color: rgb(0, 0, 0);
+}
 
 /* General input styling */
 #search-page-header-div-input {

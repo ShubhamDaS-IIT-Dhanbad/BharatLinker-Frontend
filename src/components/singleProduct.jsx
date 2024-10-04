@@ -7,9 +7,15 @@ import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import ProductFragment from './productReferenceComponent/productFragment.jsx';
-import {RETAILER_PRODUCT_SERVER,RETAILER_SERVER} from '../../public/constant.js';
+import { RETAILER_PRODUCT_SERVER, RETAILER_SERVER } from '../../public/constant.js';
 
 import LoadingSingleProduct from "./loadingComponents/loadingSingleProduct.jsx";
+
+
+import { BiSearchAlt } from "react-icons/bi";
+import { TbHomeMove } from "react-icons/tb";
+import { MdOutlineStore } from "react-icons/md";
+import { TbCategoryPlus } from "react-icons/tb";
 
 const ProductDetails = () => {
     const { productId } = useParams();
@@ -67,7 +73,7 @@ const ProductDetails = () => {
 
     return (
         <Fragment>
-            <div id="product-details-search-container-top">
+            {/* <div id="product-details-search-container-top">
                 <div id='product-details-search-container-top-div'>
                     <MdOutlineKeyboardArrowLeft size={'20px'} style={{marginLeft:"5px"}} onClick={()=>navigate('/search')}/>
                     <input
@@ -80,6 +86,25 @@ const ProductDetails = () => {
                     />
                 </div>
             </div>
+             */}
+            <div id='product-details-search-container-top'>
+                <div id='product-details-search-container-top-div'>
+                    <BiSearchAlt size={40} id='header-div-search-div-search' />
+                    <input
+                        id='product-details-search-bar'
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        placeholder="Search Products"
+                        onKeyDown={handleEnter}
+                    />
+                    < TbCategoryPlus onClick={() => { navigate('/search') }} size={35} style={{ paddingRight: "10px" }} />
+                </div>
+            </div>
+
+
+
+
+
             {loading ? (
                 <LoadingSingleProduct />
             ) : (
