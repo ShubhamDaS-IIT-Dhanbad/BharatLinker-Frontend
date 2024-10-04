@@ -6,7 +6,6 @@ import { RETAILER_SERVER } from '../../../public/constant.js';
 export const fetchShops = createAsyncThunk(
     'shops/fetchShops',
     async ({ inputValue, selectedCategories, selectedBrands, selectedPincodes, page, shopsPerPage }) => {
-        console.log(selectedPincodes);
         const response = await axios.get(
             `${RETAILER_SERVER}/shop/getshops?pincode=${selectedPincodes.join(',')}&keyword=${inputValue}&categories=${selectedCategories.join(',')}&brand=${selectedBrands.join(',')}&page=${page}&limit=${shopsPerPage}`
         );
