@@ -59,7 +59,7 @@ export const useUserLocation = () => {
 
         toast.success(`Location updated to ${locationCity} (${locationPincode})!`);
       } else {
-        toast.error('Invalid pincode fetched, not added to the list.');
+        // toast.error('Invalid pincode fetched, not added to the list.');
       }
     } catch (error) {
       toast.error(`Failed to fetch location: ${error.message}`);

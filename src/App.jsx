@@ -8,6 +8,10 @@ import RetailerRoutes from './retailerComponent/retailerRoutes.jsx';
 import RetailerHomePageHeaderFooter from './retailerComponent/retailerHomePageHeaderFooter.jsx';
 import RetailerProductHeaderFooter from './retailerComponent/retailerProductHeaderFooter.jsx';
 
+
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 // Lazy load your components
 const Home = lazy(() => import('./components/home.jsx'));
 const Retailer = lazy(() => import('./retailerComponent/retailer.jsx'));
@@ -24,7 +28,16 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <Suspense fallback={<div></div>}>
+      <Suspense fallback={
+        <>
+         <div style={{width:'100vw',height:"57px",position:"fixed",top:"0px",backgroundColor:'rgb(135, 162, 255)'}}>
+
+         </div>
+         <div style={{width:'100vw',height:"57px",position:"fixed",bottom:"0px",backgroundColor:'rgb(135, 162, 255)'}}>
+
+         </div>
+         </>
+      }>
         <RoutesWithConditionalHeader
           address={address}
           userPincodes={userPincodes}
@@ -44,12 +57,12 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
 
   const { isRetailerHeaderFooter, isRetailerProductHeaderFooter, isHomepage } = useMemo(() => {
     return {
-      isRetailerHeaderFooter: location.pathname.startsWith('/retailer/home') || 
-                               location.pathname.startsWith('/retailer/shop') || 
-                               location.pathname.startsWith('/retailer/data'),
-      isRetailerProductHeaderFooter: location.pathname.startsWith('/retailer/product') || 
-                                      location.pathname.startsWith('/retailer/uploadproduct') || 
-                                      location.pathname.startsWith('/retailer/updateproduct'),
+      isRetailerHeaderFooter: location.pathname.startsWith('/retailer/home') ||
+        location.pathname.startsWith('/retailer/shop') ||
+        location.pathname.startsWith('/retailer/data'),
+      isRetailerProductHeaderFooter: location.pathname.startsWith('/retailer/product') ||
+        location.pathname.startsWith('/retailer/uploadproduct') ||
+        location.pathname.startsWith('/retailer/updateproduct'),
       isHomepage: location.pathname === '/',
     };
   }, [location.pathname]);
