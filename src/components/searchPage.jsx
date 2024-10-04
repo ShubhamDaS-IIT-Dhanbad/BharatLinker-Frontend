@@ -92,9 +92,10 @@ const SearchPage = () => {
             showSortBy: sortType
         };
         dispatch(resetProducts());
-        dispatch(fetchProducts(params));
+        return dispatch(fetchProducts(params)).then(() => {
+            setFetching(false);
+        });
     }
-
     const getCookieValue = (cookieName) => {
         const name = cookieName + "=";
         const decodedCookie = decodeURIComponent(document.cookie);
@@ -103,18 +104,23 @@ const SearchPage = () => {
             cookie = cookie.trim();
             if (cookie.startsWith(name)) {
                 return cookie.substring(name.length);
-
             }
         }
         return null;
     };
+
     useEffect(() => {
         const pincodesCookie = getCookieValue('userpincodes');
         if (pincodesCookie) {
-            const pincodesData = JSON.parse(pincodesCookie);
-            setSelectedPincodes(pincodesData);
-            if (pincodesData.length > 0 && !loading && currentPage === 1) {
-                fetchProduct(pincodesData);
+            try {
+                const pincodesData = JSON.parse(pincodesCookie);
+                setSelectedPincodes(pincodesData);
+
+                if (products.length === 0) {
+                    fetchProduct(pincodesData);
+                }
+            } catch (error) {
+                console.error("Error parsing userpincodes cookie", error);
             }
         }
     }, []);

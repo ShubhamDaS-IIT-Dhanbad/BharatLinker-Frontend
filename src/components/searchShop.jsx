@@ -80,7 +80,6 @@ const Shop = () => {
       setFetching(false); // Reset fetching after data is fetched
     });
   };
-
   const getCookieValue = (cookieName) => {
     const name = cookieName + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
@@ -102,7 +101,7 @@ const Shop = () => {
         setSelectedPincodes(pincodesData);
 
         if (shops.length === 0) {
-            fetchShopsData(pincodesData);
+          fetchShopsData(pincodesData);
         }
       } catch (error) {
         console.error("Error parsing userpincodes cookie", error);
