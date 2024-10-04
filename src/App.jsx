@@ -1,4 +1,4 @@
-import React, { useMemo, Suspense, lazy } from "react";
+import React, { useMemo, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from './components/header.jsx';
 import ScrollToTop from './components/scrollToTop.jsx';
@@ -8,18 +8,13 @@ import RetailerRoutes from './retailerComponent/retailerRoutes.jsx';
 import RetailerHomePageHeaderFooter from './retailerComponent/retailerHomePageHeaderFooter.jsx';
 import RetailerProductHeaderFooter from './retailerComponent/retailerProductHeaderFooter.jsx';
 
-
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
-
-// Lazy load your components
-const Home = lazy(() => import('./components/home.jsx'));
-const Retailer = lazy(() => import('./retailerComponent/retailer.jsx'));
-const SearchPage = lazy(() => import('./components/searchPage.jsx'));
-const ShopPage = lazy(() => import('./components/searchShop.jsx'));
-const SingleProduct = lazy(() => import('./components/singleProduct.jsx'));
-const SingleShop = lazy(() => import('./components/singleShop.jsx'));
-const Pincode = lazy(() => import('./components/pincode.jsx'));
+import Home from './components/home.jsx';
+import Retailer from './retailerComponent/retailer.jsx';
+import SearchPage from './components/searchPage.jsx';
+import ShopPage from './components/searchShop.jsx';
+import SingleProduct from './components/singleProduct.jsx';
+import SingleShop from './components/singleShop.jsx';
+import Pincode from './components/pincode.jsx';
 
 function App() {
   const { address, userPincodes } = useUserLocation();
