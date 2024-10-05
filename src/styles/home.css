@@ -16,7 +16,7 @@
     align-items: center;
     justify-content: space-evenly;
     height: 65px;
-    background-color: rgb(135, 162, 255);
+    background-color: rgb(30, 30, 31);
     position: fixed;border-top: 1px solid black;
     box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
     bottom: 0;
