@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo, Suspense } from "react";
+import React, { useMemo, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import ReactGA from "react-ga4";  // Import GA4
+
 import Header from './components/header.jsx';
 import ScrollToTop from './components/scrollToTop.jsx';
 import { useUserLocation } from './hooks/useUserLocation.jsx';
@@ -7,7 +9,6 @@ import { useUserPincode } from './hooks/useUserPincode.jsx';
 import RetailerRoutes from './retailerComponent/retailerRoutes.jsx';
 import RetailerHomePageHeaderFooter from './retailerComponent/retailerHomePageHeaderFooter.jsx';
 import RetailerProductHeaderFooter from './retailerComponent/retailerProductHeaderFooter.jsx';
-import { initialize, sendPageview } from 'react-ga4';  // Import GA4 initialization functions
 
 import Home from './components/home.jsx';
 import Retailer from './retailerComponent/retailer.jsx';
@@ -20,17 +21,11 @@ import Pincode from './components/pincode.jsx';
 function App() {
   const { address, userPincodes } = useUserLocation();
   const { inputValue, handleInputChange, handleAddPincode, togglePincodeSelection, handleDeletePincode } = useUserPincode(userPincodes);
-  const location = useLocation();
 
   useEffect(() => {
-    // Initialize Google Analytics 4 with your Measurement ID
-    initialize('YOUR_GA4_MEASUREMENT_ID'); // Replace with your GA4 Measurement ID
+    // Initialize Google Analytics with your Measurement ID
+    ReactGA.initialize("G-VEKMNYQYQ1"); // Replace with your GA4 Measurement ID
   }, []);
-
-  useEffect(() => {
-    // Send pageview to GA4 on route change
-    sendPageview(window.location.pathname);
-  }, [location.pathname]);
 
   return (
     <Router>
@@ -51,7 +46,12 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(({ address }) => {
-  const location = useLocation();
+  const location = useLocation();  // Moved this hook inside the component that is wrapped by <Router>
+
+  useEffect(() => {
+    // Send pageview event to GA4 whenever the route changes
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
+  }, [location]);
 
   const { isRetailerHeaderFooter, isRetailerProductHeaderFooter, isHomepage } = useMemo(() => {
     return {
