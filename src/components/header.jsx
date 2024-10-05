@@ -84,7 +84,7 @@ function Navbar({address}) {
                 </div>
             </div>
 
-            <ToastContainer
+            {/* <ToastContainer
                 position="bottom-center"
                 autoClose={2000}
                 hideProgressBar={false}
@@ -95,7 +95,7 @@ function Navbar({address}) {
                     position: "fixed",
                     top: "87vh"
                 }}
-            />
+            /> */}
         </div>
     );
 }
