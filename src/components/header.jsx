@@ -24,10 +24,12 @@ function Navbar({address}) {
     }, []);
 
     const handleSearchSubmit = () => {
-        if (searchInput.trim()) {
-            navigate(`/search?query=${searchInput}`);
+        const trimmedInput = searchInput.trim();
+        if (trimmedInput) {
+            navigate(`/search?query=${encodeURIComponent(trimmedInput)}`);
         }
     };
+    
 
     return (
         <div className={hideHeader ? 'header-div-hide' : 'header-div-show'}>

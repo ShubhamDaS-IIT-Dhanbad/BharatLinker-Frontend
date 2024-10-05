@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import ProductCard from './productCard.jsx';
 import '../styles/searchPage.css';
 import { LiaSortSolid } from "react-icons/lia";
@@ -47,6 +47,7 @@ const BrandCard = ({ brandObj, toggleBrandSelection }) => {
 
 
 const SearchPage = () => {
+    const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -126,17 +127,23 @@ const SearchPage = () => {
     }, []);
 
 
+    
     const [isInitialRender, setIsInitialRender] = useState(true);
+    const [searchQuery, setSearchQuery] = useState(new URLSearchParams(location.search).get('query') || '');
     useEffect(() => {
-        if (!isInitialRender) {
+        const comingFromProduct = location.state?.from?.startsWith('/product/');
+        console.log("product", comingFromProduct);
+        const comingFromHome = location.state?.from === '/home';
+        if ((!comingFromProduct && (comingFromHome || searchQuery.trim()))|| !isInitialRender) {
             fetchProduct(selectedPincodes);
-        } else {
-            setTimeout(() => {
-                setIsInitialRender(false);
-            }, 2000);
         }
-    }, [inputValue, selectedPincodes, selectedBrands, selectedCategories, sortType]);
+        
+        if (isInitialRender) {
+            setIsInitialRender(false);
+        }
 
+    }, [location.search, inputValue,selectedBrands, selectedCategories, sortType,inputValue]);
+    // location.search, inputValue, selectedPincodes, selectedBrands, selectedCategories, sortType, isInitialRender
 
     const togglePincodeSelection = (pincode) => {
         setSelectedPincodes((prevSelectedPincodes) => {
