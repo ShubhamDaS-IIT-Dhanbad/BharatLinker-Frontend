@@ -78,11 +78,11 @@ const Pincode = () => {
             </div>
             <ToastContainer
                 position="bottom-center" // Set position to bottom-center
-                autoClose={5000} // Auto close after 5 seconds
-                hideProgressBar={false} // Show progress bar
-                closeOnClick // Close on click
-                draggable // Enable dragging
-                pauseOnHover // Pause on hover
+                autoClose={5000}
+                hideProgressBar={false}
+                closeOnClick
+                draggable
+                pauseOnHover
             />
         </div>
     );

@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { reupdateProduct, reupdateShop } from '../redux/features/pincodeUpdatedSlice';
+import { useDispatch } from 'react-redux';
 
 export const useUserPincode = () => {
+  const dispatch = useDispatch();
+
   const getPincodesFromCookie = () => {
     const cookieValue = document.cookie.split('; ').find(row => row.startsWith('userpincodes='));
     if (cookieValue) {
@@ -40,7 +44,6 @@ export const useUserPincode = () => {
       return updatedPincodes;
     });
 
-    setInputValue('');
     toast.success(`Pincode ${inputValue} added successfully!`);
   };
 
@@ -49,6 +52,7 @@ export const useUserPincode = () => {
       const updatedPincodes = prevPincodes.map(pin =>
         pin.pincode === pincode ? { ...pin, selected: !pin.selected } : pin
       );
+
       updateCookies(updatedPincodes);
       return updatedPincodes;
     });
@@ -59,6 +63,7 @@ export const useUserPincode = () => {
       const updatedPincodes = prevPincodes.filter(pin => pin.pincode !== pincode);
       updateCookies(updatedPincodes);
       toast.success(`Pincode ${pincode} deleted successfully!`);
+
       return updatedPincodes;
     });
   };
@@ -66,15 +71,17 @@ export const useUserPincode = () => {
   const updateCookies = (pincodes) => {
     const expires = new Date();
     expires.setTime(expires.getTime() + 60 * 60 * 1000); // 1 hour expiration
+    dispatch(reupdateProduct());
+    dispatch(reupdateShop());
     document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(pincodes))}; expires=${expires.toUTCString()}; path=/`;
   };
 
   return {
-    userPincodes, 
-    inputValue, 
-    handleInputChange, 
-    handleAddPincode, 
-    togglePincodeSelection, 
-    handleDeletePincode
+    userPincodes,
+    inputValue,
+    handleInputChange,
+    handleAddPincode,
+    togglePincodeSelection,
+    handleDeletePincode,
   };
 };

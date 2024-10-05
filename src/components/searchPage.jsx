@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import ProductCard from './productCard.jsx';
 import '../styles/searchPage.css';
@@ -11,20 +11,14 @@ import LoadingSearchPage from './loadingComponents/loadingSearchPage.jsx';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, resetProducts, setCurrentPage } from '../redux/features/searchProductSlice.jsx';
+import { updateProduct } from '../redux/features/pincodeUpdatedSlice.jsx';
+
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"; // Added missing import for IoIosArrowDown and IoIosArrowUp
 import { TbHomeMove } from "react-icons/tb";
 
 import { BiSearchAlt } from "react-icons/bi";
 
-
-const PinCodeCard = ({ pincodeObj, togglePincodeSelection }) => {
-    return (
-        <div className="pincode-item-product-page-card" onClick={() => togglePincodeSelection(pincodeObj.pincode)}>
-            <div className={pincodeObj.selected ? 'pincode-item-selected' : 'pincode-item-unselected'}></div>
-            <p className="pincode-item-pincode">{pincodeObj.pincode}</p>
-        </div>
-    );
-};
+import { debounce } from 'lodash';
 
 const CategoryCard = ({ categoryObj, toggleCategorySelection }) => {
     return (
@@ -48,13 +42,15 @@ const BrandCard = ({ brandObj, toggleBrandSelection }) => {
 
 const SearchPage = () => {
     const location = useLocation();
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
 
     // Redux state selectors
-    const { products, loading, hasMoreProducts, currentPage } = useSelector((state) => state.searchproducts); // Select current page here
+    const { products, loading, hasMoreProducts, currentPage } = useSelector((state) => state.searchproducts);
+    const { isUpdatedProduct } = useSelector((state) => state.pincodestate);
 
     // State Management
     const [inputValue, setInputValue] = useState(query);
@@ -63,7 +59,6 @@ const SearchPage = () => {
     const [showSortBy, setShowSortBy] = useState('');
     const [selectedPincodes, setSelectedPincodes] = useState([]);
     const [fetching, setFetching] = useState(false);
-    const [showPincode, setShowPincode] = useState(false);
     const [showCategory, setShowCategory] = useState(false);
     const [showBrand, setShowBrand] = useState(false);
     const [sortType, setSortType] = useState();
@@ -82,21 +77,23 @@ const SearchPage = () => {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
 
-    const fetchProduct = (pincodesData) => {
-        const params = {
-            inputValue,
-            page: 1,
-            productsPerPage,
-            selectedPincodes: pincodesData.filter(pin => pin.selected).map(pin => pin.pincode),
-            selectedCategories,
-            selectedBrands,
-            showSortBy: sortType
-        };
-        dispatch(resetProducts());
-        return dispatch(fetchProducts(params)).then(() => {
-            setFetching(false);
-        });
-    }
+    // Debounced version of fetchProduct
+    const debouncedFetchProduct = useCallback(
+        debounce((pincodesData) => {
+            const params = {
+                inputValue,
+                page: 1,
+                productsPerPage,
+                selectedPincodes: pincodesData.filter(pin => pin.selected).map(pin => pin.pincode),
+                selectedCategories,
+                selectedBrands,
+                showSortBy: sortType
+            };
+            dispatch(resetProducts());
+            dispatch(fetchProducts(params)).finally(() => setFetching(false));
+        }, 0), [inputValue, selectedPincodes, selectedCategories, selectedBrands, sortType]
+    );
+
     const getCookieValue = (cookieName) => {
         const name = cookieName + "=";
         const decodedCookie = decodeURIComponent(document.cookie);
@@ -111,46 +108,30 @@ const SearchPage = () => {
     };
 
     useEffect(() => {
-        const pincodesCookie = getCookieValue('userpincodes');
-        if (pincodesCookie) {
-            try {
-                const pincodesData = JSON.parse(pincodesCookie);
-                setSelectedPincodes(pincodesData);
-                if (products.length === 0) {
-                    fetchProduct(pincodesData);
-                }
-            } catch (error) {
-                console.error("Error parsing userpincodes cookie", error);
+        if (!isUpdatedProduct) {
+            const pincodesCookie = getCookieValue('userpincodes');
+            const pincodesData = JSON.parse(pincodesCookie);
+            setSelectedPincodes(pincodesData);
+
+            if (products.length === 0) {
+                debouncedFetchProduct(pincodesData);
             }
+
+            dispatch(updateProduct());
         }
     }, []);
 
-
-    
     const [isInitialRender, setIsInitialRender] = useState(true);
-    const [searchQuery, setSearchQuery] = useState(new URLSearchParams(location.search).get('query') || '');
     useEffect(() => {
-        const comingFromProduct = location.state?.from?.startsWith('/product/');
-        const comingFromHome = location.state?.from === '/home';
         if (!isInitialRender) {
-            fetchProduct(selectedPincodes);
+            debouncedFetchProduct(selectedPincodes)
+        } else {
+            const timer = setTimeout(() => setIsInitialRender(false), 500);
+            return () => clearTimeout(timer);
         }
-        
-        if (isInitialRender) {
-            setIsInitialRender(false);
-        }
+    }, [location.search, selectedPincodes, selectedBrands, selectedCategories, sortType, inputValue]);
 
-    }, [location.search, inputValue, selectedPincodes,selectedBrands, selectedCategories, sortType,inputValue]);
 
-    const togglePincodeSelection = (pincode) => {
-        setSelectedPincodes((prevSelectedPincodes) => {
-            return prevSelectedPincodes.map(pin =>
-                pin.pincode === pincode
-                    ? { ...pin, selected: !pin.selected }
-                    : pin
-            );
-        });
-    };
 
     const toggleBrandSelection = (brand) => {
         setBrands((prevSelectedBrands) => {
@@ -189,22 +170,23 @@ const SearchPage = () => {
             }
         });
     };
-
     const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-        setSearchParams({ query: event.target.value });
-    };
-
-
+        const value = event.target.value;
+        setInputValue(value);
+        
+        setSearchParams(prev => ({
+          ...prev,
+          query: value
+        }));
+      };
+      
     const handleLoadMore = () => {
         if (!loading && hasMoreProducts && !fetching) {
             setFetching(true);
-
-            // Increment page and dispatch action to fetch more products
             dispatch(setCurrentPage(currentPage + 1));
             const params = {
                 inputValue,
-                page: currentPage + 1, // Load next page
+                page: currentPage + 1,
                 productsPerPage,
                 selectedPincodes: selectedPincodes.filter(pin => pin.selected).map(pin => pin.pincode),
                 selectedCategories,
@@ -279,20 +261,6 @@ const SearchPage = () => {
                         FILTER SECTION
                     </div>
                     <div id="filter-options-product-page">
-                        <div onClick={() => setShowPincode(!showPincode)} className="search-shop-page-filter-option-title">
-                            <p>Pincode</p>
-                            {showPincode ? <IoIosArrowUp size="25px" /> : <IoIosArrowDown size="25px" />}
-                        </div>
-                        {showPincode && (
-                            <div id="filter-pincode-options">
-                                {selectedPincodes.map((pincodeObj) => (
-                                    <PinCodeCard key={pincodeObj.pincode}
-                                        pincodeObj={pincodeObj}
-                                        togglePincodeSelection={togglePincodeSelection}
-                                    />
-                                ))}
-                            </div>
-                        )}
                         <div onClick={() => setShowCategory(!showCategory)} className="search-shop-page-filter-option-title">
                             <p>Category</p>
                             {showCategory ? <IoIosArrowUp size="25px" /> : <IoIosArrowDown size="25px" />}
