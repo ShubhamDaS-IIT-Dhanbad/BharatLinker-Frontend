@@ -11,22 +11,22 @@ import { useUserPincode } from '../hooks/useUserPincode.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, resetProducts, setCurrentPage } from '../redux/features/searchProductSlice.jsx';
 
-function Navbar({address}) {
-    const dispatch=useDispatch();
+function Navbar({ address }) {
+    const dispatch = useDispatch();
 
     const [searchInput, setSearchInput] = useState('');
     const [hideHeader, setHideHeader] = useState(false);
     const navigate = useNavigate();
 
     const {
-        userPincodes, 
-        inputValue, 
-        handleInputChange, 
-        handleAddPincode, 
-        togglePincodeSelection, 
-        handleDeletePincode 
+        userPincodes,
+        inputValue,
+        handleInputChange,
+        handleAddPincode,
+        togglePincodeSelection,
+        handleDeletePincode
     } = useUserPincode();
-   
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -43,12 +43,12 @@ function Navbar({address}) {
         const trimmedInput = searchInput.trim();
         if (trimmedInput) {
             const params = {
-                inputValue:trimmedInput,
+                inputValue: trimmedInput,
                 page: 1,
-                productsPerPage:20,
-                selectedPincodes:userPincodes.filter(pin => pin.selected).map(pin => Number(pin.pincode)),
-                selectedCategories:[],
-                selectedBrands:[],
+                productsPerPage: 20,
+                selectedPincodes: userPincodes.filter(pin => pin.selected).map(pin => Number(pin.pincode)),
+                selectedCategories: [],
+                selectedBrands: [],
                 showSortBy: ''
             };
             dispatch(resetProducts());
@@ -56,7 +56,7 @@ function Navbar({address}) {
             navigate(`/search?query=${encodeURIComponent(trimmedInput)}`);
         }
     };
-    
+
 
     return (
         <div className={hideHeader ? 'header-div-hide' : 'header-div-show'}>
@@ -84,18 +84,8 @@ function Navbar({address}) {
                 </div>
             </div>
 
-            {/* <ToastContainer
-                position="bottom-center"
-                autoClose={2000}
-                hideProgressBar={false}
-                closeOnClick
-                draggable
-                pauseOnHover
-                style={{
-                    position: "fixed",
-                    top: "87vh"
-                }}
-            /> */}
+          
+
         </div>
     );
 }
