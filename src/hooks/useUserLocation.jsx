@@ -57,12 +57,17 @@ export const useUserLocation = () => {
         document.cookie = `address=${encodeURIComponent(JSON.stringify(data.address))}; ${expires}; path=/`;
         document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(userPincodes))}; ${expires}; path=/`;
 
-        toast.success(`Location updated to ${locationCity} (${locationPincode})!`);
-      } else {
-        // toast.error('Invalid pincode fetched, not added to the list.');
-      }
+        // Show success toast with autoClose and onClick properties
+        toast.success(`Location updated to ${locationCity} (${locationPincode})!`, {
+          autoClose: 1500, // Close after 1.5 seconds
+          onClick: () => toast.dismiss() // Dismiss on click
+        });
+      } 
     } catch (error) {
-      toast.error(`Failed to fetch location: ${error.message}`);
+      toast.error(`Failed to fetch location: ${error.message}`, {
+        autoClose: 1500,
+        onClick: () => toast.dismiss() // Dismiss on click
+      });
     }
   };
 
