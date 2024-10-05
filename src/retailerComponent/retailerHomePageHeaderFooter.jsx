@@ -101,19 +101,20 @@ function RetailerHomePageHeaderFooter() {
                     Home
                 </div>
                 <div
-                    className={`homeFooterShop ${isActive('/retailer/product')}`}
-                    onClick={() => navigate('/retailer/product')}
-                >
-                    <HiOutlineCreditCard size={30} />
-                    Product
-                </div>
-                <div
                     className={`homeFooterShop ${isActive('/retailer/shop')}`}
                     onClick={() => navigate('/retailer/shop')}
                 >
                     <MdOutlineStore size={30} />
                     Shop
                 </div>
+                <div
+                    className={`homeFooterShop ${isActive('/retailer/product')}`}
+                    onClick={() => navigate('/retailer/product')}
+                >
+                    <HiOutlineCreditCard size={30} />
+                    Product
+                </div>
+
                 <div
                     className={`homeFooterShop ${isActive('/logout')}`} // Update path as per your requirement
                     onClick={handleLogout}
