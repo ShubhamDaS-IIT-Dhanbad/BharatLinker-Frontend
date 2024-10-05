@@ -116,7 +116,6 @@ const SearchPage = () => {
             try {
                 const pincodesData = JSON.parse(pincodesCookie);
                 setSelectedPincodes(pincodesData);
-
                 if (products.length === 0) {
                     fetchProduct(pincodesData);
                 }
@@ -132,9 +131,8 @@ const SearchPage = () => {
     const [searchQuery, setSearchQuery] = useState(new URLSearchParams(location.search).get('query') || '');
     useEffect(() => {
         const comingFromProduct = location.state?.from?.startsWith('/product/');
-        console.log("product", comingFromProduct);
         const comingFromHome = location.state?.from === '/home';
-        if ((!comingFromProduct && (comingFromHome || searchQuery.trim()))|| !isInitialRender) {
+        if (!isInitialRender) {
             fetchProduct(selectedPincodes);
         }
         
@@ -142,8 +140,7 @@ const SearchPage = () => {
             setIsInitialRender(false);
         }
 
-    }, [location.search, inputValue,selectedBrands, selectedCategories, sortType,inputValue]);
-    // location.search, inputValue, selectedPincodes, selectedBrands, selectedCategories, sortType, isInitialRender
+    }, [location.search, inputValue, selectedPincodes,selectedBrands, selectedCategories, sortType,inputValue]);
 
     const togglePincodeSelection = (pincode) => {
         setSelectedPincodes((prevSelectedPincodes) => {
