@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUserPincode } from '../hooks/useUserPincode.jsx';
 
-import { useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, resetProducts, setCurrentPage } from '../redux/features/searchProductSlice.jsx';
 
 function Navbar({address}) {
@@ -19,7 +19,12 @@ function Navbar({address}) {
     const navigate = useNavigate();
 
     const {
-        userPincodes
+        userPincodes, 
+        inputValue, 
+        handleInputChange, 
+        handleAddPincode, 
+        togglePincodeSelection, 
+        handleDeletePincode 
     } = useUserPincode();
    
 
