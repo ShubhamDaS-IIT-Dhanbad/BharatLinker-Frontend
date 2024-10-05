@@ -1,4 +1,4 @@
-import React, { useMemo, Suspense } from "react";
+import React, { useEffect, useMemo, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from './components/header.jsx';
 import ScrollToTop from './components/scrollToTop.jsx';
@@ -7,6 +7,7 @@ import { useUserPincode } from './hooks/useUserPincode.jsx';
 import RetailerRoutes from './retailerComponent/retailerRoutes.jsx';
 import RetailerHomePageHeaderFooter from './retailerComponent/retailerHomePageHeaderFooter.jsx';
 import RetailerProductHeaderFooter from './retailerComponent/retailerProductHeaderFooter.jsx';
+import { initialize, sendPageview } from 'react-ga4';  // Import GA4 initialization functions
 
 import Home from './components/home.jsx';
 import Retailer from './retailerComponent/retailer.jsx';
@@ -19,20 +20,22 @@ import Pincode from './components/pincode.jsx';
 function App() {
   const { address, userPincodes } = useUserLocation();
   const { inputValue, handleInputChange, handleAddPincode, togglePincodeSelection, handleDeletePincode } = useUserPincode(userPincodes);
+  const location = useLocation();
+
+  useEffect(() => {
+    // Initialize Google Analytics 4 with your Measurement ID
+    initialize('YOUR_GA4_MEASUREMENT_ID'); // Replace with your GA4 Measurement ID
+  }, []);
+
+  useEffect(() => {
+    // Send pageview to GA4 on route change
+    sendPageview(window.location.pathname);
+  }, [location.pathname]);
 
   return (
     <Router>
       <ScrollToTop />
-      <Suspense fallback={
-        <>
-         <div style={{width:'100vw',height:"57px",position:"fixed",top:"0px",backgroundColor:'rgb(135, 162, 255)'}}>
-
-         </div>
-         <div style={{width:'100vw',height:"57px",position:"fixed",bottom:"0px",backgroundColor:'rgb(135, 162, 255)'}}>
-
-         </div>
-         </>
-      }>
+      <Suspense fallback={<LoadingFallback />}>
         <RoutesWithConditionalHeader
           address={address}
           userPincodes={userPincodes}
@@ -81,5 +84,12 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
     </>
   );
 });
+
+const LoadingFallback = () => (
+  <>
+    <div style={{ width: '100vw', height: "57px", position: "fixed", top: "0px", backgroundColor: 'rgb(135, 162, 255)' }} />
+    <div style={{ width: '100vw', height: "57px", position: "fixed", bottom: "0px", backgroundColor: 'rgb(135, 162, 255)' }} />
+  </>
+);
 
 export default App;
