@@ -164,7 +164,7 @@ const RetailerShopFragment = () => {
                         <input
                             type="text"
                             name="shopName"
-                            value={shop?.shopName || ''}  // Use updatedShop for value
+                            value={updatedShop?.shopName || ''}  // Use updatedShop for value
                             onChange={handleInputChange}          // Controlled input
                             placeholder="Shop Name"
                             className="retailer-input"
