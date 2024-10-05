@@ -6,8 +6,6 @@ import { FiEdit, FiSave } from 'react-icons/fi';
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import { ToastContainer, toast } from 'react-toastify';
 
-import { IoPlaySkipBackOutline } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 
 import 'react-toastify/dist/ReactToastify.css';

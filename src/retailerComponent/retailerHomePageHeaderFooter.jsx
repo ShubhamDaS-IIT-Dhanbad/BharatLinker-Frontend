@@ -4,6 +4,8 @@ import { HiOutlineUserCircle } from 'react-icons/hi';
 import { BiSearchAlt } from 'react-icons/bi';
 import { MdOutlineStore, MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { ToastContainer } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { resetRetailerData } from '../redux/features/retailerDataSlice'; // Adjust the path as necessary
 
 
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -42,8 +44,10 @@ function RetailerHomePageHeaderFooter() {
         }
     };
 
+    const dispatch = useDispatch(); 
     const handleLogout = () => {
         document.cookie = "BharatLinkerRetailer=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        dispatch(resetRetailerData());
         navigate('/');
     };
 

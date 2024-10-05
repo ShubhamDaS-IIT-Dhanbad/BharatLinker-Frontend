@@ -66,6 +66,7 @@ export const deleteShopImage = createAsyncThunk(
     }
 );
 
+
 // Initial state
 const initialState = {
     shop: null,
@@ -91,6 +92,13 @@ const retailerSlice = createSlice({
                 state.pincodes = [...state.pincodes]; 
                 state.shop.pinCodes=state.pincodes
             }
+        },
+        resetRetailerData: (state) => {
+            state.shop = null;
+            state.shopImages = [];
+            state.pincodes = [];
+            state.loading = false;
+            state.error = null;
         },
     },    
     extraReducers: (builder) => {
@@ -131,6 +139,7 @@ export const selectLoading = (state) => state.retailer.loading;
 export const selectError = (state) => state.retailer.error;
 
 // Export actions and reducer
-export const { addPincode, removePincode } = retailerSlice.actions;
+
+export const { addPincode, removePincode,resetRetailerData } = retailerSlice.actions;
 export default retailerSlice.reducer;
 
