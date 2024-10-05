@@ -108,15 +108,13 @@ const SearchPage = () => {
     };
 
     useEffect(() => {
+        const pincodesCookie = getCookieValue('userpincodes');
+        const pincodesData = JSON.parse(pincodesCookie);
         if (!isUpdatedProduct) {
-            const pincodesCookie = getCookieValue('userpincodes');
-            const pincodesData = JSON.parse(pincodesCookie);
             setSelectedPincodes(pincodesData);
-
             if (products.length === 0) {
                 debouncedFetchProduct(pincodesData);
             }
-
             dispatch(updateProduct());
         }
     }, []);
@@ -129,7 +127,7 @@ const SearchPage = () => {
             const timer = setTimeout(() => setIsInitialRender(false), 500);
             return () => clearTimeout(timer);
         }
-    }, [location.search, selectedPincodes, selectedBrands, selectedCategories, sortType, inputValue]);
+    }, [selectedPincodes, selectedBrands, selectedCategories, sortType]);
 
 
 
@@ -173,13 +171,13 @@ const SearchPage = () => {
     const handleInputChange = (event) => {
         const value = event.target.value;
         setInputValue(value);
-        
         setSearchParams(prev => ({
-          ...prev,
-          query: value
+            ...prev,
+            query: value
         }));
-      };
-      
+        debouncedFetchProduct(selectedPincodes)
+    };
+
     const handleLoadMore = () => {
         if (!loading && hasMoreProducts && !fetching) {
             setFetching(true);

@@ -6,11 +6,22 @@ import { BiSearchAlt } from "react-icons/bi";
 import { TbChevronDown } from "react-icons/tb";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useUserPincode } from '../hooks/useUserPincode.jsx';
+
+import { useDispatch} from 'react-redux';
+import { fetchProducts, resetProducts, setCurrentPage } from '../redux/features/searchProductSlice.jsx';
 
 function Navbar({address}) {
+    const dispatch=useDispatch();
+
     const [searchInput, setSearchInput] = useState('');
     const [hideHeader, setHideHeader] = useState(false);
     const navigate = useNavigate();
+
+    const {
+        userPincodes
+    } = useUserPincode();
+   
 
     useEffect(() => {
         const handleScroll = () => {
@@ -26,6 +37,17 @@ function Navbar({address}) {
     const handleSearchSubmit = () => {
         const trimmedInput = searchInput.trim();
         if (trimmedInput) {
+            const params = {
+                inputValue:trimmedInput,
+                page: 1,
+                productsPerPage:20,
+                selectedPincodes:userPincodes.filter(pin => pin.selected).map(pin => Number(pin.pincode)),
+                selectedCategories:[],
+                selectedBrands:[],
+                showSortBy: ''
+            };
+            dispatch(resetProducts());
+            dispatch(fetchProducts(params));
             navigate(`/search?query=${encodeURIComponent(trimmedInput)}`);
         }
     };
