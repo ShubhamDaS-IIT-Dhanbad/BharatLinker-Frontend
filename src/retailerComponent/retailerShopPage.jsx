@@ -1,95 +1,66 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useRef } from 'react';
-import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchShopData, updateShopData, uploadShopImage, deleteShopImage, addPincode, removePincode, getBharatLinkerRetailerCookie, selectShop, selectShopImages, selectPincodes, selectLoading, selectError } from '../redux/features/retailerDataSlice'; // Adjust path as per your structure
 import { RiImageAddLine } from 'react-icons/ri';
-import { FiEdit, FiSave } from 'react-icons/fi'; // Icons for edit/save
-import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'; // Icons for address/contact toggle
+import { FiEdit, FiSave } from 'react-icons/fi';
+import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import '../retailerStyles/retailerShopPage.css';
 
-import { RETAILER_SERVER } from '../../public/constant.js';
 import { IoPlaySkipBackOutline } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 
+import 'react-toastify/dist/ReactToastify.css';
+import '../retailerStyles/retailerShopPage.css';
 const RetailerShopFragment = () => {
+    const dispatch = useDispatch();
     const inputRef = useRef(null);
 
-    const [shop, setShop] = useState(null);
-    const [shopImages, setShopImages] = useState([]);
+    const shop = useSelector(selectShop);
+    const shopImages = useSelector(selectShopImages);
+    const pincodes = useSelector(selectPincodes);
+    const loading = useSelector(selectLoading);
+    const error = useSelector(selectError);
+
     const [isEditing, setIsEditing] = useState(false);
     const [updatedShop, setUpdatedShop] = useState({});
-    const [pincodes, setPincodes] = useState([]);
     const [showAddress, setShowAddress] = useState(false);
     const [showContact, setShowContact] = useState(false);
+
     const [loadingUpload, setLoadingUpload] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [loadingUpdate, setLoadingUpdate] = useState(false);
 
-    const [loading,setLoading]=useState(true);
-
     const maxImages = 5;
     const maxPincodes = 5;
 
-    const getBharatLinkerRetailerCookie = () => {
-        const cookieName = 'BharatLinkerRetailer=';
-        const cookieArray = document.cookie.split('; ');
-        const foundCookie = cookieArray.find(row => row.startsWith(cookieName));
-        const data = foundCookie ? JSON.parse(decodeURIComponent(foundCookie.split('=')[1])) : null;
-        return data;
-    };
-
-    const setBharatLinkerRetailerCookie = (shopData) => {
-        const cookieName = 'BharatLinkerRetailer';
-        const cookieValue = JSON.stringify(shopData);
-        const expiryDate = new Date();
-        expiryDate.setTime(expiryDate.getTime() + (7 * 24 * 60 * 60 * 1000)); // Set cookie to expire in 7 days
-        document.cookie = `${cookieName}=${encodeURIComponent(cookieValue)}; expires=${expiryDate.toUTCString()}; path=/`;
-    };
-
-    const fetchShopData = async () => {
-        const retailerData = getBharatLinkerRetailerCookie();
-        if (retailerData) {
-
-            const shopId = retailerData.id;
-            try {
-                const response = await axios.get(`${RETAILER_SERVER}/shop/getshopdetails?shopId=${shopId}`);
-                const shopData = response.data.shop;
-
-                setShop(shopData);
-                setShopImages(shopData.shopImages || []);
-                setPincodes(shopData.pinCodes || []);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching shop details:', error);
+    useEffect(() => {
+        if (shop === null) {
+            const retailerData = getBharatLinkerRetailerCookie();
+            if (retailerData) {
+                dispatch(fetchShopData(retailerData.id));
             }
         }
-    };
-
-    useEffect(() => {
-        fetchShopData();
     }, []);
+
+    const [isInitialRender, setIsInitialRender] = useState(true);
+    useEffect(() => {
+        if (shop && !isInitialRender) {
+            setUpdatedShop(shop);
+        } else {
+            setIsInitialRender(false);
+        }
+    }, [shop]);
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file && shop) {
             setLoadingUpload(true);
-            const formData = new FormData();
-            formData.append('shopId', shop._id);
-            formData.append('images', file);
-
-            axios.post(`${RETAILER_SERVER}/shop/uploadshopimage`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-                .then(response => {
-                    setShopImages(prevImages => [...prevImages, response.data.images[0]]);
+            dispatch(uploadShopImage({ shopId: shop._id, file }))
+                .then(() => {
                     toast.success('Image uploaded successfully!');
                 })
-                .catch(error => {
-                    console.error('Error uploading image:', error);
+                .catch(() => {
                     toast.error('Error uploading image.');
                 })
                 .finally(() => {
@@ -99,121 +70,91 @@ const RetailerShopFragment = () => {
     };
 
     const handleImageDelete = (index) => {
-
         const imageToDelete = shopImages[index];
-        const deleteUrl = `${RETAILER_SERVER}/shop/deleteshopimage?shopId=${shop?._id}&imageUrl=${encodeURIComponent(imageToDelete)}`;
-
         setLoadingDelete(true);
-
-        axios.delete(deleteUrl)
-            .then(response => {
-                setShopImages(prevImages => prevImages.filter((_, i) => i !== index));
-                toast.success('Image deleted successfully!');
-            })
-            .catch(error => {
-                console.error('Error deleting image:', error);
-                toast.error('Error deleting image.');
-            })
-            .finally(() => {
-                setLoadingDelete(false);
-            });
-    };
-
-    const triggerFileInput = (inputId) => {
-        document.getElementById(inputId).click();
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setUpdatedShop({ ...updatedShop, [name]: value });
+        dispatch(deleteShopImage({ shopId: shop._id, imageUrl: imageToDelete }))
+            .then(() => toast.success('Image deleted successfully!'))
+            .catch(() => toast.error('Error deleting image.'))
+            .finally(() => setLoadingDelete(false));
     };
 
     const toggleEditMode = () => {
         setIsEditing(!isEditing);
-        setUpdatedShop(shop);
     };
 
-    const handleSaveChanges = async () => {
-        // Validate fields
-        const requiredFields = ['shopName', 'email', 'address', 'phoneNumber', 'pinCodes'];
-        for (const field of requiredFields) {
-            if (!updatedShop[field] || (Array.isArray(updatedShop[field]) && updatedShop[field].length === 0)) {
-                toast.error(`${field} cannot be empty.`);
-                return; // Exit the function if a required field is empty
-            }
-        }
-
+    const handleSaveChanges = () => {
         setLoadingUpdate(true);
-        try {
-            const response = await axios.post(`${RETAILER_SERVER}/shop/updateshopdata?shopId=${shop?._id}`, updatedShop);
-            setShop(response.data.shop);
-            setBharatLinkerRetailerCookie(response.data.shop);
-            toast.success('Shop details updated successfully!');
-            setIsEditing(false);
-        } catch (error) {
-            console.error('Error updating shop details:', error);
-            toast.error('Error updating shop details.');
-        } finally {
-            setLoadingUpdate(false);
-        }
+        const updatedData = { shopId: shop._id, updatedShop };
+        dispatch(updateShopData(updatedData))
+            .then(() => {
+                // Fetch the latest shop data after successful update
+                dispatch(fetchShopData(shop._id));
+                setUpdatedShop(shop);
+                toast.success('Shop details updated successfully!');
+                setIsEditing(false);
+            })
+            .catch(() => {
+                toast.error('Error updating shop details.');
+            })
+            .finally(() => setLoadingUpdate(false));
     };
 
 
     const handleAddPincode = (newPincode) => {
-        if (newPincode && pincodes.length < maxPincodes) {
-            setPincodes(prevPincodes => [...prevPincodes, newPincode]);
-            setUpdatedShop({ ...updatedShop, pinCodes: [...pincodes, newPincode] });
+        if (newPincode && pincodes.length < 5) {
+            dispatch(addPincode(Number(newPincode)));
+            inputRef.current.value = ''; // Clear input
+            setUpdatedShop(shop);
         }
     };
 
     const handleRemovePincode = (index) => {
-        const updatedPincodes = pincodes.filter((_, i) => i !== index);
-        setPincodes(updatedPincodes);
-        setUpdatedShop({ ...updatedShop, pinCodes: updatedPincodes });
+        dispatch(removePincode(index));
+        setUpdatedShop(shop);
+    };
+
+    // Input change handler for controlled inputs
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUpdatedShop((prevShop) => ({
+            ...prevShop,
+            [name]: value,
+        }));
     };
 
     const toggleAddress = () => setShowAddress(!showAddress);
     const toggleContact = () => setShowContact(!showContact);
 
+    if (!shop || loading) return <div style={{
+        width: "100vw", height: "100vh",
+        display: "flex", justifyContent: "center", alignItems: "center"
+    }}>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+
     return (
         <div className="retailer-shop-fragment">
             <ToastContainer />
             <div className="retailer-shop-images">
-                {shopImages.length > 0 && (
-                    shopImages.slice(0, maxImages).map((image, index) => (
-                        <div className="retailer-image-container" key={index}>
-                            <img src={image} alt={`Shop Image ${index + 1}`} className="retailer-shop-image" />
-                            <div className="delete-icon" onClick={() => handleImageDelete(index)}>
-                                {loadingDelete ? 'Deleting...' : 'Delete'}
-                            </div>
+                {(shopImages?.length > 0 ? shopImages.slice(0, maxImages) : [])?.map((image, index) => (
+                    <div className="retailer-image-container" key={index}>
+                        <img src={image} alt={`Shop Image ${index + 1}`} className="retailer-shop-image" />
+                        <div className="delete-icon" onClick={() => handleImageDelete(index)}>
+                            {loadingDelete ? 'Deleting...' : 'Delete'}
                         </div>
-                    ))
-                )}
-                {shopImages.length < maxImages && (
-                    Array.from({ length: maxImages - shopImages.length }).map((_, index) => (
-                        <div className="retailer-image-upload-container" key={index}>
-                            <div
-                                className="shop-image-empty"
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => triggerFileInput('image-upload')}
-                            >
-                                <RiImageAddLine size={50} className="shop-image-empty-icon" />
-                            </div>
-                            <div className="delete-icon" onClick={() => triggerFileInput('image-upload')}>
-                                {loadingUpload ? 'uploading...' : 'upload'}
-                            </div>
+                    </div>
+                ))}
+                {shopImages?.length < maxImages && (
+                    <div className="retailer-image-upload-container">
+                        <div
+                            className="shop-image-empty"
+                            onClick={() => document.getElementById('image-upload').click()}
+                        >
+                            {loadingUpload ? 'Uploading...' : <RiImageAddLine size={50} />}
                         </div>
-                    ))
+                    </div>
                 )}
             </div>
-
-            <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                style={{ display: 'none' }}
-                id="image-upload"
-            />
+            <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} id="image-upload" />
 
             <div className="retailer-shop-details">
                 <div className="retailer-details-info">
@@ -225,14 +166,14 @@ const RetailerShopFragment = () => {
                         <input
                             type="text"
                             name="shopName"
-                            value={updatedShop.shopName || ''}
-                            onChange={handleInputChange}
+                            value={updatedShop?.shopName || ''}  // Use updatedShop for value
+                            onChange={handleInputChange}          // Controlled input
                             placeholder="Shop Name"
                             className="retailer-input"
                         />
+
                     )}
                 </div>
-
                 <div className='retailer-page-email'>
                     {!isEditing ? (
                         <div className="retailer-email-title">Email: {shop?.email}</div>
@@ -268,7 +209,6 @@ const RetailerShopFragment = () => {
                         )}
                     </div>
                 )}
-
                 <div className="retailer-shop-divider"></div>
 
                 <div className="retailer-shop-toggle-section" onClick={toggleContact} style={{ cursor: 'pointer' }}>
@@ -293,8 +233,6 @@ const RetailerShopFragment = () => {
                 )}
                 <div className="retailer-shop-divider"></div>
 
-
-
                 <div className="retailer-pincode-section">
                     <div className="retailer-pincode-title">Pincodes:</div>
                     {pincodes.map((pincode, index) => (
@@ -313,26 +251,14 @@ const RetailerShopFragment = () => {
                                     className='retailer-pincode-section-add-pincode-input'
                                     placeholder="Add Pincode"
                                     ref={inputRef}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            handleAddPincode(e.target.value);
-                                            e.target.value = ''; // Clear input after adding
-                                        }
-                                    }}
-                                />
-                                <FaPlus onClick={() => {
-                                    if (inputRef.current) {
-                                        handleAddPincode(inputRef.current.value);
-                                        inputRef.current.value = ''; // Clear input after adding
-                                    }
-                                }} size={30} />
+                                    onKeyPress={(e) => { if (e.key === 'Enter') { handleAddPincode(e.target.value); } }} />
+
+                                <FaPlus size={30} className='retailer-pincode-section-add-pincode-button' onClick={() => handleAddPincode(inputRef.current.value)} />
+
                             </div>
                         </div>
                     )}
                 </div>
-
-
-
                 <div className="retailer-shop-action-buttons">
                     {isEditing ? (
                         <div style={{ display: "flex", widthL: "100vw" }}
@@ -340,14 +266,15 @@ const RetailerShopFragment = () => {
                         >
                             <div className='retailer-shop-action-buttons-close' onClick={() => setIsEditing(!isEditing)} >
                                 close
-                                {/* <IoClose size={30} className="retailer-discard-button" /> */}
                             </div>
                             <div className='retailer-shop-action-buttons-save' onClick={handleSaveChanges}>
-                                Save
+                                {loadingUpdate ? <>saving...</> : <>save</>}
                             </div>
                         </div>
                     ) : (
-                        <FiEdit onClick={toggleEditMode} className="retailer-edit-button" />
+                        <div onClick={toggleEditMode} className="retailer-edit-button" >
+                            <FiEdit />Edit
+                        </div>
                     )}
                 </div>
             </div>
@@ -356,4 +283,3 @@ const RetailerShopFragment = () => {
 };
 
 export default RetailerShopFragment;
-

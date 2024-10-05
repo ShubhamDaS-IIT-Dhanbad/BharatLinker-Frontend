@@ -77,7 +77,7 @@
     background-color: #9ef0a1;
 }
 .retailer-image-empty-container {
-    min-width: 90vw; /* Width of the empty div */
+    min-width: 90vw;
     max-height: 300px; /* Fixed height for empty image divs */
     border: 1px dashed #ccc; /* Dashed border for empty state */
     background-color: #f0f0f0; /* Background color for empty state */
@@ -156,10 +156,13 @@ input[type="file"] {
 
 
 .retailer-edit-button {
-    padding: 10px;
-    margin: 10px;
+ background-color: #9ef0a1;
+    padding: 10px;display: flex;justify-content: center;
+    align-items: center;
+    margin: 10px;gap: 10px;
     background-color: none;
-    font-size: 30px;
+    font-size: 30px;font-weight: 800;
+    margin-top: 50px;border-radius: 5px;
 }
 
 .retailer-save-discard {
@@ -228,6 +231,9 @@ padding: 10px;
     border: 1px solid rgb(111, 111, 230);background-color: none;
     width: 85%;height: 50px;border-radius: 8px;
     padding-left: 10px;font-weight: 900;
+}
+.retailer-pincode-section-add-pincode-button{
+    background-color: white;
 }
 .retailer-discard-button{
     color: black;

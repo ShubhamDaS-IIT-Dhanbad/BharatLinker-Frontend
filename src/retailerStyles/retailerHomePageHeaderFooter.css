@@ -6,15 +6,16 @@
 .headerDivUserLocationName-shop-name {
     font-size: 16px;
     padding-left: 5px;
-    color: rgb(42, 255, 67);
+    color: rgb(105, 255, 250);
     font-weight: 900;
-    text-shadow: 0px 0px 0px rgb(169, 210, 174); /* Change values as needed */
+    text-shadow: 0px 0px 0px rgb(150, 248, 246); /* Change values as needed */
 }
 
 .headerDiv {
     display: flex;flex-direction: column;
     justify-content: space-between;align-items: flex-start;
-    background-color: rgb(161, 132, 255);gap: 10px;
+    background-color: rgb(20, 20, 20);
+    gap: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);color: white;
     position: fixed;
     top: 0;z-index: 9999;
@@ -78,7 +79,7 @@
     display: flex;
     justify-content: space-evenly;width: 100vw;
     padding: 10px;position: fixed;bottom: 0;
-    background-color: rgb(161, 132, 255);
+    background-color: rgb(20, 20, 20);
     border-top: 1px solid #ccc;color: white;
 }
 
@@ -93,6 +94,7 @@
     color: #ff004c; /* Change to your desired hover color */
 }
 .homeFooterShop.active {
-    color: rgb(42, 255, 67); /* Example active color */
+    color: rgb(97, 255, 242);
+    text-shadow: 0px 0px 0px rgb(150, 248, 246);
     font-weight: bold;
 }
