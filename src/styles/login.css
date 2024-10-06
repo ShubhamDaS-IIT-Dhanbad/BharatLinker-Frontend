@@ -1,0 +1,38 @@
+.login-container{
+    height: 100vh;width: 100vw;overflow: hidden;
+    background-color: #363333; /* Light background for better contrast */
+    display: flex;flex-direction: column;
+    align-items: center;justify-content: space-between;
+}
+.login-container-img{
+    padding: 0;margin: 0;
+    max-width: 100vw;width: 100vw;
+}
+
+.login-container-desc{
+    flex-grow: 1;display: flex;
+    color: rgba(255, 255, 255, 0.92);align-items: center;
+    text-align: center;margin-top: 10px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+    flex-direction: column;
+}
+.login-container-google-login-button{
+    position: fixed;bottom: 10vh;border-radius: 50px;display: flex;
+    align-items: center;padding: 0px 10px 0px 0px;
+    width: 90vw;height: 60px;background-color: aliceblue;
+    color: #363333;gap: 20px;justify-content: center;
+    font-weight: 800;font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+.login-container-google-login-button img{
+    height: 59px;position: absolute;left: 0px;
+}
+
+
+.login-container-google-login-button:hover {
+    background-color: #ffffff;scale: 1.05;
+}
+
+/* Active (clicked) state */
+.login-container-google-login-button:active {
+    background-color: #ffffff;
+}

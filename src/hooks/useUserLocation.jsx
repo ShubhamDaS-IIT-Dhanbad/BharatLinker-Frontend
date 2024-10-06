@@ -41,7 +41,7 @@ export const useUserLocation = () => {
       const data = await response.json();
       const locationPincode = data.address.postcode || 'Add Pincode';
       const locationCity = data.address.city || data.address.town || data.address.village || data.address.state_district || data.address.state || 'Unknown City';
-
+      console.log(locationPincode,locationCity)
       // Validate pincode to ensure it's a number
       if (!isNaN(locationPincode)) {
         setAddress({ city: locationCity, postcode: locationPincode });

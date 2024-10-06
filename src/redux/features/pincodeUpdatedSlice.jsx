@@ -5,7 +5,9 @@ const pincodeSlice = createSlice({
   initialState: {
     isUpdatedPincode: true,
     isUpdatedProduct: false, 
-    isUpdatedShop: false, 
+    isUpdatedShop: false,
+    isUpdatedRefurbish: false, 
+    isUpdatedUserProduct: false, 
   },
   reducers: {
     updatePincode: (state, action) => {
@@ -17,12 +19,24 @@ const pincodeSlice = createSlice({
     updateShop: (state) => {
       state.isUpdatedShop = true;
     },
+    updateRefurbish: (state) => {
+      state.isUpdatedRefurbish = true;
+    },
+    updateUserRefurbish: (state) => {
+      state.isUpdatedUserProduct = true;
+    },
 
     reupdateProduct: (state) => {
         state.isUpdatedProduct = false; 
       },
       reupdateShop: (state) => {
         state.isUpdatedShop = false;
+      },
+      reupdateRefurbish: (state) => {
+        state.isUpdatedRefurbish = false;
+      },
+      reupdateUserRefurbish: (state) => {
+        state.isUpdatedUserProduct= false;
       }
   },
 });
@@ -31,8 +45,12 @@ export const {
   updatePincode,
   updateProduct,
   updateShop,
+  updateRefurbish,
+  updateUserRefurbish,
   reupdateProduct,
   reupdateShop,
+  reupdateRefurbish,
+  reupdateUserRefurbish
 } = pincodeSlice.actions;
 
 export default pincodeSlice.reducer;

@@ -7,4 +7,5 @@ export const RETAILER_SERVER='https://bharat-linker-retailer.vercel.app'
 export const RETAILER_PRODUCT_SERVER='https://bharat-linker-products.vercel.app'
 // export const RETAILER_PRODUCT_SERVER='http://localhost:3001'
 // export const RETAILER_PRODUCT_SERVER='http://localhost:3001'
+export const USER_PRODUCT_SERVER='https://bharat-linker-refurbished-server.vercel.app'
 export default REACT_APP_API_URL;

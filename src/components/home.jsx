@@ -41,7 +41,7 @@ const Home = () => {
 
     // Helper function to determine active style
     const getActiveStyle = (path) => {
-        return location.pathname === path ? { color: 'rgba(0, 248, 248, 1)', fontWeight: 'bolder'} : {};
+        return location.pathname === path ? { color: 'black', fontWeight: 'bolder'} : {};
     };
 
     return (
@@ -54,19 +54,19 @@ const Home = () => {
 
             <div id='home-footer'>
                 <div id='home-footer-shop' onClick={() => navigate('/')} style={getActiveStyle('/')}>
-                    <RiSunCloudyLine size={40} />
+                    <RiSunCloudyLine size={45} />
                     Home
                 </div>
                 <div id='home-footer-shop' onClick={() => navigate('/search')} style={getActiveStyle('/product')}>
-                    <TbCategoryPlus size={40} />
+                    <TbCategoryPlus size={45} />
                     Products
                 </div>
                 <div id='home-footer-shop' onClick={() => navigate('/shop')} style={getActiveStyle('/shop')}>
-                    <MdOutlineStore size={40} />
+                    <MdOutlineStore size={45} />
                     Shop
                 </div>
                 <div id='home-footer-shop' onClick={handleRetailerClick} style={getActiveStyle('/retailer')}>
-                    <MdOutlineAdminPanelSettings size={40} />
+                    <MdOutlineAdminPanelSettings size={45} />
                     Retailer
                 </div>
             </div>

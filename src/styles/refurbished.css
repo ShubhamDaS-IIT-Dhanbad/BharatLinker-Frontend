@@ -1,0 +1,206 @@
+/* Refurbished Header Styles */
+.refurbished-header-show,
+.refurbished-header-hide {
+    display: flex;
+    flex-direction: column;
+    max-width: 100vw;
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    min-width: 100vw;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    z-index: 10000000000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+#refurbished-header-ham {
+    margin-left: 4px;
+    color: rgb(0, 0, 0);
+}
+
+.refurbished-header-show {
+    padding: 15px 0 0;
+    height: 100px;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.refurbished-header-hide {
+    padding: 10px 0 0;
+    transform: translateY(-55px);
+}
+
+.refurbished-header-user {
+    display: flex;
+    height: 52px;
+    padding: 0 10px;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#refurbished-header-location-div {
+    padding-left: 10px;
+}
+
+#refurbished-header-location {
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.refurbished-header-parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.refurbished-header-category {
+    margin-right: 30px;
+}
+
+#refurbished-header-location-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    font-weight: 900;
+    color: rgb(0, 0, 0);
+    }
+
+#refurbished-header-search-div {
+    height: 40px;
+    padding: 0px 7px 7px 7px;
+    display: flex;
+}
+.refursection-mag-div{
+    margin-top: 120px;
+    width: 100vw;
+}
+.refursection-mag-div img{
+    max-width: 100vw;
+}
+
+#refurbished-header-search-div-1 {
+    display: flex;
+    justify-content: center;
+    border: 1px solid black;
+    align-items: center;
+    background-color: white;
+    border-radius: 11px;
+    flex-grow: 1;
+}
+
+#refurbished-header-search-icon {
+    font-size: 29px;
+    margin-left: 10px;
+    color: rgb(0, 0, 0);
+}
+
+/* Autofill for input fields in Chrome, Edge, Safari */
+#refurbished-header-input:-webkit-autofill,
+#refurbished-header-input:-webkit-autofill:hover,
+#refurbished-header-input:-webkit-autofill:focus {
+    background-color: white !important;
+    color: black !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+/* General input styling */
+#refurbished-header-input {
+    border: none;
+    color: rgb(0, 0, 0);
+    font-size: 12px;
+    padding-left: 10px;
+    flex-grow: 1;
+    outline: none;
+    background-color: white;
+}
+.user-dashboard-products-list{
+   margin-top: 20px;
+}
+#refurbished-footer{
+    background-color: rgb(46, 47, 52);z-index: 90000;
+    position: fixed;bottom: 0;
+    width: 100vw;height: 77px;
+    display: flex;justify-content: center;align-items: center;
+}
+#refurbished-footer-item{
+    width: 90%;border: 1px solid black;
+    height: 70%;border-radius: 20px;
+    display: flex;justify-content: center;align-items: center;
+    color: rgb(255, 255, 255);border: 2px solid white;
+    font-weight: 900;
+}
+
+
+
+
+
+
+.refurbished-product-card {
+    color: black;
+    width: 47vw;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    height: 340px;
+    margin-top: 10px;
+    z-index: 3;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.refurbished-product-card-top {
+    height: 200px;background-color: black;
+    border-radius: 5px;
+}
+
+.refurbished-product-card-top-image {
+    width: 100%;max-width: 200px;height: 200px;
+    background-color: rgb(246, 247, 247);
+  border-radius: 5px;
+}
+
+#refurbished-product-card-shop-price {
+    display: flex;
+    flex-direction: column;
+    font-size: 19px;background-color: bisque;
+    padding: 3px 5px;
+    font-weight: 900;
+    justify-content: space-between;
+}
+
+.refurbished-product-card-bottom {
+    width: 100%;
+    display: flex;flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #000000;
+    padding: 20px 5px 20px 5px ;
+}
+.refurbished-product-card-shop-name {
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+.refurbished-product-card-shop {
+    font-size: 21px;
+    margin-top: 19px;
+    color: rgb(0, 0, 0);
+    font-weight: 1000;
+}
+.refurbished-products-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;margin-bottom: 100px;
+}
+.load-more-container{
+    margin-bottom: 100px;
+}

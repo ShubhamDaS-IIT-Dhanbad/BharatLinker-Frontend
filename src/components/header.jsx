@@ -7,9 +7,11 @@ import { TbChevronDown } from "react-icons/tb";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUserPincode } from '../hooks/useUserPincode.jsx';
+import Cookies from 'js-cookie';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, resetProducts, setCurrentPage } from '../redux/features/searchProductSlice.jsx';
+import { TbCategory2 } from "react-icons/tb";
 
 function Navbar({ address }) {
     const dispatch = useDispatch();
@@ -19,14 +21,8 @@ function Navbar({ address }) {
     const navigate = useNavigate();
 
     const {
-        userPincodes,
-        inputValue,
-        handleInputChange,
-        handleAddPincode,
-        togglePincodeSelection,
-        handleDeletePincode
+        userPincodes
     } = useUserPincode();
-
 
     useEffect(() => {
         const handleScroll = () => {
@@ -57,18 +53,31 @@ function Navbar({ address }) {
         }
     };
 
+    // Function to handle user icon click
+    const handleUserIconClick = () => {
+        const userCookie = Cookies.get('BharatLinkerUser'); // Check for the cookie
+        if (!userCookie) {
+            // If the cookie is not present, redirect to the login page
+            navigate('/login');
+        } else {
+            navigate('/dashboard');
+        }
+    };
 
     return (
         <div className={hideHeader ? 'header-div-hide' : 'header-div-show'}>
-            <div className='header-div-user'>
-                <HiOutlineUserCircle id='header-div-ham' size={35} />
-                <div id='header-div-user-location-div'>
-                    <p id='header-div-user-location'>Location</p>
-                    <div id='header-div-user-location-name' onClick={() => navigate('/pincode')}>
-                        {address.city} {address.postcode}
-                        <TbChevronDown size={15} />
+            <div className='header-div-parent'>
+                <div className='header-div-user' >
+                    <HiOutlineUserCircle id='header-div-ham' size={35} onClick={handleUserIconClick}/>
+                    <div id='header-div-user-location-div'>
+                        <p id='header-div-user-location'>Location</p>
+                        <div id='header-div-user-location-name' onClick={() => navigate('/pincode')}>
+                            {address.city} {address.postcode}
+                            <TbChevronDown size={15} />
+                        </div>
                     </div>
                 </div>
+                <TbCategory2 size={25} className='header-div-parent-refurbished' onClick={() => { navigate('/refurbished') }} />
             </div>
 
             <div id='header-div-search-div'>
@@ -83,9 +92,6 @@ function Navbar({ address }) {
                     />
                 </div>
             </div>
-
-          
-
         </div>
     );
 }

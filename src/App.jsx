@@ -10,6 +10,8 @@ import RetailerRoutes from './retailerComponent/retailerRoutes.jsx';
 import RetailerHomePageHeaderFooter from './retailerComponent/retailerHomePageHeaderFooter.jsx';
 import RetailerProductHeaderFooter from './retailerComponent/retailerProductHeaderFooter.jsx';
 
+import Dashboard from "./components/dashboard.jsx";
+
 import Home from './components/home.jsx';
 import Retailer from './retailerComponent/retailer.jsx';
 import SearchPage from './components/searchPage.jsx';
@@ -17,6 +19,10 @@ import ShopPage from './components/searchShop.jsx';
 import SingleProduct from './components/singleProduct.jsx';
 import SingleShop from './components/singleShop.jsx';
 import Pincode from './components/pincode.jsx';
+import Refurbished from './components/refurbished.jsx';
+import Login from "./components/login.jsx";
+
+import RefurbishedProductUpload from './components/refurbishedproductupload.jsx';
 
 function App() {
   const { address, userPincodes } = useUserLocation();
@@ -72,14 +78,22 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
       {isRetailerProductHeaderFooter && <RetailerProductHeaderFooter />}
 
       <Routes>
+      <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/product/:productId" element={<SingleProduct />} />
         <Route path="/shop/:shopId" element={<SingleShop />} />
         <Route path="/pincode" element={<Pincode />} />
         <Route path='/retailer' element={<Retailer />} />
+        <Route path='/refurbished' element={<Refurbished address={address}/>} />
         <Route path="/*" element={<RetailerRoutes />} />
+
+
+
+        <Route path="/refurbished/product/upload" element={<RefurbishedProductUpload />} />
       </Routes>
     </>
   );

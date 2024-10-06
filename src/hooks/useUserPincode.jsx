@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { reupdateProduct, reupdateShop } from '../redux/features/pincodeUpdatedSlice';
+import { reupdateProduct, reupdateShop,reupdateRefurbish } from '../redux/features/pincodeUpdatedSlice';
 import { useDispatch } from 'react-redux';
 
 export const useUserPincode = () => {
@@ -73,6 +73,7 @@ export const useUserPincode = () => {
     expires.setTime(expires.getTime() + 60 * 60 * 1000); // 1 hour expiration
     dispatch(reupdateProduct());
     dispatch(reupdateShop());
+    dispatch(reupdateRefurbish());
     document.cookie = `userpincodes=${encodeURIComponent(JSON.stringify(pincodes))}; expires=${expires.toUTCString()}; path=/`;
   };
 
