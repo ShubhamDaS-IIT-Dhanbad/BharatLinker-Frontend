@@ -1,38 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux'; // Added missing import
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { USER_PRODUCT_SERVER } from '../../public/constant.js';
 import '../retailerStyles/retailerUploadProduct.css';
 import { RiImageAddLine } from 'react-icons/ri';
+import { HiOutlineUserCircle } from 'react-icons/hi'; // Added missing import
+import { IoHomeOutline } from 'react-icons/io5'; // Added missing import
+import { TbShieldMinus } from 'react-icons/tb'; // Added missing import
+import { BiSearchAlt } from 'react-icons/bi'; // Added missing import
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import '../styles/refurbishedproductupload.css';
+import { IoIosCloseCircleOutline } from "react-icons/io";
 const UploadProduct = () => {
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
-    const [pincodes, setPincodes] = useState(''); // To capture user input for pincodes
-    const [keywords, setKeywords] = useState(''); // To capture keywords as a string
+    const [pincodes, setPincodes] = useState('');
+    const [keywords, setKeywords] = useState('');
     const [shop, setShop] = useState('');
     const [images, setImages] = useState([null, null, null]);
     const [isUploading, setIsUploading] = useState(false);
+    const { displayName, email } = useSelector(state => state.user);
 
-    // Function to get BharatLinkerUser cookie
     const getBharatLinkerUserCookie = () => {
         const cookieName = 'BharatLinkerUser=';
         const cookieArray = document.cookie.split('; ');
         const foundCookie = cookieArray.find(row => row.startsWith(cookieName));
-        const data = foundCookie ? JSON.parse(decodeURIComponent(foundCookie.split('=')[1])) : null;
-        return data;
+        return foundCookie ? JSON.parse(decodeURIComponent(foundCookie.split('=')[1])) : null;
     };
 
     useEffect(() => {
-        const userData = getBharatLinkerUserCookie(); // Retrieve user data from cookie
+        const userData = getBharatLinkerUserCookie();
         if (userData) {
-            setShop(userData.uid); // Assuming the user data has an 'uid'
+            setShop(userData.uid);
         }
-    }, []);
+    }, []); // Added empty dependency array
 
-    // Handle image change
     const handleImageChange = (index, files) => {
         if (files && files[0]) {
             const updatedImages = [...images];
@@ -41,7 +48,6 @@ const UploadProduct = () => {
         }
     };
 
-    // Handle drag and drop
     const handleDrop = (index, event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -49,20 +55,18 @@ const UploadProduct = () => {
         handleImageChange(index, files);
     };
 
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault(); // Prevent default form submission
         setIsUploading(true);
 
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
         formData.append('price', price);
-        formData.append('uid', shop); // Assuming shop is the user ID
-        formData.append('keywords', keywords); // Use the keywords from user input
-        formData.append('pincodes', pincodes); // Use the pincodes from user input
+        formData.append('uid', shop);
+        formData.append('keywords', keywords);
+        formData.append('pincodes', pincodes);
 
-        // Append images
         images.forEach((image) => {
             if (image) {
                 formData.append('images', image);
@@ -76,26 +80,23 @@ const UploadProduct = () => {
                 },
             });
             toast.success('Product uploaded successfully!');
-            // Reset form fields after successful submission
             setTitle('');
             setDescription('');
             setPrice('');
-            setPincodes(''); // Reset pincodes
-            setKeywords(''); // Reset keywords
+            setPincodes('');
+            setKeywords('');
             setImages([null, null, null]);
         } catch (error) {
-            toast.error('Error uploading product. Please try again.');
+            toast.error(`Error uploading product: ${error.response ? error.response.data.message : 'Please try again.'}`);
         } finally {
             setIsUploading(false);
         }
     };
 
-    // Trigger file input click
     const triggerFileInput = (index) => {
         document.getElementById(`image-upload-${index}`).click();
     };
 
-    // Remove selected image
     const removeImage = (index) => {
         const updatedImages = [...images];
         updatedImages[index] = null;
@@ -103,97 +104,109 @@ const UploadProduct = () => {
     };
 
     return (
-        <div className="upload-product-container">
-            <form onSubmit={handleSubmit} className="upload-form">
-                <div className="image-upload-section">
-                    <div className="image-upload-container">
-                        {images.map((image, idx) => (
-                            <div
-                                key={idx}
-                                className="image-upload-box"
-                                onDrop={(e) => handleDrop(idx, e)}
-                                onDragOver={(e) => e.preventDefault()}
-                            >
-                                {image ? (
-                                    <>
-                                        <img
-                                            src={URL.createObjectURL(image)}
-                                            alt={`Preview ${idx + 1}`}
-                                            className="image-preview"
-                                        />
-                                        <button className="image-remove-button" type="button" onClick={() => removeImage(idx)}>Remove</button>
-                                    </>
-                                ) : (
-                                    <div className="image-input" onClick={() => triggerFileInput(idx)}>
-                                        <RiImageAddLine size={80} className="shop-image-empty-icon" />
-                                    </div>
-                                )}
-                                <input
-                                    style={{ display: 'none' }}
-                                    type="file"
-                                    accept="image/*"
-                                    id={`image-upload-${idx}`}
-                                    className="image-input"
-                                    onChange={(e) => handleImageChange(idx, e.target.files)}
-                                />
-                            </div>
-                        ))}
-                    </div>
+        <>
+            <div className='refurbished-upload-product-header-show'>
+                < HiOutlineUserCircle id='dashboard-header-ham' size={35} onClick={() => { navigate('/dashboard') }} />
+                <div className='refurbished-upload-product-header-show-section'>
+                    REFURBISHED
                 </div>
+                <IoIosCloseCircleOutline size={35} className='dashboard-header-parent-refurbished' onClick={() => navigate('/')} />
+            </div>
 
-                {/* Form Fields */}
-                <div className="form-group-title-div">
-                    <label>Title:</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group-description-div">
-                    <label>Description:</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group-price-div">
-                    <label>Price:</label>
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group-pincodes-div">
-                    <label>Pincodes:</label>
-                    <input
-                        type="text"
-                        value={pincodes}
-                        onChange={(e) => setPincodes(e.target.value)} // Capture pincodes from user input
-                        required
-                    />
-                </div>
-                <div className="form-group-keywords-div">
-                    <label>Keywords:</label>
-                    <input
-                        type="text"
-                        value={keywords}
-                        onChange={(e) => setKeywords(e.target.value)} // Capture keywords as a string
-                        required
-                    />
-                </div>
-                <div className="upload-button-div">
-                    <button className="upload-button" type="submit" disabled={isUploading}>
-                        {isUploading ? 'Uploading...' : 'Upload Product'}
+            <div className="refurbished-upload-container">
+                <form className="upload-form" onSubmit={handleSubmit}>
+                    <div className="image-upload-section">
+                        <div className="refurbished-image-upload-container">
+                            {images.map((image, idx) => (
+                                <div
+                                    key={idx}
+                                    className="refurbished-image-upload-box"
+                                    onDrop={(e) => handleDrop(idx, e)}
+                                    onDragOver={(e) => e.preventDefault()}
+                                >
+                                    {image ? (
+                                        <>
+                                            <img
+                                                src={URL.createObjectURL(image)}
+                                                alt={`Preview ${idx + 1}`}
+                                                className="refurbished-image-preview"
+                                            />
+                                            <button className="image-remove-button" type="button" onClick={() => removeImage(idx)}>Remove</button>
+                                        </>
+                                    ) : (
+                                        <div className="refurbished-image-input" onClick={() => triggerFileInput(idx)}>
+                                            <RiImageAddLine size={80} className="shop-image-empty-icon" />
+                                        </div>
+                                    )}
+                                    <input
+                                        style={{ display: 'none' }}
+                                        type="file"
+                                        accept="image/*"
+                                        id={`image-upload-${idx}`}
+                                        className="image-input"
+                                        onChange={(e) => handleImageChange(idx, e.target.files)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Form Fields */}
+                    <div className="refurbished-form-group-title-div">
+                        <input
+                            type="text"
+                            value={title} // Use the state variable instead of a hardcoded string
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder='Product Title'
+                            required
+                        />
+                    </div>
+
+                    <div className="refurbished-form-group-description-div">
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder='Product Description'
+                        />
+                    </div>
+                    <div className="refurbished-form-group-price-div">
+                        <input
+                            type="number"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                             placeholder='Product Price'
+                            required
+                        />
+                        
+                    </div>
+
+                    <div className="refurbished-form-group-price-div">
+                        <input
+                            type="text"
+                            value={pincodes}
+                            onChange={(e) => setPincodes(e.target.value)}
+                             placeholder='Pincode'
+                            required
+                        />
+                    </div>
+                    <div className="refurbished-form-group-price-div">
+                        <input
+                            type="text"
+                            value={keywords}
+                            onChange={(e) => setKeywords(e.target.value)}
+                             placeholder='keywords [seperated by comma]'
+                            required
+                        />
+                    </div>
+                    <button type="submit" id='refurbished-upload-product-footer' disabled={isUploading}>
+                        <div id='refurbished-footer-item'>
+                            {isUploading ? 'Uploading...' : 'Submit Refurbished'}
+                        </div>
                     </button>
-                </div>
-            </form>
-            <ToastContainer />
-        </div>
+                </form>
+                <ToastContainer />
+            </div>
+        </>
     );
 };
 

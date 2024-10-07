@@ -65,7 +65,7 @@ const Dashboard = () => {
         if (!displayName) {
             navigate('/login');
         } else {
-            navigate('/product/add');
+            navigate('/refurbished/product/upload');
         }
     };
 
@@ -122,6 +122,8 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+
+            
             <div className='dashboard-welcome-img-div'>
             <img className='dashboard-welcome-img' src={w1}/>
             </div>

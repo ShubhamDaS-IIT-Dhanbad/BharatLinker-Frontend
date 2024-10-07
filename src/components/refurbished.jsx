@@ -21,50 +21,35 @@ const RefurbishedPage = ({ address }) => {
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState('');
   const [hideHeader, setHideHeader] = useState(false);
-  const refurbishedProducts = useSelector(state => state.refurbishedProducts.items); // Get products from Redux state
+  const refurbishedProducts = useSelector(state => state.refurbishedProducts.items);
   const { userPincodes } = useUserPincode();
   const selectedPincodes = userPincodes.filter(pin => pin.selected).map(pin => Number(pin.pincode));
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(true);
   const { currentPage, totalPages, hasMoreProducts, error } = useSelector(state => state.refurbishedProducts);
-
   const { isUpdatedRefurbish } = useSelector((state) => state.pincodestate);
 
   useEffect(() => {
     if (!isUpdatedRefurbish) {
-      try {
-        dispatch(resetProducts());
-        dispatch(fetchRefurbishedProducts({ searchQuery: searchInput.trim() || '', selectedPincodes, page: currentPage }));
-        dispatch(updateRefurbish());
-      } catch (error) {
-        console.error('Error fetching refurbished products:', error);
-      }
+      fetchProducts(); // Fetch products on initial load
     }
+    setLoading(false);
+    setFetching(false);
   }, []);
-  const [isInitialRender, setIsInitialRender] = useState(true);
-  useEffect(() => {
-    if (!isInitialRender) {
+
+  const fetchProducts = () => {
+    setLoading(true);
+    try {
       dispatch(resetProducts());
       dispatch(fetchRefurbishedProducts({ searchQuery: searchInput.trim() || '', selectedPincodes, page: currentPage }));
       dispatch(updateRefurbish());
-    } else {
-      setIsInitialRender(false);
+    } catch (error) {
+      console.error('Error fetching refurbished products:', error);
+    } finally {
+      setLoading(false);
+      setFetching(false);
     }
-  }, [searchInput]);
-
-
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setHideHeader(window.scrollY > 80);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
+  };
 
   const handleUploadClick = () => {
     const userCookie = Cookies.get('BharatLinkerUser');
@@ -76,29 +61,41 @@ const RefurbishedPage = ({ address }) => {
   };
 
   const handleSearchClick = () => {
-    setSearchInput(searchInput.trim());
+    fetchProducts(); // Fetch products when search icon is clicked
   };
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      setSearchInput(searchInput.trim());
+      fetchProducts(); // Fetch products when Enter key is pressed
     }
   };
 
-  // Handle "Load More" button click
   const handleLoadMore = () => {
     if (!loading && hasMoreProducts && !fetching) {
       setFetching(true);
-      dispatch(setCurrentPage(currentPage + 1)); // Increment current page
+      dispatch(setCurrentPage(currentPage + 1));
       dispatch(fetchRefurbishedProducts({ searchQuery: searchInput.trim(), selectedPincodes, page: currentPage + 1 })).finally(() => {
         setFetching(false);
       });
     }
   };
 
+  // Scroll header hide/show
+  useEffect(() => {
+    const handleScroll = () => {
+      setHideHeader(window.scrollY > 80);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   // Error handling
   if (error) return <div>Error: {error}</div>;
 
+  if (loading || fetching) return <>Loading...</>;
   return (
     <div className='refurbished-main-container'>
       <div className={hideHeader ? 'refurbished-header-hide' : 'refurbished-header-show'}>
@@ -129,6 +126,7 @@ const RefurbishedPage = ({ address }) => {
           </div>
         </div>
       </div>
+
       <div className='refursection-mag-div'>
         <img src={r1} alt="Refurbished section" />
       </div>
@@ -148,13 +146,14 @@ const RefurbishedPage = ({ address }) => {
             </div>
           ))
         ) : (
-          !loading && <div className='no-product-found'>
+          !loading && !fetching &&
+          <div className='no-product-found'>
             <TbClockSearch size={60} />
             <div>No Refurbished Product Found</div>
             <div style={{ fontWeight: "900" }}>In Your Area</div>
           </div>
         )}
-
+        {loading && <>Loading...</>}
         {hasMoreProducts && !loading && refurbishedProducts.length > 0 && (
           <div className='load-more-container'>
             <IoIosArrowDown size={30} className="load-more-container" onClick={handleLoadMore} />
