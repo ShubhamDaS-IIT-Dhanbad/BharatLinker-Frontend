@@ -4,6 +4,8 @@ import { HiOutlineUserCircle } from 'react-icons/hi';
 import { TbChevronDown, TbCategory2 } from 'react-icons/tb';
 import { BiSearchAlt } from 'react-icons/bi';
 import { SlCloudUpload } from 'react-icons/sl';
+
+import { IoHomeOutline } from "react-icons/io5";
 import { IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -110,7 +112,7 @@ const RefurbishedPage = ({ address }) => {
               </div>
             </div>
           </div>
-          <TbCategory2 size={25} className='refurbished-header-category' onClick={() => navigate('/')} />
+          <IoHomeOutline size={25} className='refurbished-header-category' onClick={() => navigate('/')} />
         </div>
 
         <div id='refurbished-header-search-div'>
