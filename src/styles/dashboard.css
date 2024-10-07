@@ -7,15 +7,16 @@
     position: fixed;
     top: 0;
     min-width: 100vw;
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
+    color: white;
+    background-color:rgb(19, 82, 240);
+    
     z-index: 10000000000;
     transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
 }
 
 #dashboard-header-ham {
     margin-left: 4px;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
 }
 
 .dashboard-header-show {
@@ -41,6 +42,7 @@
 
 #dashboard-header-user-location-div {
     padding-left: 10px;
+    color: rgb(255, 255, 255);
 }
 
 #dashboard-header-user-location {
@@ -162,7 +164,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 9px;
-    width: 100%;margin-top: 130px;
+    width: 100%;margin-top: 20px;
     margin-bottom: 100px;
 }
 
@@ -215,4 +217,20 @@
     margin-top: 19px;
     color: rgb(0, 0, 0);
     font-weight: 1000;
+}
+.dashboard-welcome-img-div{
+    width: 100vw;margin-top: 140px;
+    display: flex;justify-content: center;align-items: center;
+}
+.dashboard-welcome-img{
+    width: 85vw;
+    align-self: center;
+}
+
+
+#dashboard-refurbished-footer{
+    background-color:rgb(19, 82, 240);z-index: 90000;
+    position: fixed;bottom: 0;
+    width: 100vw;height: 77px;
+    display: flex;justify-content: center;align-items: center;
 }

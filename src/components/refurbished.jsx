@@ -12,6 +12,7 @@ import { fetchRefurbishedProducts, setCurrentPage, resetProducts } from '../redu
 import { updateRefurbish } from '../redux/features/pincodeUpdatedSlice.jsx';
 import { useUserPincode } from '../hooks/useUserPincode.jsx';
 import r1 from '../assets/refur.webp';
+import { TbClockSearch } from "react-icons/tb";
 
 import '../styles/refurbished.css';
 
@@ -103,7 +104,7 @@ const RefurbishedPage = ({ address }) => {
       <div className={hideHeader ? 'refurbished-header-hide' : 'refurbished-header-show'}>
         <div className='refurbished-header-parent'>
           <div className='refurbished-header-user'>
-            <HiOutlineUserCircle id='refurbished-header-ham' size={35} />
+            <HiOutlineUserCircle id='refurbished-header-ham' size={35} onClick={() => navigate('/dashboard')} />
             <div id='refurbished-header-location-div'>
               <p id='refurbished-header-location'>Location</p>
               <div id='refurbished-header-location-name' onClick={() => navigate('/pincode')}>
@@ -147,10 +148,14 @@ const RefurbishedPage = ({ address }) => {
             </div>
           ))
         ) : (
-          <p>No products found.</p>
+          !loading && <div className='no-product-found'>
+            <TbClockSearch size={60} />
+            <div>No Refurbished Product Found</div>
+            <div style={{ fontWeight: "900" }}>In Your Area</div>
+          </div>
         )}
 
-        {hasMoreProducts && !loading && (
+        {hasMoreProducts && !loading && refurbishedProducts.length > 0 && (
           <div className='load-more-container'>
             <IoIosArrowDown size={30} className="load-more-container" onClick={handleLoadMore} />
           </div>
@@ -160,7 +165,7 @@ const RefurbishedPage = ({ address }) => {
       {/* Refurbished Footer Section */}
       <div id='refurbished-footer'>
         <div id='refurbished-footer-item' onClick={handleUploadClick}>
-          Upload Your Product
+          Upload Refurbished
         </div>
       </div>
     </div>

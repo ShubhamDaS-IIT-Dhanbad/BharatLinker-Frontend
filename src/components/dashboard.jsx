@@ -9,6 +9,9 @@ import Cookies from 'js-cookie';
 import { setUserData, clearUserData, fetchProductsByUserId, clearUserProductData, setError } from '../redux/features/userSlice.jsx';
 import { updateUserRefurbish } from '../redux/features/pincodeUpdatedSlice';
 import '../styles/dashboard.css';
+import { TbClockSearch } from "react-icons/tb";
+
+import w1 from '../assets/welcome.png';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -31,7 +34,7 @@ const Dashboard = () => {
                     dispatch(updateUserRefurbish());
                 } catch (error) {
                     console.error('Error parsing user cookie:', error);
-                    dispatch(clearUserData()); 
+                    dispatch(clearUserData());
                 }
             }
         }
@@ -70,7 +73,7 @@ const Dashboard = () => {
         if (window.confirm('Are you sure you want to log out?')) {
             Cookies.remove('BharatLinkerUser');
             dispatch(clearUserData());
-            alert('Successfully logged out!'); 
+            alert('Successfully logged out!');
             navigate('/', { replace: true });
         }
     };
@@ -111,7 +114,7 @@ const Dashboard = () => {
                         <BiSearchAlt id='dashboard-header-search-div-search' onClick={handleSearchSubmit} />
                         <input
                             id='dashboard-header-input'
-                            placeholder="Search"
+                            placeholder="Search Your Refurbished"
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleSearchSubmit()}
@@ -119,7 +122,9 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-
+            <div className='dashboard-welcome-img-div'>
+            <img className='dashboard-welcome-img' src={w1}/>
+            </div>
             <div className="dashboard-product-list">
                 {products.length > 0 ? (
                     products.map(product => (
@@ -134,22 +139,26 @@ const Dashboard = () => {
                         </div>
                     ))
                 ) : (
-                    <></>
+                    !loading && <div className='no-product-found'>
+                        <TbClockSearch size={60} />
+                        <div>You Refurbished Is Empty</div>
+                        <div style={{ fontWeight: "900" }}>Upload Refurbished</div>
+                    </div>
                 )}
             </div>
 
             {fetching && <p>Loading more products...</p>}
             {loading && <p>Loading more products...</p>}
 
-            {hasMoreProducts && !loading && !fetching &&(
+            {hasMoreProducts && !loading && !fetching && (
                 <div className='load-more-container'>
                     <IoIosArrowDown size={30} onClick={handleLoadMore} />
                 </div>
             )}
 
-            <div id='refurbished-footer'>
+            <div id='dashboard-refurbished-footer'>
                 <div id='refurbished-footer-item' onClick={handleUploadClick}>
-                    Upload Your Product
+                    Upload Refurbished
                 </div>
             </div>
         </div>

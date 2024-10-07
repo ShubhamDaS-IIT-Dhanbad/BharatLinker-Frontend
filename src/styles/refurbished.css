@@ -8,15 +8,15 @@
     position: fixed;
     top: 0;
     min-width: 100vw;
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
+    background-color: rgb(7,132,181);
+    color: rgb(255, 255, 255);
     z-index: 10000000000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 #refurbished-header-ham {
     margin-left: 4px;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
 }
 
 .refurbished-header-show {
@@ -66,7 +66,7 @@
     gap: 5px;
     font-size: 16px;
     font-weight: 900;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     }
 
 #refurbished-header-search-div {
@@ -122,7 +122,7 @@
    margin-top: 20px;
 }
 #refurbished-footer{
-    background-color: rgb(46, 47, 52);z-index: 90000;
+    background-color: rgb(7,132,181);z-index: 90000;
     position: fixed;bottom: 0;
     width: 100vw;height: 77px;
     display: flex;justify-content: center;align-items: center;
