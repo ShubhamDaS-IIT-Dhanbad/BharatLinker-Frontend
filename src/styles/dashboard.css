@@ -8,7 +8,7 @@
     top: 0;
     min-width: 100vw;
     color: white;
-    background-color:rgb(19, 82, 240);
+    background-color:rgb(3,0,46);
     
     z-index: 10000000000;
     transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth transition */
@@ -229,7 +229,7 @@
 
 
 #dashboard-refurbished-footer{
-    background-color:rgb(19, 82, 240);z-index: 90000;
+    background-color:rgb(3,0,46);z-index: 90000;
     position: fixed;bottom: 0;
     width: 100vw;height: 77px;
     display: flex;justify-content: center;align-items: center;
