@@ -56,7 +56,7 @@ const RefurbishedPage = ({ address }) => {
     if (!userCookie) {
       navigate('/login');
     } else {
-      navigate('/refurbished/product/upload');
+      navigate('/dashboard');
     }
   };
 
@@ -164,7 +164,7 @@ const RefurbishedPage = ({ address }) => {
       {/* Refurbished Footer Section */}
       <div id='refurbished-footer'>
         <div id='refurbished-footer-item' onClick={handleUploadClick}>
-          Upload Refurbished
+         Dashboard
         </div>
       </div>
     </div>

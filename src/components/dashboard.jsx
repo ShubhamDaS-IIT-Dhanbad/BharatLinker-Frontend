@@ -6,12 +6,13 @@ import { IoIosArrowDown } from "react-icons/io";
 import { BiSearchAlt } from 'react-icons/bi';
 import { TbShieldMinus } from "react-icons/tb";
 import Cookies from 'js-cookie';
-import { setUserData, clearUserData, fetchProductsByUserId, clearUserProductData, setError } from '../redux/features/userSlice.jsx';
+import { setUserData, clearUserData, fetchProductsByUserId, setError } from '../redux/features/userSlice.jsx';
 import { updateUserRefurbish } from '../redux/features/pincodeUpdatedSlice';
 import '../styles/dashboard.css';
 import { TbClockSearch } from "react-icons/tb";
-
 import w1 from '../assets/welcome.png';
+import { ToastContainer, toast } from 'react-toastify'; // Import toast functions
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -20,22 +21,22 @@ const Dashboard = () => {
     const [searchInput, setSearchInput] = useState('');
     const [fetching, setFetching] = useState(false);
     const [hideHeader, setHideHeader] = useState(false);
-    const [isInitialRender, setIsInitialRender] = useState(true);
     const { isUpdatedUserProduct } = useSelector((state) => state.pincodestate);
+    const [showToast, setShowToast] = useState(true); // Add state for toast visibility
+    
+    const MAX_PRODUCTS = 3; // Set the maximum products allowed
 
     useEffect(() => {
-        if (!isUpdatedUserProduct) {
-            const userCookie = Cookies.get('BharatLinkerUser');
-            if (userCookie) {
-                try {
-                    const user = JSON.parse(decodeURIComponent(userCookie));
-                    dispatch(setUserData(user));
-                    dispatch(fetchProductsByUserId(user.uid, 1, '')); // Default to an empty search
-                    dispatch(updateUserRefurbish());
-                } catch (error) {
-                    console.error('Error parsing user cookie:', error);
-                    dispatch(clearUserData());
-                }
+        const userCookie = Cookies.get('BharatLinkerUser');
+        if (userCookie) {
+            try {
+                const user = JSON.parse(decodeURIComponent(userCookie));
+                dispatch(setUserData(user));
+                dispatch(fetchProductsByUserId(user.uid, 1, '')); // Default to an empty search
+                dispatch(updateUserRefurbish());
+            } catch (error) {
+                console.error('Error parsing user cookie:', error);
+                dispatch(clearUserData());
             }
         }
     }, []);
@@ -64,6 +65,8 @@ const Dashboard = () => {
     const handleUploadClick = () => {
         if (!displayName) {
             navigate('/login');
+        } else if (products.length >= MAX_PRODUCTS) {
+            toast.error(`You can only upload up to ${MAX_PRODUCTS} products!`); // Show toast message
         } else {
             navigate('/refurbished/product/upload');
         }
@@ -73,7 +76,7 @@ const Dashboard = () => {
         if (window.confirm('Are you sure you want to log out?')) {
             Cookies.remove('BharatLinkerUser');
             dispatch(clearUserData());
-            alert('Successfully logged out!');
+            toast.success('Successfully logged out!'); // Show toast message on logout
             navigate('/', { replace: true });
         }
     };
@@ -97,6 +100,12 @@ const Dashboard = () => {
 
     return (
         <div>
+            {showToast && (
+                <ToastContainer
+                    style={{ position: "fixed", top: '0px', zIndex: "10000000" }}
+                    onClick={() => setShowToast(false)} // Hide on click
+                />
+            )}
             <div className={`dashboard-header-show ${hideHeader ? 'hide' : ''}`}>
                 <div className='dashboard-header-parent'>
                     <div className='dashboard-header-user'>
@@ -122,10 +131,8 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-
-            
             <div className='dashboard-welcome-img-div'>
-            <img className='dashboard-welcome-img' src={w1}/>
+                <img className='dashboard-welcome-img' src={w1} alt="Welcome" />
             </div>
             <div className="dashboard-product-list">
                 {products.length > 0 ? (
